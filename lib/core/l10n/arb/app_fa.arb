@@ -1,0 +1,51 @@
+{
+  "@@locale": "fa",
+
+  "appTitle": "مالک کاسپین",
+  "@appTitle": { "description": "App name in the task switcher. Keep equal to Brand.appNameFa." },
+
+  "retry": "تلاش دوباره",
+  "@retry": { "description": "Button on every error state." },
+
+  "lastUpdated": "آخرین به‌روزرسانی: {time}",
+  "@lastUpdated": {
+    "description": "Shown above cached data. time is a relative time such as «۱۰ دقیقه پیش».",
+    "placeholders": { "time": { "type": "String" } }
+  },
+
+  "justNow": "همین الان",
+  "@justNow": { "description": "Relative time under one minute." },
+
+  "minutesAgo": "{count} دقیقه پیش",
+  "@minutesAgo": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+
+  "hoursAgo": "{count} ساعت پیش",
+  "@hoursAgo": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+
+  "yesterday": "دیروز",
+  "@yesterday": { "description": "Relative time for the previous calendar day." },
+
+  "daysAgo": "{count} روز پیش",
+  "@daysAgo": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+
+  "statusPending": "منتظر",
+  "@statusPending": { "description": "Status chip: waiting for a decision." },
+
+  "statusApproved": "تأیید شد",
+  "@statusApproved": { "description": "Status chip: approved." },
+
+  "statusRejected": "رد شد",
+  "@statusRejected": { "description": "Status chip: rejected." },
+
+  "statusCancelled": "لغو شد",
+  "@statusCancelled": { "description": "Status chip: cancelled." },
+
+  "lowStock": "کم",
+  "@lowStock": { "description": "Chip on stock rows that are running low." }
+}
