@@ -292,6 +292,170 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String filterPending(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'منتظر ($countString)';
+  }
+
+  @override
+  String get filterReviewed => 'بررسی‌شده';
+
+  @override
+  String get filterAll => 'همه';
+
+  @override
+  String get requestsEmptyPending => 'درخواستی منتظر تأیید شما نیست.';
+
+  @override
+  String get requestsEmptyReviewed => 'هنوز درخواستی بررسی نشده است.';
+
+  @override
+  String get requestsEmptyAll => 'هنوز درخواستی ثبت نشده است.';
+
+  @override
+  String get queuedLabel => 'در صف ارسال';
+
+  @override
+  String get managerLabel => 'مدیر انبار';
+
+  @override
+  String requestTitle(String number) {
+    return 'درخواست $number';
+  }
+
+  @override
+  String requestFrom(String sender, String time) {
+    return 'از طرف $sender · $time';
+  }
+
+  @override
+  String get placeLabel => 'محل مصرف';
+
+  @override
+  String get stockNow => 'موجودی فعلی';
+
+  @override
+  String get usedLastMonth => 'مصرف ماه قبل';
+
+  @override
+  String get hiddenByCount => 'در حال شمارش';
+
+  @override
+  String qtyWithUnit(String qty, String unit) {
+    return '$qty $unit';
+  }
+
+  @override
+  String get noteLabel => 'یادداشت';
+
+  @override
+  String get routineRequestNote =>
+      'این درخواست عادی است و مدیر انبار درباره آن تصمیم می‌گیرد.';
+
+  @override
+  String decidedApprovedBy(String name, String time) {
+    return 'تأیید شد توسط $name · $time';
+  }
+
+  @override
+  String decidedRejectedBy(String name, String time) {
+    return 'رد شد توسط $name · $time';
+  }
+
+  @override
+  String decisionReason(String reason) {
+    return 'دلیل: $reason';
+  }
+
+  @override
+  String get approve => 'تأیید';
+
+  @override
+  String get reject => 'رد کردن';
+
+  @override
+  String approveReason(String number) {
+    return 'برای تأیید درخواست $number هویت خود را تأیید کنید';
+  }
+
+  @override
+  String get approvedDone => 'تأیید شد و به انبار خبر داده شد';
+
+  @override
+  String get rejectedDone => 'رد شد و به انبار خبر داده شد';
+
+  @override
+  String get undo => 'بازگرداندن';
+
+  @override
+  String get decisionQueued =>
+      'اینترنت وصل نیست. تصمیم شما در صف ارسال است و خودکار فرستاده می‌شود.';
+
+  @override
+  String get conflictTitle => 'این درخواست قبلاً بررسی شده است';
+
+  @override
+  String conflictApproved(String name) {
+    return 'تأیید شد توسط $name. تصمیم شما ثبت نشد.';
+  }
+
+  @override
+  String conflictRejected(String name) {
+    return 'رد شد توسط $name. تصمیم شما ثبت نشد.';
+  }
+
+  @override
+  String get ok => 'باشه';
+
+  @override
+  String rejectSheetTitle(String number) {
+    return 'رد کردن درخواست $number';
+  }
+
+  @override
+  String get rejectReasonLabel => 'دلیل (اختیاری)';
+
+  @override
+  String get rejectReasonHint => 'مثلاً: مقدار زیاد است';
+
+  @override
+  String get locationHistoryTitle => 'مصرف قبلی همین محل';
+
+  @override
+  String get locationHistoryEmpty => 'تا حالا چیزی به این محل داده نشده است.';
+
+  @override
+  String historyLine(String item, String qty, String unit) {
+    return '$item · $qty $unit';
+  }
+
+  @override
+  String historyMeta(String date, String document) {
+    return '$date · حواله $document';
+  }
+
+  @override
+  String get chatTitle => 'گفتگو درباره این درخواست';
+
+  @override
+  String get chatEmpty => 'هنوز پیامی نیست.';
+
+  @override
+  String get chatInputLabel => 'پیام';
+
+  @override
+  String get chatSend => 'فرستادن';
+
+  @override
+  String get chatSendFailed => 'فرستاده نشد. برای تلاش دوباره لمس کنید.';
+
+  @override
+  String get you => 'شما';
+
+  @override
   String get errorTitle => 'اطلاعات دریافت نشد';
 
   @override

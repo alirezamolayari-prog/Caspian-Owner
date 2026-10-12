@@ -12,7 +12,7 @@ import 'package:caspian_owner/core/storage/app_database.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
-import 'package:drift/drift.dart' show driftRuntimeOptions;
+import 'package:drift/drift.dart' show DatabaseConnection, driftRuntimeOptions;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -83,7 +83,14 @@ class TestHarness {
     final backend = MockBackend(fixtures, latency: Duration.zero);
     final store = MemorySecureStore();
     final authenticator = FakeAuthenticator(available: deviceAuthAvailable);
-    final database = AppDatabase(NativeDatabase.memory());
+    // Synchronous stream closing: drift otherwise closes unused query
+    // streams on a timer, which widget tests report as a pending Timer.
+    final database = AppDatabase(
+      DatabaseConnection(
+        NativeDatabase.memory(),
+        closeStreamsSynchronously: true,
+      ),
+    );
     return TestHarness._(
       backend: backend,
       store: store,

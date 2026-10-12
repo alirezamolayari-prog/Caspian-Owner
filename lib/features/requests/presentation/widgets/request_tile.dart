@@ -1,6 +1,8 @@
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
+import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/relative_time.dart';
+import 'package:caspian_owner/core/widgets/status_chip.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/requests/presentation/widgets/request_status_chip.dart';
 import 'package:caspian_owner/features/requests/presentation/widgets/request_texts.dart';
@@ -8,11 +10,19 @@ import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 
 /// One request in a list: initial avatar, title, «sender · time», status.
+/// Warehouse-manager decisions say «مدیر انبار»; decisions waiting offline
+/// say «در صف ارسال».
 class RequestTile extends StatelessWidget {
-  const new({required this.request, required this.onTap, super.key});
+  const new({
+    required this.request,
+    required this.onTap,
+    this.queued = false,
+    super.key,
+  });
 
   final GoodsRequest request;
   final VoidCallback onTap;
+  final bool queued;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +34,8 @@ class RequestTile extends StatelessWidget {
       now: clock.now(),
       l10n: l10n,
     );
+    final byManager = request.decidedBy?.kind == DeciderKind.manager;
+    final subtitle = l10n.senderAndTime(sender, time);
 
     return InkWell(
       onTap: onTap,
@@ -55,14 +67,17 @@ class RequestTile extends StatelessWidget {
                     ),
                     const SizedBox(height: Space.xs),
                     Text(
-                      l10n.senderAndTime(sender, time),
+                      byManager ? '$subtitle · ${l10n.managerLabel}' : subtitle,
                       style: theme.textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: Space.sm),
-              RequestStatusChip(request.status),
+              if (queued)
+                StatusChip(label: l10n.queuedLabel, icon: AppIcons.queued)
+              else
+                RequestStatusChip(request.status),
             ],
           ),
         ),
