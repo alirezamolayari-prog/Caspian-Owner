@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** M3 PR is open. Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M4 (auth with OTP mock, app lock, secure storage, router shell with 4 tabs, deep links) on branch `m04-auth-shell`.
+**Next step:** M4 PR is open. Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M5 (Home: hero card, latest requests, surprise-count card, empty/loading/error states) on branch `m05-home`.
 
 ## Environment (M0)
 | Item | Value |
@@ -22,8 +22,9 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | M0 | Done | `flutter doctor` green (Flutter + Android, licenses accepted); no phone connected |
 | M1 | Done (PR #1) | Scaffold, signing, lints, LICENSE, CLAUDE.md, docs, CI |
 | M2 | Done (PR #2) | Brand, light/dark tokens, Vazirmatn UI-FD bundled, fa/RTL, ARB + gen-l10n, Persian digits, Jalali, relative time, StatusChip, AppIcons |
-| M3 | PR open | `api/openapi.yaml`, freezed models, repository interfaces, mock backend + fixtures (scenarios), locations CSV, drift cache + pending queue, ApiConfig switch, module registry; 110 tests incl. contract validation |
-| M4–M13 | Not started | |
+| M3 | Done (PR #3) | `api/openapi.yaml`, freezed models, repository interfaces, mock backend + fixtures (scenarios), locations CSV, drift cache + pending queue, ApiConfig switch, module registry |
+| M4 | PR open | Login (phone + OTP, `11111` in debug only), session in secure storage, app lock (fingerprint/device PIN on launch and after 5 min; app PIN fallback, required on phones without a screen lock; 5 wrong PINs → sign out), go_router shell with 4 tabs + deep links through the lock, FLAG_SECURE channel, logout wipes data; 131 tests |
+| M5–M13 | Not started | |
 
 ## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)

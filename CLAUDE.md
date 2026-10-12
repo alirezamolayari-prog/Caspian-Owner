@@ -42,6 +42,9 @@ flutter build apk --release   # signed with android/key.properties, else the DEB
 - Models are freezed + json_serializable with snake_case keys (`build.yaml`). Fields that are required-but-nullable in the contract need `@JsonKey(includeIfNull: true)`. Digits in names need an explicit `@JsonKey(name: ...)` (e.g. `used_last_30d`).
 - `test/contract/contract_test.dart` validates every model against `api/openapi.yaml`. Keep it green when changing either side.
 - Generated files (`*.g.dart`, `*.freezed.dart`, `lib/core/l10n/generated/`) are committed.
+- Riverpod 3 with plain providers (no generator). Dependencies are injected in `lib/core/di/providers.dart` and overridden at startup by `lib/bootstrap.dart`; tests use `test/helpers/test_app.dart` (`TestHarness`). `ProviderScope(retry: ...)` returns null: no silent automatic retries.
+- Widget tests: never do real file I/O inside `testWidgets` (it hangs on the fake clock). Load fixtures in `setUpAll` (`loadTestFixtures()`), then `TestHarness.create(fixtures, ...)`. Run long suites with `--timeout 60s`.
+- Android: `MainActivity` must stay a `FlutterFragmentActivity` (local_auth), with an AppCompat launch theme.
 - Edit text files with the editor tools, not Windows PowerShell `Get-Content`/`Set-Content` (they mangle UTF-8).
 
 ## Architecture rules
