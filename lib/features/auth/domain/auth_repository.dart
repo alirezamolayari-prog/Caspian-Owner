@@ -17,10 +17,25 @@ class AuthSession {
     required this.owner,
   });
 
+  factory fromJson(Map<String, Object?> json) => AuthSession(
+    accessToken: json['access_token']! as String,
+    refreshToken: json['refresh_token']! as String,
+    expiresAt: DateTime.parse(json['expires_at']! as String),
+    owner: Owner.fromJson(json['owner']! as Map<String, Object?>),
+  );
+
   final String accessToken;
   final String refreshToken;
   final DateTime expiresAt;
   final Owner owner;
+
+  /// Contract shape (`AuthTokens`), also used to keep the session on device.
+  Map<String, Object?> toJson() => {
+    'access_token': accessToken,
+    'refresh_token': refreshToken,
+    'expires_at': expiresAt.toUtc().toIso8601String(),
+    'owner': owner.toJson(),
+  };
 }
 
 /// Phone + one-time code login (contract: `/v1/auth/...`).

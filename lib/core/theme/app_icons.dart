@@ -16,4 +16,20 @@ abstract final class AppIcons {
   // Common actions
   static const IconData retry = Symbols.refresh_rounded;
   static const IconData error = Symbols.error_rounded;
+
+  // Bottom tabs
+  static const IconData home = Symbols.home_rounded;
+  static const IconData requests = Symbols.assignment_rounded;
+  static const IconData stock = Symbols.inventory_2_rounded;
+  static const IconData assistant = Symbols.auto_awesome_rounded;
+
+  // Top bar and account
+  static const IconData notifications = Symbols.notifications_rounded;
+  static const IconData account = Symbols.account_circle_rounded;
+  static const IconData logout = Symbols.logout_rounded;
+
+  // Security
+  static const IconData lock = Symbols.lock_rounded;
+  static const IconData fingerprint = Symbols.fingerprint_rounded;
+  static const IconData sms = Symbols.sms_rounded;
 }

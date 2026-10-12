@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:alchemist/alchemist.dart';
-import 'package:caspian_owner/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../helpers/test_app.dart';
 import '../../helpers/theme_sample.dart';
 
 const _phone = Size(360, 720);
 
 Widget _app(ThemeMode mode) => SizedBox.fromSize(
   size: _phone,
-  child: CaspianOwnerApp(home: const ThemeSample(), themeMode: mode),
+  child: themedApp(const ThemeSample(), themeMode: mode),
 );
 
 void main() {
@@ -29,7 +29,7 @@ void main() {
   );
 
   testWidgets('layout is right-to-left', (tester) async {
-    await tester.pumpWidget(const CaspianOwnerApp(home: ThemeSample()));
+    await tester.pumpWidget(themedApp(const ThemeSample()));
     await tester.pumpAndSettle();
 
     final context = tester.element(find.byType(ThemeSample));
@@ -47,14 +47,14 @@ void main() {
     tester.platformDispatcher.textScaleFactorTestValue = 2;
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
 
-    await tester.pumpWidget(const CaspianOwnerApp(home: ThemeSample()));
+    await tester.pumpWidget(themedApp(const ThemeSample()));
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
   });
 
   testWidgets('buttons meet the 48dp touch target', (tester) async {
-    await tester.pumpWidget(const CaspianOwnerApp(home: ThemeSample()));
+    await tester.pumpWidget(themedApp(const ThemeSample()));
     await tester.pumpAndSettle();
 
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));

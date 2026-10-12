@@ -47,5 +47,71 @@
   "@statusCancelled": { "description": "Status chip: cancelled." },
 
   "lowStock": "کم",
-  "@lowStock": { "description": "Chip on stock rows that are running low." }
+  "@lowStock": { "description": "Chip on stock rows that are running low." },
+
+  "errorNetwork": "اتصال برقرار نشد. اینترنت را بررسی کنید.",
+  "errorGeneric": "مشکلی پیش آمد. دوباره تلاش کنید.",
+
+  "tabHome": "خانه",
+  "tabRequests": "درخواست‌ها",
+  "tabStock": "موجودی",
+  "tabAssistant": "دستیار",
+
+  "requestsTitle": "درخواست‌ها",
+  "stockTitle": "موجودی انبار",
+  "assistantTitle": "دستیار کاسپین",
+  "moreTitle": "بیشتر",
+  "logout": "خروج",
+
+  "loginTitle": "ورود به مالک کاسپین",
+  "loginPhoneLabel": "شماره موبایل",
+  "loginPhoneHint": "۰۹۱۲۳۴۵۶۷۸۹",
+  "loginPhoneHelp": "یک کد با پیامک برایتان فرستاده می‌شود.",
+  "loginPhoneInvalid": "شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود.",
+  "loginSendCode": "دریافت کد",
+  "loginCodeLabel": "کد پیامک‌شده",
+  "loginCodeSent": "کد {length} رقمی به {phone} فرستاده شد.",
+  "@loginCodeSent": {
+    "placeholders": {
+      "length": { "type": "int", "format": "decimalPattern" },
+      "phone": { "type": "String" }
+    }
+  },
+  "loginVerify": "ورود",
+  "loginChangePhone": "تغییر شماره",
+  "loginResend": "ارسال دوباره کد",
+  "loginResendIn": "ارسال دوباره تا {seconds} ثانیه",
+  "@loginResendIn": {
+    "placeholders": { "seconds": { "type": "int", "format": "decimalPattern" } }
+  },
+  "loginTestCodeHint": "نسخه آزمایشی: کد ۱۱۱۱۱",
+
+  "lockTitle": "برنامه قفل است",
+  "lockBody": "برای دیدن اطلاعات، هویت خود را تأیید کنید.",
+  "lockUnlockDevice": "باز کردن با اثر انگشت",
+  "lockReason": "برای باز کردن مالک کاسپین هویت خود را تأیید کنید",
+  "lockUsePin": "ورود با رمز برنامه",
+  "pinLabel": "رمز برنامه",
+  "pinWrong": "رمز درست نیست. {left} بار دیگر می‌توانید امتحان کنید.",
+  "@pinWrong": {
+    "placeholders": { "left": { "type": "int", "format": "decimalPattern" } }
+  },
+  "pinSetupTitle": "ساختن رمز برنامه",
+  "pinSetupBody": "این گوشی قفل اثر انگشت یا رمز ندارد. برای حفاظت از اطلاعات، یک رمز ۴ رقمی برای برنامه بسازید.",
+  "pinRepeatLabel": "تکرار رمز",
+  "pinTooShort": "رمز باید ۴ رقم باشد.",
+  "pinMismatch": "دو رمز یکی نیستند.",
+  "pinSave": "ذخیره رمز",
+  "signedOutTooManyAttempts": "به‌خاطر چند رمز اشتباه، دوباره وارد شوید.",
+
+  "homeGreeting": "سلام {name}",
+  "@homeGreeting": { "placeholders": { "name": { "type": "String" } } },
+  "notificationsTooltip": "اعلان‌ها",
+  "accountTooltip": "حساب و گزینه‌های بیشتر",
+
+  "cancel": "انصراف",
+  "logoutConfirmTitle": "از حساب خارج می‌شوید؟",
+  "logoutConfirmBody": "اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، کد پیامکی لازم است.",
+
+  "comingSoon": "این بخش به‌زودی آماده می‌شود."
 }
