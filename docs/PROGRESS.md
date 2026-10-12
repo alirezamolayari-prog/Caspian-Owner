@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** M1 PR is open. Wait for green CI, squash-merge, then start M2 (brand, theme, Vazirmatn, RTL, ARB, Jalali) on branch `m02-brand-theme`.
+**Next step:** M2 PR is open. Wait for green CI, squash-merge (commit or stash local work first, so `gh pr merge` can switch branches), then start M3 (OpenAPI contract, models, mock repositories, locations CSV, drift cache, pending queue) on branch `m03-contract-data`.
 
 ## Environment (M0)
 | Item | Value |
@@ -20,8 +20,9 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | # | Status | Notes |
 |---|---|---|
 | M0 | Done | `flutter doctor` green (Flutter + Android, licenses accepted); no phone connected |
-| M1 | PR open | Scaffold, signing, lints, LICENSE, CLAUDE.md, docs, CI. Local gate green; debug + signed release APK built |
-| M2–M13 | Not started | Vazirmatn v33.003 zip already in `E:\dev\_downloads\vazirmatn` |
+| M1 | Done (PR #1) | Scaffold, signing, lints, LICENSE, CLAUDE.md, docs, CI |
+| M2 | PR open | Brand, light/dark tokens, Vazirmatn UI-FD bundled, fa/RTL, ARB + gen-l10n, Persian digits, Jalali, relative time, StatusChip, AppIcons; 55 tests incl. contrast + goldens |
+| M3–M13 | Not started | |
 
 ## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)
@@ -36,3 +37,6 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 - Harmless build warning: the new `android sdk` CLI writes package.xml v4, AGP reads up to v3 ("SDK processing ... XML version 4"). Builds succeed.
 - The Kotlin daemon can't start on this PC, so `android/gradle.properties` sets `kotlin.compiler.execution.strategy=in-process`. Gradle heap lowered to 3G (the PC has 8 GB RAM).
 - Release APK signing verified: cert SHA-256 `f332c7e7…c468ec` (full value in docs/RELEASING.md).
+- Dart 3.13 constructor syntax `const new(...)` is used (the lint `unnecessary_type_name_in_constructor` wants it). VS Code's Dart extension shows a false "primary-constructors experiment" error until VS Code is restarted and picks up Flutter 3.47.7 from `E:\dev\flutter`.
+- Material Symbols fonts are only tree-shaken once app code (not just tests) uses an icon. M2's release APK is 56.5 MB for that reason; with one icon used it's 41.9 MB. Recheck the size after M5.
+- Goldens: `test/**/goldens/ci/` (all platforms) and `goldens/windows/` (local only). Regenerate with `flutter test --update-goldens`.

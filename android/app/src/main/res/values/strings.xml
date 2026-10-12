@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Brand: launcher label. Keep equal to Brand.appNameFa in lib/core/brand/brand.dart. -->
+<resources>
+    <string name="app_name">مالک کاسپین</string>
+</resources>
