@@ -13,6 +13,9 @@ abstract final class SecureKeys {
   static const deviceId = 'device_id';
   static const pinHash = 'pin_hash';
   static const pinSalt = 'pin_salt';
+
+  /// Owner preferences (kept on logout).
+  static const settings = 'settings';
 }
 
 /// Android Keystore-backed storage (flutter_secure_storage).
