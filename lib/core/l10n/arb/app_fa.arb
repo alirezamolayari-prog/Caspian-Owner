@@ -113,5 +113,46 @@
   "logoutConfirmTitle": "از حساب خارج می‌شوید؟",
   "logoutConfirmBody": "اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، کد پیامکی لازم است.",
 
-  "comingSoon": "این بخش به‌زودی آماده می‌شود."
+  "comingSoon": "این بخش به‌زودی آماده می‌شود.",
+
+  "homePendingTitle": "منتظر تأیید شما",
+  "homePendingCount": "{count} درخواست",
+  "@homePendingCount": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+  "homeReviewRequests": "بررسی درخواست‌ها",
+  "homeAllReviewed": "همه درخواست‌ها بررسی شده‌اند",
+  "homeAllReviewedBody": "درخواستی منتظر تأیید شما نیست.",
+  "homeLatestRequests": "آخرین درخواست‌ها",
+  "homeNoRequests": "هنوز درخواستی ثبت نشده است.",
+
+  "countCardTitle": "شمارش غافلگیرانه",
+  "countLastTime": "آخرین بار: {date}",
+  "@countLastTime": { "placeholders": { "date": { "type": "String" } } },
+  "countNever": "هنوز شمارشی انجام نشده است.",
+  "countRunningNow": "یک شمارش در حال انجام است",
+  "countStart": "شروع",
+
+  "requestLineTitle": "{item} · {qty} {unit}",
+  "@requestLineTitle": {
+    "placeholders": {
+      "item": { "type": "String" },
+      "qty": { "type": "String" },
+      "unit": { "type": "String" }
+    }
+  },
+  "requestMoreItems": "و {count} قلم دیگر",
+  "@requestMoreItems": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+  "senderAndTime": "{sender} · {time}",
+  "@senderAndTime": {
+    "placeholders": {
+      "sender": { "type": "String" },
+      "time": { "type": "String" }
+    }
+  },
+
+  "errorTitle": "اطلاعات دریافت نشد",
+  "offlineShowingCached": "اتصال برقرار نیست؛ آخرین اطلاعات ذخیره‌شده نمایش داده می‌شود."
 }

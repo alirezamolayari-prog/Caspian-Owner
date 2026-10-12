@@ -441,6 +441,108 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'این بخش به‌زودی آماده می‌شود.'**
   String get comingSoon;
+
+  /// No description provided for @homePendingTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'منتظر تأیید شما'**
+  String get homePendingTitle;
+
+  /// No description provided for @homePendingCount.
+  ///
+  /// In fa, this message translates to:
+  /// **'{count} درخواست'**
+  String homePendingCount(int count);
+
+  /// No description provided for @homeReviewRequests.
+  ///
+  /// In fa, this message translates to:
+  /// **'بررسی درخواست‌ها'**
+  String get homeReviewRequests;
+
+  /// No description provided for @homeAllReviewed.
+  ///
+  /// In fa, this message translates to:
+  /// **'همه درخواست‌ها بررسی شده‌اند'**
+  String get homeAllReviewed;
+
+  /// No description provided for @homeAllReviewedBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواستی منتظر تأیید شما نیست.'**
+  String get homeAllReviewedBody;
+
+  /// No description provided for @homeLatestRequests.
+  ///
+  /// In fa, this message translates to:
+  /// **'آخرین درخواست‌ها'**
+  String get homeLatestRequests;
+
+  /// No description provided for @homeNoRequests.
+  ///
+  /// In fa, this message translates to:
+  /// **'هنوز درخواستی ثبت نشده است.'**
+  String get homeNoRequests;
+
+  /// No description provided for @countCardTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'شمارش غافلگیرانه'**
+  String get countCardTitle;
+
+  /// No description provided for @countLastTime.
+  ///
+  /// In fa, this message translates to:
+  /// **'آخرین بار: {date}'**
+  String countLastTime(String date);
+
+  /// No description provided for @countNever.
+  ///
+  /// In fa, this message translates to:
+  /// **'هنوز شمارشی انجام نشده است.'**
+  String get countNever;
+
+  /// No description provided for @countRunningNow.
+  ///
+  /// In fa, this message translates to:
+  /// **'یک شمارش در حال انجام است'**
+  String get countRunningNow;
+
+  /// No description provided for @countStart.
+  ///
+  /// In fa, this message translates to:
+  /// **'شروع'**
+  String get countStart;
+
+  /// No description provided for @requestLineTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'{item} · {qty} {unit}'**
+  String requestLineTitle(String item, String qty, String unit);
+
+  /// No description provided for @requestMoreItems.
+  ///
+  /// In fa, this message translates to:
+  /// **'و {count} قلم دیگر'**
+  String requestMoreItems(int count);
+
+  /// No description provided for @senderAndTime.
+  ///
+  /// In fa, this message translates to:
+  /// **'{sender} · {time}'**
+  String senderAndTime(String sender, String time);
+
+  /// No description provided for @errorTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات دریافت نشد'**
+  String get errorTitle;
+
+  /// No description provided for @offlineShowingCached.
+  ///
+  /// In fa, this message translates to:
+  /// **'اتصال برقرار نیست؛ آخرین اطلاعات ذخیره‌شده نمایش داده می‌شود.'**
+  String get offlineShowingCached;
 }
 
 class _AppLocalizationsDelegate
