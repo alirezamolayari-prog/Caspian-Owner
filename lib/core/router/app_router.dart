@@ -10,9 +10,15 @@ import 'package:caspian_owner/features/count/presentation/count_detail_screen.da
 import 'package:caspian_owner/features/count/presentation/count_history_screen.dart';
 import 'package:caspian_owner/features/count/presentation/count_start_screen.dart';
 import 'package:caspian_owner/features/home/presentation/home_screen.dart';
+import 'package:caspian_owner/features/more/presentation/about_screen.dart';
+import 'package:caspian_owner/features/more/presentation/developer_screen.dart';
 import 'package:caspian_owner/features/more/presentation/more_screen.dart';
+import 'package:caspian_owner/features/more/presentation/purchase_list_screen.dart';
+import 'package:caspian_owner/features/more/presentation/users_screen.dart';
+import 'package:caspian_owner/features/reports/presentation/reports_screen.dart';
 import 'package:caspian_owner/features/requests/presentation/request_detail_screen.dart';
 import 'package:caspian_owner/features/requests/presentation/requests_screen.dart';
+import 'package:caspian_owner/features/settings/presentation/settings_screen.dart';
 import 'package:caspian_owner/features/stock/presentation/stock_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,6 +111,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const MoreScreen(),
       ),
+      for (final (path, screen) in <(String, Widget)>[
+        (Routes.reports, const ReportsScreen()),
+        (Routes.purchases, const PurchaseListScreen()),
+        (Routes.users, const UsersScreen()),
+        (Routes.settings, const SettingsScreen()),
+        (Routes.about, const AboutScreen()),
+        (Routes.developer, const DeveloperScreen()),
+      ])
+        GoRoute(
+          path: path,
+          parentNavigatorKey: _rootKey,
+          builder: (context, state) => screen,
+        ),
       GoRoute(
         path: Routes.counts,
         parentNavigatorKey: _rootKey,

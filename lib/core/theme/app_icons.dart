@@ -44,6 +44,16 @@ abstract final class AppIcons {
   static const IconData account = Symbols.account_circle_rounded;
   static const IconData logout = Symbols.logout_rounded;
 
+  // More
+  static const IconData reports = Symbols.bar_chart_rounded;
+  static const IconData purchase = Symbols.shopping_cart_rounded;
+  static const IconData users = Symbols.group_rounded;
+  static const IconData settings = Symbols.settings_rounded;
+  static const IconData about = Symbols.info_rounded;
+  static const IconData developer = Symbols.code_rounded;
+  static const IconData share = Symbols.share_rounded;
+  static const IconData admin = Symbols.shield_person_rounded;
+
   // Security
   static const IconData lock = Symbols.lock_rounded;
   static const IconData fingerprint = Symbols.fingerprint_rounded;

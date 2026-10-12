@@ -17,6 +17,12 @@ abstract final class Routes {
   // Pushed screens (no bottom bar).
   static const more = '/more';
   static String request(String id) => '/requests/$id';
+  static const reports = '/reports';
+  static const purchases = '/purchases';
+  static const users = '/users';
+  static const settings = '/settings';
+  static const about = '/about';
+  static const developer = '/developer';
   static const counts = '/counts';
   static const countNew = '/counts/new';
   static String count(String id) => '/counts/$id';
