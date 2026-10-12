@@ -16,6 +16,9 @@ abstract final class AppIcons {
   // Common actions
   static const IconData retry = Symbols.refresh_rounded;
   static const IconData error = Symbols.error_rounded;
+  static const IconData offline = Symbols.cloud_off_rounded;
+  static const IconData allDone = Symbols.task_alt_rounded;
+  static const IconData count = Symbols.fact_check_rounded;
 
   // Bottom tabs
   static const IconData home = Symbols.home_rounded;

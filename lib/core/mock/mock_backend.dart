@@ -22,6 +22,10 @@ enum MockScenario {
   /// Every call fails with a server error.
   serverError,
 
+  /// No connection: every call fails as if the phone were offline
+  /// (cached data and the pending queue take over).
+  offline,
+
   /// Every decision is answered with `409`: another owner decided first.
   conflict,
 }
@@ -72,6 +76,9 @@ class MockBackend {
         ? const Duration(seconds: 4)
         : latency;
     if (wait > Duration.zero) await Future<void>.delayed(wait);
+    if (scenario == MockScenario.offline) {
+      throw const NetworkException('mock offline');
+    }
     if (scenario == MockScenario.serverError) {
       throw const ServerException(
         code: 'internal',
