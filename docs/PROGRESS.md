@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** M4 PR is open. Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M5 (Home: hero card, latest requests, surprise-count card, empty/loading/error states) on branch `m05-home`.
+**Next step:** M5 PR is open. Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M6 (Requests list + filters, Request Detail, approve/reject with fingerprint + undo + offline queue + 409, per-request chat, location history) on branch `m06-requests`.
 
 ## Environment (M0)
 | Item | Value |
@@ -23,8 +23,9 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | M1 | Done (PR #1) | Scaffold, signing, lints, LICENSE, CLAUDE.md, docs, CI |
 | M2 | Done (PR #2) | Brand, light/dark tokens, Vazirmatn UI-FD bundled, fa/RTL, ARB + gen-l10n, Persian digits, Jalali, relative time, StatusChip, AppIcons |
 | M3 | Done (PR #3) | `api/openapi.yaml`, freezed models, repository interfaces, mock backend + fixtures (scenarios), locations CSV, drift cache + pending queue, ApiConfig switch, module registry |
-| M4 | PR open | Login (phone + OTP, `11111` in debug only), session in secure storage, app lock (fingerprint/device PIN on launch and after 5 min; app PIN fallback, required on phones without a screen lock; 5 wrong PINs → sign out), go_router shell with 4 tabs + deep links through the lock, FLAG_SECURE channel, logout wipes data; 131 tests |
-| M5–M13 | Not started | |
+| M4 | Done (PR #4) | Login (phone + OTP, `11111` in debug only), session in secure storage, app lock (fingerprint/device PIN; app PIN fallback; 5 wrong PINs → sign out), go_router shell with 4 tabs + deep links through the lock, FLAG_SECURE channel, logout wipes data |
+| M5 | PR open | Home: hero card (pending count / calm empty state), latest 3 requests, surprise-count card; skeleton loading, error + «تلاش دوباره», pull-to-refresh, offline cache with «آخرین به‌روزرسانی»; reusable `cachedFetch`, `ErrorState`, `StaleNotice`, `RequestTile`, `RequestStatusChip`; mock `offline` scenario; 142 tests + Home goldens |
+| M6–M13 | Not started | |
 
 ## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)
@@ -45,3 +46,6 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 - `build_runner` 2.16 removed `--delete-conflicting-outputs`; plain `dart run build_runner build`.
 - `csv` 8.0.0 API: `Csv(autoDetect: false).decode(text)` (auto-detect off: the `;` in aliases could fool it).
 - A local `.vscode/settings.json` (excluded via `.git/info/exclude`) points the Dart extension at `E:\dev\flutter`; this removed the false IDE errors.
+- Release APK is ~57 MB: one "fat" APK with native code for arm64, armv7 and x86_64, plus SQLite. Consider dropping x86_64 or splitting per ABI in M12 (download size on slow networks).
+- Release builds take 15–20 minutes on this PC; run them in the background.
+- Widget tests: ListView doesn't build off-screen items; use `scrollUntilVisible` before expecting them. Goldens with relative times: add ~30 s slack so «۱۰ دقیقه پیش» doesn't round to ۹.
