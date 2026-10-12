@@ -22,9 +22,18 @@
 - `lib/features/<feature>/data`: mock and API implementations.
 - `lib/core/`: brand, config, theme, l10n, router, network, storage, security, update, notifications, modules, logging, widgets, utils.
 
+## Data layer (M3)
+- **Contract:** `api/openapi.yaml`. Beyond the minimum schemas it adds `GoodsRequest.escalated` (owners decide only escalated requests; routine ones are shown read-only), `AlreadyDecided` (the `409` body carrying the winning decision), `LocationUsage` (same-place history), `NotificationEvent` (with an in-app deep-link `target`) and `Location.merged_with`.
+- **Models:** freezed classes per feature (`features/*/domain/`), shared ones in `core/domain/` (people, places, config).
+- **Repositories:** interfaces in `features/*/domain/*_repository.dart`; failures are the sealed `ApiException` family (`core/network/api_exception.dart`).
+- **Mock backend:** `core/mock/`. One in-memory server (`MockBackend`) loads the JSON fixtures in `assets/mock/` through the contract models, shifts their dates to "now", and applies the server's rules: first decision wins (`409`), idempotency keys, counts hide stock, stock never auto-adjusted. Scenarios for the developer screen: normal, empty, slow network, server error, conflict.
+- **Locations:** `assets/mock/caspian_locations.csv` is the Warehouse seed file, byte-identical to commit `2f26c614` on `feature/a-consumption-locations` of `Caspian_Warehouse`. Re-sync from `main` after that branch is merged. Floors and their display names live in `core/domain/place.dart` (`Floors.all`, building order P4 → ROOF).
+- **Switch to the real server:** `core/config/api_config.dart`, one value (`ApiConfig.dataSource`).
+
 ## Offline behaviour
 - Last data cached in drift, shown with «آخرین به‌روزرسانی: …».
 - Offline decisions go to a pending queue («در صف ارسال»), each with an idempotency key, so the server applies it only once.
+- Implementation: `core/storage/` (drift). `CacheStore` keeps contract JSON per key with its time. `PendingDecisionQueue`: every decision is enqueued, then flushed. At most one entry per request (a newer decision replaces an unsent one); `409` removes it and reports the winner; offline keeps it and stops the flush; the same key is reused on every retry. `AppDatabase.wipe()` runs on logout.
 
 ## Modules
 An `AppModule` registry lets other Caspian apps (parking, services, CRM) contribute Home cards, More entries and routes, enabled per role through server feature flags (mocked now).
