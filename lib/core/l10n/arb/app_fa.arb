@@ -153,6 +153,91 @@
     }
   },
 
+  "filterPending": "منتظر ({count})",
+  "@filterPending": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+  "filterReviewed": "بررسی‌شده",
+  "filterAll": "همه",
+  "requestsEmptyPending": "درخواستی منتظر تأیید شما نیست.",
+  "requestsEmptyReviewed": "هنوز درخواستی بررسی نشده است.",
+  "requestsEmptyAll": "هنوز درخواستی ثبت نشده است.",
+  "queuedLabel": "در صف ارسال",
+  "managerLabel": "مدیر انبار",
+
+  "requestTitle": "درخواست {number}",
+  "@requestTitle": { "placeholders": { "number": { "type": "String" } } },
+  "requestFrom": "از طرف {sender} · {time}",
+  "@requestFrom": {
+    "placeholders": {
+      "sender": { "type": "String" },
+      "time": { "type": "String" }
+    }
+  },
+  "placeLabel": "محل مصرف",
+  "stockNow": "موجودی فعلی",
+  "usedLastMonth": "مصرف ماه قبل",
+  "hiddenByCount": "در حال شمارش",
+  "qtyWithUnit": "{qty} {unit}",
+  "@qtyWithUnit": {
+    "placeholders": { "qty": { "type": "String" }, "unit": { "type": "String" } }
+  },
+  "noteLabel": "یادداشت",
+  "routineRequestNote": "این درخواست عادی است و مدیر انبار درباره آن تصمیم می‌گیرد.",
+
+  "decidedApprovedBy": "تأیید شد توسط {name} · {time}",
+  "@decidedApprovedBy": {
+    "placeholders": { "name": { "type": "String" }, "time": { "type": "String" } }
+  },
+  "decidedRejectedBy": "رد شد توسط {name} · {time}",
+  "@decidedRejectedBy": {
+    "placeholders": { "name": { "type": "String" }, "time": { "type": "String" } }
+  },
+  "decisionReason": "دلیل: {reason}",
+  "@decisionReason": { "placeholders": { "reason": { "type": "String" } } },
+
+  "approve": "تأیید",
+  "reject": "رد کردن",
+  "approveReason": "برای تأیید درخواست {number} هویت خود را تأیید کنید",
+  "@approveReason": { "placeholders": { "number": { "type": "String" } } },
+  "approvedDone": "تأیید شد و به انبار خبر داده شد",
+  "rejectedDone": "رد شد و به انبار خبر داده شد",
+  "undo": "بازگرداندن",
+  "decisionQueued": "اینترنت وصل نیست. تصمیم شما در صف ارسال است و خودکار فرستاده می‌شود.",
+  "conflictTitle": "این درخواست قبلاً بررسی شده است",
+  "conflictApproved": "تأیید شد توسط {name}. تصمیم شما ثبت نشد.",
+  "@conflictApproved": { "placeholders": { "name": { "type": "String" } } },
+  "conflictRejected": "رد شد توسط {name}. تصمیم شما ثبت نشد.",
+  "@conflictRejected": { "placeholders": { "name": { "type": "String" } } },
+  "ok": "باشه",
+
+  "rejectSheetTitle": "رد کردن درخواست {number}",
+  "@rejectSheetTitle": { "placeholders": { "number": { "type": "String" } } },
+  "rejectReasonLabel": "دلیل (اختیاری)",
+  "rejectReasonHint": "مثلاً: مقدار زیاد است",
+
+  "locationHistoryTitle": "مصرف قبلی همین محل",
+  "locationHistoryEmpty": "تا حالا چیزی به این محل داده نشده است.",
+  "historyLine": "{item} · {qty} {unit}",
+  "@historyLine": {
+    "placeholders": {
+      "item": { "type": "String" },
+      "qty": { "type": "String" },
+      "unit": { "type": "String" }
+    }
+  },
+  "historyMeta": "{date} · حواله {document}",
+  "@historyMeta": {
+    "placeholders": { "date": { "type": "String" }, "document": { "type": "String" } }
+  },
+
+  "chatTitle": "گفتگو درباره این درخواست",
+  "chatEmpty": "هنوز پیامی نیست.",
+  "chatInputLabel": "پیام",
+  "chatSend": "فرستادن",
+  "chatSendFailed": "فرستاده نشد. برای تلاش دوباره لمس کنید.",
+  "you": "شما",
+
   "errorTitle": "اطلاعات دریافت نشد",
   "offlineShowingCached": "اتصال برقرار نیست؛ آخرین اطلاعات ذخیره‌شده نمایش داده می‌شود."
 }

@@ -532,6 +532,270 @@ abstract class AppLocalizations {
   /// **'{sender} · {time}'**
   String senderAndTime(String sender, String time);
 
+  /// No description provided for @filterPending.
+  ///
+  /// In fa, this message translates to:
+  /// **'منتظر ({count})'**
+  String filterPending(int count);
+
+  /// No description provided for @filterReviewed.
+  ///
+  /// In fa, this message translates to:
+  /// **'بررسی‌شده'**
+  String get filterReviewed;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In fa, this message translates to:
+  /// **'همه'**
+  String get filterAll;
+
+  /// No description provided for @requestsEmptyPending.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواستی منتظر تأیید شما نیست.'**
+  String get requestsEmptyPending;
+
+  /// No description provided for @requestsEmptyReviewed.
+  ///
+  /// In fa, this message translates to:
+  /// **'هنوز درخواستی بررسی نشده است.'**
+  String get requestsEmptyReviewed;
+
+  /// No description provided for @requestsEmptyAll.
+  ///
+  /// In fa, this message translates to:
+  /// **'هنوز درخواستی ثبت نشده است.'**
+  String get requestsEmptyAll;
+
+  /// No description provided for @queuedLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'در صف ارسال'**
+  String get queuedLabel;
+
+  /// No description provided for @managerLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'مدیر انبار'**
+  String get managerLabel;
+
+  /// No description provided for @requestTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست {number}'**
+  String requestTitle(String number);
+
+  /// No description provided for @requestFrom.
+  ///
+  /// In fa, this message translates to:
+  /// **'از طرف {sender} · {time}'**
+  String requestFrom(String sender, String time);
+
+  /// No description provided for @placeLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'محل مصرف'**
+  String get placeLabel;
+
+  /// No description provided for @stockNow.
+  ///
+  /// In fa, this message translates to:
+  /// **'موجودی فعلی'**
+  String get stockNow;
+
+  /// No description provided for @usedLastMonth.
+  ///
+  /// In fa, this message translates to:
+  /// **'مصرف ماه قبل'**
+  String get usedLastMonth;
+
+  /// No description provided for @hiddenByCount.
+  ///
+  /// In fa, this message translates to:
+  /// **'در حال شمارش'**
+  String get hiddenByCount;
+
+  /// No description provided for @qtyWithUnit.
+  ///
+  /// In fa, this message translates to:
+  /// **'{qty} {unit}'**
+  String qtyWithUnit(String qty, String unit);
+
+  /// No description provided for @noteLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'یادداشت'**
+  String get noteLabel;
+
+  /// No description provided for @routineRequestNote.
+  ///
+  /// In fa, this message translates to:
+  /// **'این درخواست عادی است و مدیر انبار درباره آن تصمیم می‌گیرد.'**
+  String get routineRequestNote;
+
+  /// No description provided for @decidedApprovedBy.
+  ///
+  /// In fa, this message translates to:
+  /// **'تأیید شد توسط {name} · {time}'**
+  String decidedApprovedBy(String name, String time);
+
+  /// No description provided for @decidedRejectedBy.
+  ///
+  /// In fa, this message translates to:
+  /// **'رد شد توسط {name} · {time}'**
+  String decidedRejectedBy(String name, String time);
+
+  /// No description provided for @decisionReason.
+  ///
+  /// In fa, this message translates to:
+  /// **'دلیل: {reason}'**
+  String decisionReason(String reason);
+
+  /// No description provided for @approve.
+  ///
+  /// In fa, this message translates to:
+  /// **'تأیید'**
+  String get approve;
+
+  /// No description provided for @reject.
+  ///
+  /// In fa, this message translates to:
+  /// **'رد کردن'**
+  String get reject;
+
+  /// No description provided for @approveReason.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای تأیید درخواست {number} هویت خود را تأیید کنید'**
+  String approveReason(String number);
+
+  /// No description provided for @approvedDone.
+  ///
+  /// In fa, this message translates to:
+  /// **'تأیید شد و به انبار خبر داده شد'**
+  String get approvedDone;
+
+  /// No description provided for @rejectedDone.
+  ///
+  /// In fa, this message translates to:
+  /// **'رد شد و به انبار خبر داده شد'**
+  String get rejectedDone;
+
+  /// No description provided for @undo.
+  ///
+  /// In fa, this message translates to:
+  /// **'بازگرداندن'**
+  String get undo;
+
+  /// No description provided for @decisionQueued.
+  ///
+  /// In fa, this message translates to:
+  /// **'اینترنت وصل نیست. تصمیم شما در صف ارسال است و خودکار فرستاده می‌شود.'**
+  String get decisionQueued;
+
+  /// No description provided for @conflictTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'این درخواست قبلاً بررسی شده است'**
+  String get conflictTitle;
+
+  /// No description provided for @conflictApproved.
+  ///
+  /// In fa, this message translates to:
+  /// **'تأیید شد توسط {name}. تصمیم شما ثبت نشد.'**
+  String conflictApproved(String name);
+
+  /// No description provided for @conflictRejected.
+  ///
+  /// In fa, this message translates to:
+  /// **'رد شد توسط {name}. تصمیم شما ثبت نشد.'**
+  String conflictRejected(String name);
+
+  /// No description provided for @ok.
+  ///
+  /// In fa, this message translates to:
+  /// **'باشه'**
+  String get ok;
+
+  /// No description provided for @rejectSheetTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'رد کردن درخواست {number}'**
+  String rejectSheetTitle(String number);
+
+  /// No description provided for @rejectReasonLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'دلیل (اختیاری)'**
+  String get rejectReasonLabel;
+
+  /// No description provided for @rejectReasonHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'مثلاً: مقدار زیاد است'**
+  String get rejectReasonHint;
+
+  /// No description provided for @locationHistoryTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'مصرف قبلی همین محل'**
+  String get locationHistoryTitle;
+
+  /// No description provided for @locationHistoryEmpty.
+  ///
+  /// In fa, this message translates to:
+  /// **'تا حالا چیزی به این محل داده نشده است.'**
+  String get locationHistoryEmpty;
+
+  /// No description provided for @historyLine.
+  ///
+  /// In fa, this message translates to:
+  /// **'{item} · {qty} {unit}'**
+  String historyLine(String item, String qty, String unit);
+
+  /// No description provided for @historyMeta.
+  ///
+  /// In fa, this message translates to:
+  /// **'{date} · حواله {document}'**
+  String historyMeta(String date, String document);
+
+  /// No description provided for @chatTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'گفتگو درباره این درخواست'**
+  String get chatTitle;
+
+  /// No description provided for @chatEmpty.
+  ///
+  /// In fa, this message translates to:
+  /// **'هنوز پیامی نیست.'**
+  String get chatEmpty;
+
+  /// No description provided for @chatInputLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'پیام'**
+  String get chatInputLabel;
+
+  /// No description provided for @chatSend.
+  ///
+  /// In fa, this message translates to:
+  /// **'فرستادن'**
+  String get chatSend;
+
+  /// No description provided for @chatSendFailed.
+  ///
+  /// In fa, this message translates to:
+  /// **'فرستاده نشد. برای تلاش دوباره لمس کنید.'**
+  String get chatSendFailed;
+
+  /// No description provided for @you.
+  ///
+  /// In fa, this message translates to:
+  /// **'شما'**
+  String get you;
+
   /// No description provided for @errorTitle.
   ///
   /// In fa, this message translates to:
