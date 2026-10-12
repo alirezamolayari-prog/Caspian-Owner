@@ -1,0 +1,23 @@
+name: caspian_owner
+description: "Caspian Owner - owners' app for Caspian furniture mall"
+publish_to: 'none'
+
+# X.Y.Z+BUILD. BUILD must always increase (Android refuses a lower versionCode).
+# Bump with tool/bump_version.ps1, never by hand.
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.5
+  flutter: 3.47.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: 11.0.0
+
+flutter:
+  uses-material-design: true

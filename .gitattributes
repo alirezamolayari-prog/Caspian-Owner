@@ -1,0 +1,13 @@
+# Keep LF line endings on every OS, so `dart format` gives the same result on Windows and CI.
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+*.png binary
+*.jpg binary
+*.ttf binary
+*.otf binary
+*.jar binary
+*.apk binary
