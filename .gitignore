@@ -55,6 +55,9 @@ app.*.map.json
 build/
 .env*
 
+# Golden test failure diffs (alchemist)
+**/failures/
+
 # Private spec files (local only; the repo is public)
 CASPIAN_OWNER_BUILD.md
 caspian-owner-prompt.md
