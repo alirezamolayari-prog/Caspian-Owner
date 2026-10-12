@@ -1,4 +1,4 @@
-﻿# Progress
+# Progress
 
 **Next step:** M1 PR is open. Wait for green CI, squash-merge, then start M2 (brand, theme, Vazirmatn, RTL, ARB, Jalali) on branch `m02-brand-theme`.
 
@@ -14,18 +14,19 @@
 
 Shells started before M0 don't see the new user env vars. Set them inline, or open a new terminal.
 Flutter 3.47.7 floor: **minSdk 24** (Android 7.0). targetSdk 36.
+Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files with the editor tools, not `Get-Content`/`Set-Content`.
 
 ## Milestones
 | # | Status | Notes |
 |---|---|---|
 | M0 | Done | `flutter doctor` green (Flutter + Android, licenses accepted); no phone connected |
-| M1 | In progress | 5 local commits on `m01-scaffold`; format/analyze/test green locally |
-| M2â€“M13 | Not started | Vazirmatn v33.003 zip already in `E:\dev\_downloads\vazirmatn` |
+| M1 | PR open | Scaffold, signing, lints, LICENSE, CLAUDE.md, docs, CI. Local gate green; debug + signed release APK built |
+| M2–M13 | Not started | Vazirmatn v33.003 zip already in `E:\dev\_downloads\vazirmatn` |
 
-## Human checklist status (آ§2.4)
+## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)
 - [x] H2 removed `C:\src\flutter\bin` from the System PATH
-- [x] H3 licenses: the new `android sdk` CLI shows the terms without a prompt; `--licenses` is no longer used
+- [x] H3 licenses: the new `android sdk` CLI shows the terms without a prompt; `flutter doctor` reports all licenses accepted
 - [x] H4 release keystore `E:\keys\caspian-owner-release.jks` (alias `caspian-owner`), in KeePassXC + backups
 - [x] H5 `android/key.properties` (git-ignored)
 - [x] H6 GitHub secrets KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD
@@ -33,5 +34,5 @@ Flutter 3.47.7 floor: **minSdk 24** (Android 7.0). targetSdk 36.
 
 ## Open problems / notes
 - Harmless build warning: the new `android sdk` CLI writes package.xml v4, AGP reads up to v3 ("SDK processing ... XML version 4"). Builds succeed.
-- Kotlin daemon can't start on this PC; `kotlin.compiler.execution.strategy=in-process` in `android/gradle.properties`. Gradle heap lowered to 3G (PC has 8 GB RAM).
+- The Kotlin daemon can't start on this PC, so `android/gradle.properties` sets `kotlin.compiler.execution.strategy=in-process`. Gradle heap lowered to 3G (the PC has 8 GB RAM).
 - Release APK signing verified: cert SHA-256 `f332c7e7…c468ec` (full value in docs/RELEASING.md).
