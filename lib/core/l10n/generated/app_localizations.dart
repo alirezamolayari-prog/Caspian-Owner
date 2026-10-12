@@ -1060,6 +1060,402 @@ abstract class AppLocalizations {
   /// **'تاریخچه شمارش‌ها'**
   String get countSeeHistory;
 
+  /// No description provided for @assistantSuggestionToday.
+  ///
+  /// In fa, this message translates to:
+  /// **'خلاصه امروز'**
+  String get assistantSuggestionToday;
+
+  /// No description provided for @assistantSuggestionMonth.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست‌های این ماه'**
+  String get assistantSuggestionMonth;
+
+  /// No description provided for @assistantSuggestionCount.
+  ///
+  /// In fa, this message translates to:
+  /// **'نتیجه آخرین شمارش'**
+  String get assistantSuggestionCount;
+
+  /// No description provided for @assistantInputLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'سؤال خود را بنویسید'**
+  String get assistantInputLabel;
+
+  /// No description provided for @assistantHistory.
+  ///
+  /// In fa, this message translates to:
+  /// **'گفتگوهای قبلی'**
+  String get assistantHistory;
+
+  /// No description provided for @assistantHistoryEmpty.
+  ///
+  /// In fa, this message translates to:
+  /// **'هنوز سؤالی نپرسیده‌اید.'**
+  String get assistantHistoryEmpty;
+
+  /// No description provided for @assistantThinking.
+  ///
+  /// In fa, this message translates to:
+  /// **'در حال آماده کردن پاسخ…'**
+  String get assistantThinking;
+
+  /// No description provided for @assistantFailed.
+  ///
+  /// In fa, this message translates to:
+  /// **'پاسخ دریافت نشد؛ دوباره بپرسید'**
+  String get assistantFailed;
+
+  /// No description provided for @assistantEmpty.
+  ///
+  /// In fa, this message translates to:
+  /// **'درباره درخواست‌ها، موجودی و شمارش‌ها از دستیار کاسپین بپرسید.'**
+  String get assistantEmpty;
+
+  /// No description provided for @assistantDemoNote.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه آزمایشی: پاسخ‌ها نمونه‌اند. دستیار واقعی بعد از راه‌اندازی سرور فعال می‌شود.'**
+  String get assistantDemoNote;
+
+  /// No description provided for @moreReports.
+  ///
+  /// In fa, this message translates to:
+  /// **'گزارش‌ها'**
+  String get moreReports;
+
+  /// No description provided for @morePurchaseList.
+  ///
+  /// In fa, this message translates to:
+  /// **'لیست خرید'**
+  String get morePurchaseList;
+
+  /// No description provided for @moreUsers.
+  ///
+  /// In fa, this message translates to:
+  /// **'کاربران و دسترسی‌ها'**
+  String get moreUsers;
+
+  /// No description provided for @moreSettings.
+  ///
+  /// In fa, this message translates to:
+  /// **'تنظیمات'**
+  String get moreSettings;
+
+  /// No description provided for @moreAbout.
+  ///
+  /// In fa, this message translates to:
+  /// **'درباره و نسخه'**
+  String get moreAbout;
+
+  /// No description provided for @comingSoonBadge.
+  ///
+  /// In fa, this message translates to:
+  /// **'به‌زودی'**
+  String get comingSoonBadge;
+
+  /// No description provided for @reportsTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'گزارش‌ها'**
+  String get reportsTitle;
+
+  /// No description provided for @reportByFloor.
+  ///
+  /// In fa, this message translates to:
+  /// **'مصرف به تفکیک طبقه'**
+  String get reportByFloor;
+
+  /// No description provided for @reportByLocation.
+  ///
+  /// In fa, this message translates to:
+  /// **'مصرف به تفکیک محل'**
+  String get reportByLocation;
+
+  /// No description provided for @periodThisMonth.
+  ///
+  /// In fa, this message translates to:
+  /// **'این ماه'**
+  String get periodThisMonth;
+
+  /// No description provided for @periodLast30.
+  ///
+  /// In fa, this message translates to:
+  /// **'۳۰ روز اخیر'**
+  String get periodLast30;
+
+  /// No description provided for @periodLast90.
+  ///
+  /// In fa, this message translates to:
+  /// **'۹۰ روز اخیر'**
+  String get periodLast90;
+
+  /// No description provided for @reportRange.
+  ///
+  /// In fa, this message translates to:
+  /// **'از {from} تا {to}'**
+  String reportRange(String from, String to);
+
+  /// No description provided for @reportRowTotal.
+  ///
+  /// In fa, this message translates to:
+  /// **'{count} قلم'**
+  String reportRowTotal(int count);
+
+  /// No description provided for @reportNoConsumption.
+  ///
+  /// In fa, this message translates to:
+  /// **'بدون مصرف'**
+  String get reportNoConsumption;
+
+  /// No description provided for @reportEmpty.
+  ///
+  /// In fa, this message translates to:
+  /// **'در این بازه مصرفی ثبت نشده است.'**
+  String get reportEmpty;
+
+  /// No description provided for @purchaseBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'لیست خرید در نسخه‌های بعدی اضافه می‌شود.'**
+  String get purchaseBody;
+
+  /// No description provided for @usersAdmin.
+  ///
+  /// In fa, this message translates to:
+  /// **'مدیر سیستم'**
+  String get usersAdmin;
+
+  /// No description provided for @usersOwner.
+  ///
+  /// In fa, this message translates to:
+  /// **'مالک'**
+  String get usersOwner;
+
+  /// No description provided for @usersYou.
+  ///
+  /// In fa, this message translates to:
+  /// **'شما'**
+  String get usersYou;
+
+  /// No description provided for @usersNote.
+  ///
+  /// In fa, this message translates to:
+  /// **'افزودن، حذف و تعیین دسترسی کاربران بعد از راه‌اندازی سرور فعال می‌شود.'**
+  String get usersNote;
+
+  /// No description provided for @settingsTheme.
+  ///
+  /// In fa, this message translates to:
+  /// **'ظاهر'**
+  String get settingsTheme;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In fa, this message translates to:
+  /// **'مطابق گوشی'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In fa, this message translates to:
+  /// **'روشن'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In fa, this message translates to:
+  /// **'تیره'**
+  String get themeDark;
+
+  /// No description provided for @settingsNotifications.
+  ///
+  /// In fa, this message translates to:
+  /// **'اعلان‌ها'**
+  String get settingsNotifications;
+
+  /// No description provided for @settingsNotificationsBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'خبر درخواست‌های تازه، نتیجه شمارش و پیام‌ها'**
+  String get settingsNotificationsBody;
+
+  /// No description provided for @settingsFingerprint.
+  ///
+  /// In fa, this message translates to:
+  /// **'تأیید با اثر انگشت برای تأیید درخواست'**
+  String get settingsFingerprint;
+
+  /// No description provided for @settingsFingerprintBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'قبل از تأیید هر درخواست، یک بار اثر انگشت خواسته می‌شود.'**
+  String get settingsFingerprintBody;
+
+  /// No description provided for @settingsSecure.
+  ///
+  /// In fa, this message translates to:
+  /// **'جلوگیری از عکس صفحه'**
+  String get settingsSecure;
+
+  /// No description provided for @settingsSecureBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'در صفحه‌های موجودی، درخواست‌ها و شمارش، عکس گرفتن از صفحه ممکن نیست.'**
+  String get settingsSecureBody;
+
+  /// No description provided for @settingsPin.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز برنامه'**
+  String get settingsPin;
+
+  /// No description provided for @settingsPinBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای وقتی که اثر انگشت کار نمی‌کند'**
+  String get settingsPinBody;
+
+  /// No description provided for @settingsPinSet.
+  ///
+  /// In fa, this message translates to:
+  /// **'تعیین یا تغییر رمز'**
+  String get settingsPinSet;
+
+  /// No description provided for @settingsPinSaved.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز برنامه ذخیره شد.'**
+  String get settingsPinSaved;
+
+  /// No description provided for @aboutVersion.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه {version} (ساخت {build})'**
+  String aboutVersion(String version, String build);
+
+  /// No description provided for @aboutMall.
+  ///
+  /// In fa, this message translates to:
+  /// **'ساخته‌شده برای {mall}'**
+  String aboutMall(String mall);
+
+  /// No description provided for @devUnlocked.
+  ///
+  /// In fa, this message translates to:
+  /// **'صفحه توسعه‌دهنده باز شد.'**
+  String get devUnlocked;
+
+  /// No description provided for @devTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'صفحه توسعه‌دهنده'**
+  String get devTitle;
+
+  /// No description provided for @devScenario.
+  ///
+  /// In fa, this message translates to:
+  /// **'سناریوی داده آزمایشی'**
+  String get devScenario;
+
+  /// No description provided for @scenarioNormal.
+  ///
+  /// In fa, this message translates to:
+  /// **'عادی'**
+  String get scenarioNormal;
+
+  /// No description provided for @scenarioEmpty.
+  ///
+  /// In fa, this message translates to:
+  /// **'بدون داده'**
+  String get scenarioEmpty;
+
+  /// No description provided for @scenarioSlow.
+  ///
+  /// In fa, this message translates to:
+  /// **'شبکه کند'**
+  String get scenarioSlow;
+
+  /// No description provided for @scenarioServerError.
+  ///
+  /// In fa, this message translates to:
+  /// **'خطای سرور'**
+  String get scenarioServerError;
+
+  /// No description provided for @scenarioConflict.
+  ///
+  /// In fa, this message translates to:
+  /// **'تصمیم هم‌زمان (۴۰۹)'**
+  String get scenarioConflict;
+
+  /// No description provided for @scenarioOffline.
+  ///
+  /// In fa, this message translates to:
+  /// **'بدون اینترنت'**
+  String get scenarioOffline;
+
+  /// No description provided for @devCompleteCount.
+  ///
+  /// In fa, this message translates to:
+  /// **'پایان شمارش در حال انجام'**
+  String get devCompleteCount;
+
+  /// No description provided for @devCompleteCountBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'شبیه‌سازی کار انبار: کارکنان شمارش را تمام می‌کنند.'**
+  String get devCompleteCountBody;
+
+  /// No description provided for @devNoRunningCount.
+  ///
+  /// In fa, this message translates to:
+  /// **'شمارشی در حال انجام نیست.'**
+  String get devNoRunningCount;
+
+  /// No description provided for @devCountCompleted.
+  ///
+  /// In fa, this message translates to:
+  /// **'شمارش تمام شد.'**
+  String get devCountCompleted;
+
+  /// No description provided for @devDataSource.
+  ///
+  /// In fa, this message translates to:
+  /// **'منبع داده'**
+  String get devDataSource;
+
+  /// No description provided for @devDataSourceValue.
+  ///
+  /// In fa, this message translates to:
+  /// **'{source} · {url}'**
+  String devDataSourceValue(String source, String url);
+
+  /// No description provided for @devDebugOnly.
+  ///
+  /// In fa, this message translates to:
+  /// **'فقط در نسخه آزمایشی قابل تغییر است.'**
+  String get devDebugOnly;
+
+  /// No description provided for @devLogs.
+  ///
+  /// In fa, this message translates to:
+  /// **'آخرین خطاها و رویدادها'**
+  String get devLogs;
+
+  /// No description provided for @devNoLogs.
+  ///
+  /// In fa, this message translates to:
+  /// **'چیزی ثبت نشده است.'**
+  String get devNoLogs;
+
+  /// No description provided for @devExportLogs.
+  ///
+  /// In fa, this message translates to:
+  /// **'فرستادن فایل گزارش'**
+  String get devExportLogs;
+
   /// No description provided for @errorTitle.
   ///
   /// In fa, this message translates to:
