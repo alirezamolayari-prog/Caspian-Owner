@@ -1,6 +1,9 @@
 # Keep LF line endings on every OS, so `dart format` gives the same result on Windows and CI.
 * text=auto eol=lf
 
+# Byte-identical copy of the Caspian_Warehouse seed file (CRLF), so re-syncs diff cleanly.
+assets/mock/caspian_locations.csv -text
+
 *.bat text eol=crlf
 *.cmd text eol=crlf
 *.ps1 text eol=crlf

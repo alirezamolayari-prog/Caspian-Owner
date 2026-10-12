@@ -21,7 +21,7 @@ Private Android app (Flutter) for the ~5 owners of Caspian furniture mall (build
 ## Commands
 ```powershell
 flutter pub get
-dart run build_runner build --delete-conflicting-outputs   # after changing models/db/providers
+dart run build_runner build      # after changing models (freezed/json) or the drift database
 dart format .
 flutter analyze --fatal-infos
 flutter test
@@ -36,6 +36,13 @@ flutter build apk --release   # signed with android/key.properties, else the DEB
 - `main` is always releasable. One branch per milestone `m<NN>-<short-name>`; small English commits; `gh pr create`; wait for CI; `gh pr merge --squash --delete-branch` only when green.
 - Never force-push `main`, never rewrite published history, never commit build outputs or secrets.
 - After every milestone update `docs/PROGRESS.md` (keep "Next step:" accurate).
+
+## Code conventions
+- Dart 3.13 constructor syntax: `const new(...)`, `const factory(...)`, `factory fromJson(...)` (lint `unnecessary_type_name_in_constructor`). `dart fix --apply` converts old-style code.
+- Models are freezed + json_serializable with snake_case keys (`build.yaml`). Fields that are required-but-nullable in the contract need `@JsonKey(includeIfNull: true)`. Digits in names need an explicit `@JsonKey(name: ...)` (e.g. `used_last_30d`).
+- `test/contract/contract_test.dart` validates every model against `api/openapi.yaml`. Keep it green when changing either side.
+- Generated files (`*.g.dart`, `*.freezed.dart`, `lib/core/l10n/generated/`) are committed.
+- Edit text files with the editor tools, not Windows PowerShell `Get-Content`/`Set-Content` (they mangle UTF-8).
 
 ## Architecture rules
 - Feature-first: `lib/features/<name>/{data,domain,presentation}`; shared code in `lib/core/`.

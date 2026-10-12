@@ -1,0 +1,17 @@
+{
+  "me": "o-1",
+  "owners": [
+    { "id": "o-1", "name_fa": "علیرضا", "is_admin": true },
+    { "id": "o-2", "name_fa": "حسین کاظمی", "is_admin": false },
+    { "id": "o-3", "name_fa": "مریم احمدی", "is_admin": false },
+    { "id": "o-4", "name_fa": "رضا توکلی", "is_admin": false },
+    { "id": "o-5", "name_fa": "فرهاد نیک‌نام", "is_admin": false }
+  ],
+  "persons": [
+    { "code": "P-01", "name_fa": "امیر رحیمی", "role_fa": "انباردار" },
+    { "code": "P-02", "name_fa": "سعید مرادی", "role_fa": "انباردار" },
+    { "code": "P-03", "name_fa": "ناصر کریمی", "role_fa": "مدیر انبار" },
+    { "code": "P-04", "name_fa": "جواد صالحی", "role_fa": "تأسیسات" },
+    { "code": "P-05", "name_fa": "مهسا یزدانی", "role_fa": "خدمات" }
+  ]
+}

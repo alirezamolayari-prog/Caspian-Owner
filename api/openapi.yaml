@@ -1,0 +1,871 @@
+openapi: 3.1.0
+info:
+  title: Caspian Owner API
+  version: 1.0.0
+  summary: Contract between the Caspian Owner app and the middle server.
+  description: |
+    Single source of truth for the owner app, its mock repositories, the future
+    middle server and the Caspian Warehouse sync.
+
+    Rules:
+    - Places are identified by `location_code` + `floor_code`, never by internal ids.
+    - Persian display text is in `*_fa` fields.
+    - Timestamps are RFC 3339 with offset (`date-time`).
+    - Every decision carries an `idempotency_key`; the server applies it once.
+    - The first decision on a request wins; later ones get `409` with the winner.
+  license:
+    name: Proprietary. Copyright (c) 2026 Alireza Molayari. All rights reserved.
+servers:
+  - url: https://api.example.invalid
+    description: Placeholder until the middle server (Iranian VPS) exists.
+security:
+  - bearerAuth: []
+
+tags:
+  - name: auth
+  - name: config
+  - name: requests
+  - name: chat
+  - name: stock
+  - name: counts
+  - name: assistant
+  - name: reports
+  - name: notifications
+  - name: app
+
+paths:
+  /v1/auth/register-device:
+    post:
+      tags: [auth]
+      summary: Start login. Registers the device and sends an SMS one-time code.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterDeviceRequest' }
+      responses:
+        '200':
+          description: Code sent.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RegisterDeviceResponse' }
+        '400': { $ref: '#/components/responses/Error' }
+        '429': { $ref: '#/components/responses/Error' }
+
+  /v1/auth/verify:
+    post:
+      tags: [auth]
+      summary: Verify the one-time code and receive tokens.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/VerifyRequest' }
+      responses:
+        '200':
+          description: Logged in.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthTokens' }
+        '400': { $ref: '#/components/responses/Error' }
+        '401': { $ref: '#/components/responses/Error' }
+
+  /v1/auth/refresh:
+    post:
+      tags: [auth]
+      summary: Exchange a refresh token for new tokens.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh_token]
+              properties:
+                refresh_token: { type: string }
+      responses:
+        '200':
+          description: New tokens.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthTokens' }
+        '401': { $ref: '#/components/responses/Error' }
+
+  /v1/me:
+    get:
+      tags: [auth]
+      summary: The logged-in owner.
+      responses:
+        '200':
+          description: Current owner.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Owner' }
+        '401': { $ref: '#/components/responses/Error' }
+
+  /v1/config:
+    get:
+      tags: [config]
+      summary: Feature flags, enabled modules and the minimum supported build.
+      responses:
+        '200':
+          description: App configuration for this owner.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AppConfig' }
+
+  /v1/locations:
+    get:
+      tags: [config]
+      summary: Floors and consumption locations (mirrors the Warehouse seed).
+      parameters:
+        - name: If-None-Match
+          in: header
+          schema: { type: string }
+          description: ETag of the snapshot the app already has.
+      responses:
+        '200':
+          description: Current snapshot.
+          headers:
+            ETag: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LocationsSnapshot' }
+        '304':
+          description: The app's snapshot is current.
+
+  /v1/requests:
+    get:
+      tags: [requests]
+      summary: Goods requests visible to owners (all decisions, newest first).
+      parameters:
+        - name: status
+          in: query
+          schema: { $ref: '#/components/schemas/RequestStatus' }
+        - name: escalated_only
+          in: query
+          schema: { type: boolean, default: false }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A page of requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/GoodsRequest' }
+                  next_cursor: { type: [string, 'null'] }
+
+  /v1/requests/{id}:
+    get:
+      tags: [requests]
+      summary: One request, including the usage history of the same place.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: The request.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/GoodsRequest' }
+        '404': { $ref: '#/components/responses/Error' }
+
+  /v1/requests/{id}/decision:
+    post:
+      tags: [requests]
+      summary: Approve or reject an escalated request. The first decision wins.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+        - $ref: '#/components/parameters/DeviceId'
+        - $ref: '#/components/parameters/AppVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Decision' }
+      responses:
+        '200':
+          description: Decision recorded (or the same idempotency key was already applied).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/GoodsRequest' }
+        '403': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409':
+          description: Someone already decided. Contains the winning decision.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AlreadyDecided' }
+
+  /v1/requests/{id}/messages:
+    get:
+      tags: [chat]
+      summary: Chat about one request, oldest first.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+        - name: since
+          in: query
+          schema: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Messages.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/ChatMessage' }
+    post:
+      tags: [chat]
+      summary: Send a message about one request.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text, client_id]
+              properties:
+                text: { type: string, minLength: 1, maxLength: 2000 }
+                client_id:
+                  type: string
+                  description: Idempotency key for the message.
+      responses:
+        '201':
+          description: Stored message.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ChatMessage' }
+
+  /v1/stock:
+    get:
+      tags: [stock]
+      summary: Warehouse stock. Quantities are null while a count hides them.
+      parameters:
+        - name: q
+          in: query
+          description: Search in item name or code.
+          schema: { type: string }
+        - name: low_only
+          in: query
+          schema: { type: boolean, default: false }
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: A page of stock items.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/StockItem' }
+                  next_cursor: { type: [string, 'null'] }
+
+  /v1/stock/{code}/movements:
+    get:
+      tags: [stock]
+      summary: Recent in/out movements of one item, newest first.
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema: { type: string }
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Movements. Empty while the item is hidden by a count.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/StockMovement' }
+
+  /v1/counts:
+    get:
+      tags: [counts]
+      summary: Surprise counts, newest first.
+      responses:
+        '200':
+          description: Counts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/SurpriseCount' }
+    post:
+      tags: [counts]
+      summary: Start a surprise count now. Locks the items and hides their stock.
+      parameters:
+        - $ref: '#/components/parameters/DeviceId'
+        - $ref: '#/components/parameters/AppVersion'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [item_codes, idempotency_key]
+              properties:
+                item_codes:
+                  type: array
+                  minItems: 1
+                  items: { type: string }
+                idempotency_key: { type: string }
+      responses:
+        '201':
+          description: Count started.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SurpriseCount' }
+        '409':
+          description: Some items are already in a running count.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /v1/counts/{id}:
+    get:
+      tags: [counts]
+      summary: One count with results once done.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: The count.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SurpriseCount' }
+        '404': { $ref: '#/components/responses/Error' }
+
+  /v1/assistant/messages:
+    get:
+      tags: [assistant]
+      summary: Assistant chat history, oldest first.
+      responses:
+        '200':
+          description: History.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AssistantMessage' }
+    post:
+      tags: [assistant]
+      summary: Ask the assistant. Returns its answer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text: { type: string, minLength: 1, maxLength: 2000 }
+      responses:
+        '200':
+          description: The assistant's answer.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AssistantMessage' }
+
+  /v1/reports/consumption:
+    get:
+      tags: [reports]
+      summary: Consumption grouped by floor (building order) or location.
+      parameters:
+        - name: group_by
+          in: query
+          required: true
+          schema: { type: string, enum: [floor, location] }
+        - name: from
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: to
+          in: query
+          required: true
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Report.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ConsumptionReport' }
+
+  /v1/notifications/poll:
+    get:
+      tags: [notifications]
+      summary: New events since a time. Used until a push channel exists.
+      parameters:
+        - name: since
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Events, oldest first.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [events, server_time]
+                properties:
+                  events:
+                    type: array
+                    items: { $ref: '#/components/schemas/NotificationEvent' }
+                  server_time: { type: string, format: date-time }
+
+  /v1/app/update:
+    get:
+      tags: [app]
+      summary: The update manifest (also published as a GitHub Release asset).
+      security: []
+      responses:
+        '200':
+          description: Latest release.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UpdateManifest' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+    Cursor:
+      name: cursor
+      in: query
+      schema: { type: string }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 100, default: 50 }
+    DeviceId:
+      name: X-Device-Id
+      in: header
+      required: true
+      schema: { type: string }
+    AppVersion:
+      name: X-App-Version
+      in: header
+      required: true
+      description: '`X.Y.Z+BUILD`'
+      schema: { type: string }
+
+  responses:
+    Error:
+      description: Error with a Persian message.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+  schemas:
+    Error:
+      type: object
+      required: [code, message_fa]
+      properties:
+        code: { type: string, examples: [already_decided, not_found, invalid_code] }
+        message_fa: { type: string }
+
+    RegisterDeviceRequest:
+      type: object
+      required: [phone, device_id, device_model, app_version]
+      properties:
+        phone: { type: string, pattern: '^09[0-9]{9}$' }
+        device_id: { type: string }
+        device_model: { type: string }
+        app_version: { type: string }
+
+    RegisterDeviceResponse:
+      type: object
+      required: [code_length, resend_after_seconds]
+      properties:
+        code_length: { type: integer, examples: [5] }
+        resend_after_seconds: { type: integer, examples: [60] }
+
+    VerifyRequest:
+      type: object
+      required: [phone, device_id, code]
+      properties:
+        phone: { type: string }
+        device_id: { type: string }
+        code: { type: string }
+
+    AuthTokens:
+      type: object
+      required: [access_token, refresh_token, expires_at, owner]
+      properties:
+        access_token: { type: string }
+        refresh_token: { type: string }
+        expires_at: { type: string, format: date-time }
+        owner: { $ref: '#/components/schemas/Owner' }
+
+    Floor:
+      type: object
+      required: [code, name_fa, sort_order]
+      properties:
+        code:
+          type: string
+          enum: [P4, P3, P2, P1, B, G, F1, F2, F3, ROOF]
+        name_fa: { type: string, examples: [طبقه دوم] }
+        sort_order:
+          type: integer
+          description: Building order, bottom to top (P4 = 0 … ROOF = 9).
+
+    LocationType:
+      type: string
+      enum: [plate, named, vertical, general, floor_place]
+
+    Location:
+      type: object
+      required: [code, name_fa, type, needs_floor, aliases, is_active]
+      properties:
+        code: { type: string, examples: ['68', CAFE, AB-ASD] }
+        name_fa: { type: string, examples: [پلاک 68] }
+        type: { $ref: '#/components/schemas/LocationType' }
+        floor_code:
+          type: [string, 'null']
+          description: Fixed floor of the location; null when it spans floors.
+        needs_floor:
+          type: boolean
+          description: True when the user must also pick a floor (stairs, elevators, common areas).
+        aliases:
+          type: array
+          items: { type: string }
+        merged_with:
+          type: array
+          items: { type: string }
+          description: Other plate codes merged into the same shop.
+        is_active: { type: boolean }
+
+    LocationsSnapshot:
+      type: object
+      required: [version, floors, locations]
+      properties:
+        version: { type: string }
+        floors:
+          type: array
+          items: { $ref: '#/components/schemas/Floor' }
+        locations:
+          type: array
+          items: { $ref: '#/components/schemas/Location' }
+
+    ConsumptionPlace:
+      type: object
+      required: [location_code, floor_code]
+      properties:
+        location_code: { type: string }
+        floor_code: { type: string }
+        usage_note: { type: [string, 'null'] }
+
+    Person:
+      type: object
+      required: [code, name_fa]
+      properties:
+        code: { type: string }
+        name_fa: { type: string }
+        role_fa: { type: [string, 'null'] }
+
+    Owner:
+      type: object
+      required: [id, name_fa, is_admin]
+      properties:
+        id: { type: string }
+        name_fa: { type: string }
+        is_admin: { type: boolean }
+
+    RequestLine:
+      type: object
+      required: [item_code, item_name_fa, qty, unit_fa, stock_now, used_last_30d]
+      properties:
+        item_code: { type: string }
+        item_name_fa: { type: string }
+        qty: { type: number }
+        unit_fa: { type: string }
+        stock_now:
+          type: [number, 'null']
+          description: Null while the item is hidden by a running count.
+        used_last_30d: { type: number }
+
+    RequestStatus:
+      type: string
+      enum: [pending, approved, rejected, cancelled]
+
+    EscalationReason:
+      type: string
+      enum: [amount, quantity, important_item, manual]
+
+    DeciderKind:
+      type: string
+      enum: [owner, manager]
+
+    DecidedBy:
+      type: object
+      required: [kind, name_fa]
+      properties:
+        kind: { $ref: '#/components/schemas/DeciderKind' }
+        name_fa: { type: string }
+
+    LocationUsage:
+      type: object
+      required: [date, item_name_fa, qty, unit_fa, document_no]
+      description: A past issue to the same location + floor.
+      properties:
+        date: { type: string, format: date-time }
+        item_name_fa: { type: string }
+        qty: { type: number }
+        unit_fa: { type: string }
+        document_no: { type: string }
+
+    GoodsRequest:
+      type: object
+      required: [id, number, created_at, requester, place, lines, status, escalated]
+      properties:
+        id: { type: string }
+        number: { type: integer, examples: [124] }
+        created_at: { type: string, format: date-time }
+        requester: { $ref: '#/components/schemas/Person' }
+        place: { $ref: '#/components/schemas/ConsumptionPlace' }
+        lines:
+          type: array
+          minItems: 1
+          items: { $ref: '#/components/schemas/RequestLine' }
+        note: { type: [string, 'null'] }
+        status: { $ref: '#/components/schemas/RequestStatus' }
+        escalated:
+          type: boolean
+          description: True when owners must decide; false for routine requests decided in the Warehouse.
+        escalation_reason:
+          oneOf:
+            - $ref: '#/components/schemas/EscalationReason'
+            - type: 'null'
+        decided_by:
+          oneOf:
+            - $ref: '#/components/schemas/DecidedBy'
+            - type: 'null'
+        decided_at: { type: [string, 'null'], format: date-time }
+        decision_reason: { type: [string, 'null'] }
+        location_history:
+          type: array
+          items: { $ref: '#/components/schemas/LocationUsage' }
+          description: Only in GET /v1/requests/{id}.
+
+    Decision:
+      type: object
+      required: [request_id, action, idempotency_key]
+      properties:
+        request_id: { type: string }
+        action: { type: string, enum: [approve, reject] }
+        reason: { type: [string, 'null'] }
+        idempotency_key: { type: string }
+
+    AlreadyDecided:
+      type: object
+      required: [code, message_fa, request]
+      properties:
+        code: { type: string, const: already_decided }
+        message_fa: { type: string }
+        request: { $ref: '#/components/schemas/GoodsRequest' }
+
+    ChatAuthorKind:
+      type: string
+      enum: [owner, staff, manager]
+
+    ChatMessage:
+      type: object
+      required: [id, request_id, author, text, sent_at]
+      properties:
+        id: { type: string }
+        request_id: { type: string }
+        author:
+          type: object
+          required: [kind, name_fa]
+          properties:
+            kind: { $ref: '#/components/schemas/ChatAuthorKind' }
+            name_fa: { type: string }
+            is_me: { type: boolean, default: false }
+        text: { type: string }
+        sent_at: { type: string, format: date-time }
+
+    StockItem:
+      type: object
+      required: [code, name_fa, unit_fa, qty, low, locked_by_count]
+      properties:
+        code: { type: string }
+        name_fa: { type: string }
+        unit_fa: { type: string }
+        qty:
+          type: [number, 'null']
+          description: Null while hidden by a running surprise count.
+        shelf_fa: { type: [string, 'null'] }
+        low: { type: boolean }
+        locked_by_count: { type: boolean }
+
+    StockMovementKind:
+      type: string
+      enum: [in, out, adjustment]
+
+    StockMovement:
+      type: object
+      required: [date, kind, qty, document_no]
+      properties:
+        date: { type: string, format: date-time }
+        kind: { $ref: '#/components/schemas/StockMovementKind' }
+        qty: { type: number }
+        document_no: { type: string }
+        place:
+          oneOf:
+            - $ref: '#/components/schemas/ConsumptionPlace'
+            - type: 'null'
+
+    CountItem:
+      type: object
+      required: [item_code, item_name_fa, unit_fa]
+      properties:
+        item_code: { type: string }
+        item_name_fa: { type: string }
+        unit_fa: { type: string }
+
+    CountEntry:
+      type: object
+      required: [qty, entered_by, entered_at]
+      properties:
+        qty: { type: number }
+        entered_by: { $ref: '#/components/schemas/Person' }
+        entered_at: { type: string, format: date-time }
+
+    CountResult:
+      type: object
+      required: [item_code, system_qty, counted_qty, entries, counted_by]
+      properties:
+        item_code: { type: string }
+        system_qty: { type: number }
+        counted_qty: { type: number }
+        entries:
+          type: array
+          items: { $ref: '#/components/schemas/CountEntry' }
+          description: Every number that was entered, in order.
+        counted_by:
+          type: array
+          items: { $ref: '#/components/schemas/Person' }
+
+    SurpriseCount:
+      type: object
+      required: [id, ordered_by, ordered_at, items, status]
+      properties:
+        id: { type: string }
+        ordered_by: { $ref: '#/components/schemas/Owner' }
+        ordered_at: { type: string, format: date-time }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/CountItem' }
+        status: { type: string, enum: [running, done] }
+        finished_at: { type: [string, 'null'], format: date-time }
+        results:
+          type: array
+          items: { $ref: '#/components/schemas/CountResult' }
+          description: Present when status is done. Stock is never auto-adjusted.
+
+    AssistantMessage:
+      type: object
+      required: [id, role, text, at]
+      properties:
+        id: { type: string }
+        role: { type: string, enum: [user, assistant] }
+        text: { type: string }
+        at: { type: string, format: date-time }
+
+    ConsumptionReportRow:
+      type: object
+      required: [code, name_fa, total]
+      properties:
+        code: { type: string }
+        name_fa: { type: string }
+        total:
+          type: number
+          description: Number of issued line items in the period.
+        lines:
+          type: array
+          items:
+            type: object
+            required: [item_name_fa, qty, unit_fa]
+            properties:
+              item_name_fa: { type: string }
+              qty: { type: number }
+              unit_fa: { type: string }
+
+    ConsumptionReport:
+      type: object
+      required: [group_by, from, to, rows]
+      properties:
+        group_by: { type: string, enum: [floor, location] }
+        from: { type: string, format: date }
+        to: { type: string, format: date }
+        rows:
+          type: array
+          items: { $ref: '#/components/schemas/ConsumptionReportRow' }
+          description: For group_by=floor, in building order P4 → ROOF.
+
+    AppConfig:
+      type: object
+      required: [feature_flags, modules, min_supported_build]
+      properties:
+        feature_flags:
+          type: array
+          items: { type: string }
+          examples: [[surprise_count, assistant, reports]]
+        modules:
+          type: array
+          items: { type: string }
+          examples: [[warehouse]]
+        min_supported_build: { type: integer }
+
+    NotificationEventKind:
+      type: string
+      enum: [request_escalated, request_decided, count_result, chat_message]
+
+    NotificationEvent:
+      type: object
+      required: [id, kind, at, title_fa, body_fa, target]
+      properties:
+        id: { type: string }
+        kind: { $ref: '#/components/schemas/NotificationEventKind' }
+        at: { type: string, format: date-time }
+        title_fa: { type: string }
+        body_fa: { type: string }
+        target:
+          type: string
+          description: In-app deep link, e.g. /requests/r-124 or /counts/c-7.
+
+    UpdateManifest:
+      type: object
+      required: [version, build, min_supported_build, apk_url, sha256, size_bytes, changelog_fa, published_at]
+      properties:
+        version: { type: string, examples: [1.2.0] }
+        build: { type: integer }
+        min_supported_build: { type: integer }
+        apk_url: { type: string, format: uri }
+        sha256: { type: string, pattern: '^[0-9a-f]{64}$' }
+        size_bytes: { type: integer }
+        changelog_fa: { type: string }
+        published_at: { type: string, format: date-time }
