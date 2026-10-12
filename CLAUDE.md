@@ -48,6 +48,7 @@ flutter build apk --release   # signed with android/key.properties, else the DEB
 - `tester.pageBack()` can't find the back button since Material moved to its own package; use `tester.binding.handlePopRoute()` (Android back).
 - With several scrollables on screen (e.g. a multi-line TextField), pass `scrollable: find.byType(Scrollable).first` to `scrollUntilVisible`.
 - Android: `MainActivity` must stay a `FlutterFragmentActivity` (local_auth), with an AppCompat launch theme.
+- Never run other `flutter` commands while `flutter build apk --release` runs: they regenerate `GeneratedPluginRegistrant.java` with dev-only plugins (`integration_test`) and the release compile fails ("package dev.flutter.plugins.integration_test does not exist").
 - Edit text files with the editor tools, not Windows PowerShell `Get-Content`/`Set-Content` (they mangle UTF-8).
 
 ## Architecture rules
