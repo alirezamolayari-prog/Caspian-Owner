@@ -1,0 +1,122 @@
+[
+  {
+    "id": "r-125", "number": 125, "created_at": "2026-10-12T11:55:00+03:30",
+    "requester": { "code": "P-02", "name_fa": "سعید مرادی", "role_fa": "انباردار" },
+    "place": { "location_code": "SUPER", "floor_code": "P1", "usage_note": "تعمیر سقف کاذب" },
+    "lines": [
+      { "item_code": "I-1014", "item_name_fa": "لوله پی‌وی‌سی ۲ اینچ", "qty": 8, "unit_fa": "شاخه", "stock_now": 14, "used_last_30d": 3 }
+    ],
+    "note": "نشتی آب از سقف سوپرمارکت",
+    "status": "pending", "escalated": true, "escalation_reason": "quantity"
+  },
+  {
+    "id": "r-124", "number": 124, "created_at": "2026-10-12T11:50:00+03:30",
+    "requester": { "code": "P-01", "name_fa": "امیر رحیمی", "role_fa": "انباردار" },
+    "place": { "location_code": "68", "floor_code": "G" },
+    "lines": [
+      { "item_code": "I-1001", "item_name_fa": "لامپ LED ۱۸ وات", "qty": 24, "unit_fa": "عدد", "stock_now": 42, "used_last_30d": 36 }
+    ],
+    "note": "برای تعویض لامپ‌های راهروی همکف کنار پلاک ۶۸",
+    "status": "pending", "escalated": true, "escalation_reason": "quantity"
+  },
+  {
+    "id": "r-123", "number": 123, "created_at": "2026-10-12T11:15:00+03:30",
+    "requester": { "code": "P-04", "name_fa": "جواد صالحی", "role_fa": "تأسیسات" },
+    "place": { "location_code": "AB-ASD", "floor_code": "F2" },
+    "lines": [
+      { "item_code": "I-1012", "item_name_fa": "کلید مینیاتوری ۱۶ آمپر", "qty": 4, "unit_fa": "عدد", "stock_now": null, "used_last_30d": 6 },
+      { "item_code": "I-1002", "item_name_fa": "کابل برق افشان ۲٫۵", "qty": 30, "unit_fa": "متر", "stock_now": 180, "used_last_30d": 55 }
+    ],
+    "note": "تابلو برق آسانسور باری اسدنژاد",
+    "status": "pending", "escalated": true, "escalation_reason": "important_item"
+  },
+  {
+    "id": "r-122", "number": 122, "created_at": "2026-10-12T10:20:00+03:30",
+    "requester": { "code": "P-05", "name_fa": "مهسا یزدانی", "role_fa": "خدمات" },
+    "place": { "location_code": "CAFE", "floor_code": "B" },
+    "lines": [
+      { "item_code": "I-1007", "item_name_fa": "مایع شوینده کف", "qty": 6, "unit_fa": "گالن", "stock_now": 12, "used_last_30d": 9 },
+      { "item_code": "I-1018", "item_name_fa": "دستمال نظافت", "qty": 10, "unit_fa": "بسته", "stock_now": 22, "used_last_30d": 14 }
+    ],
+    "status": "pending", "escalated": true, "escalation_reason": "amount"
+  },
+  {
+    "id": "r-121", "number": 121, "created_at": "2026-10-11T17:00:00+03:30",
+    "requester": { "code": "P-01", "name_fa": "امیر رحیمی", "role_fa": "انباردار" },
+    "place": { "location_code": "GEN", "floor_code": "F1", "usage_note": "راهروی شرقی" },
+    "lines": [
+      { "item_code": "I-1003", "item_name_fa": "رنگ پلاستیک سفید", "qty": 2, "unit_fa": "گالن", "stock_now": 3, "used_last_30d": 4 }
+    ],
+    "status": "approved", "escalated": true, "escalation_reason": "manual",
+    "decided_by": { "kind": "owner", "name_fa": "حسین کاظمی" },
+    "decided_at": "2026-10-11T18:10:00+03:30"
+  },
+  {
+    "id": "r-120", "number": 120, "created_at": "2026-10-11T10:00:00+03:30",
+    "requester": { "code": "P-04", "name_fa": "جواد صالحی", "role_fa": "تأسیسات" },
+    "place": { "location_code": "PL-SAF", "floor_code": "F3" },
+    "lines": [
+      { "item_code": "I-1015", "item_name_fa": "لامپ مهتابی ۳۶ وات", "qty": 2, "unit_fa": "عدد", "stock_now": 1, "used_last_30d": 5 }
+    ],
+    "status": "approved", "escalated": false,
+    "decided_by": { "kind": "manager", "name_fa": "ناصر کریمی" },
+    "decided_at": "2026-10-11T10:25:00+03:30"
+  },
+  {
+    "id": "r-119", "number": 119, "created_at": "2026-10-10T09:30:00+03:30",
+    "requester": { "code": "P-02", "name_fa": "سعید مرادی", "role_fa": "انباردار" },
+    "place": { "location_code": "101", "floor_code": "F1" },
+    "lines": [
+      { "item_code": "I-1011", "item_name_fa": "پریز برق دوقلو", "qty": 20, "unit_fa": "عدد", "stock_now": 30, "used_last_30d": 4 }
+    ],
+    "note": "بازسازی غرفه",
+    "status": "rejected", "escalated": true, "escalation_reason": "quantity",
+    "decided_by": { "kind": "owner", "name_fa": "مریم احمدی" },
+    "decided_at": "2026-10-10T11:00:00+03:30",
+    "decision_reason": "تعداد زیاد است؛ هزینه بازسازی با مستأجر است"
+  },
+  {
+    "id": "r-118", "number": 118, "created_at": "2026-10-09T14:00:00+03:30",
+    "requester": { "code": "P-05", "name_fa": "مهسا یزدانی", "role_fa": "خدمات" },
+    "place": { "location_code": "OFFICE", "floor_code": "F3" },
+    "lines": [
+      { "item_code": "I-1008", "item_name_fa": "کیسه زباله بزرگ", "qty": 2, "unit_fa": "رول", "stock_now": 2, "used_last_30d": 6 }
+    ],
+    "status": "approved", "escalated": false,
+    "decided_by": { "kind": "manager", "name_fa": "ناصر کریمی" },
+    "decided_at": "2026-10-09T14:20:00+03:30"
+  },
+  {
+    "id": "r-117", "number": 117, "created_at": "2026-10-08T12:00:00+03:30",
+    "requester": { "code": "P-04", "name_fa": "جواد صالحی", "role_fa": "تأسیسات" },
+    "place": { "location_code": "BAM", "floor_code": "ROOF" },
+    "lines": [
+      { "item_code": "I-1009", "item_name_fa": "فیلتر کولر آبی", "qty": 12, "unit_fa": "عدد", "stock_now": 18, "used_last_30d": 12 }
+    ],
+    "note": "سرویس کولرهای بام",
+    "status": "approved", "escalated": true, "escalation_reason": "amount",
+    "decided_by": { "kind": "owner", "name_fa": "علیرضا" },
+    "decided_at": "2026-10-08T13:05:00+03:30"
+  },
+  {
+    "id": "r-116", "number": 116, "created_at": "2026-10-06T16:00:00+03:30",
+    "requester": { "code": "P-01", "name_fa": "امیر رحیمی", "role_fa": "انباردار" },
+    "place": { "location_code": "35", "floor_code": "B" },
+    "lines": [
+      { "item_code": "I-1017", "item_name_fa": "قفل کتابی", "qty": 3, "unit_fa": "عدد", "stock_now": 6, "used_last_30d": 1 }
+    ],
+    "status": "rejected", "escalated": false,
+    "decided_by": { "kind": "manager", "name_fa": "ناصر کریمی" },
+    "decided_at": "2026-10-06T16:40:00+03:30",
+    "decision_reason": "قفل قبلی هنوز سالم است"
+  },
+  {
+    "id": "r-115", "number": 115, "created_at": "2026-10-03T09:00:00+03:30",
+    "requester": { "code": "P-02", "name_fa": "سعید مرادی", "role_fa": "انباردار" },
+    "place": { "location_code": "LAMINIK", "floor_code": "F2" },
+    "lines": [
+      { "item_code": "I-1004", "item_name_fa": "چسب سیلیکون شفاف", "qty": 5, "unit_fa": "عدد", "stock_now": 25, "used_last_30d": 7 }
+    ],
+    "status": "cancelled", "escalated": false
+  }
+]
