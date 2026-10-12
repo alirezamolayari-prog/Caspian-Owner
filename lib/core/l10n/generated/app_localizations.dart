@@ -171,6 +171,276 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'کم'**
   String get lowStock;
+
+  /// No description provided for @errorNetwork.
+  ///
+  /// In fa, this message translates to:
+  /// **'اتصال برقرار نشد. اینترنت را بررسی کنید.'**
+  String get errorNetwork;
+
+  /// No description provided for @errorGeneric.
+  ///
+  /// In fa, this message translates to:
+  /// **'مشکلی پیش آمد. دوباره تلاش کنید.'**
+  String get errorGeneric;
+
+  /// No description provided for @tabHome.
+  ///
+  /// In fa, this message translates to:
+  /// **'خانه'**
+  String get tabHome;
+
+  /// No description provided for @tabRequests.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست‌ها'**
+  String get tabRequests;
+
+  /// No description provided for @tabStock.
+  ///
+  /// In fa, this message translates to:
+  /// **'موجودی'**
+  String get tabStock;
+
+  /// No description provided for @tabAssistant.
+  ///
+  /// In fa, this message translates to:
+  /// **'دستیار'**
+  String get tabAssistant;
+
+  /// No description provided for @requestsTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست‌ها'**
+  String get requestsTitle;
+
+  /// No description provided for @stockTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'موجودی انبار'**
+  String get stockTitle;
+
+  /// No description provided for @assistantTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'دستیار کاسپین'**
+  String get assistantTitle;
+
+  /// No description provided for @moreTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'بیشتر'**
+  String get moreTitle;
+
+  /// No description provided for @logout.
+  ///
+  /// In fa, this message translates to:
+  /// **'خروج'**
+  String get logout;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود به مالک کاسپین'**
+  String get loginTitle;
+
+  /// No description provided for @loginPhoneLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'شماره موبایل'**
+  String get loginPhoneLabel;
+
+  /// No description provided for @loginPhoneHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'۰۹۱۲۳۴۵۶۷۸۹'**
+  String get loginPhoneHint;
+
+  /// No description provided for @loginPhoneHelp.
+  ///
+  /// In fa, this message translates to:
+  /// **'یک کد با پیامک برایتان فرستاده می‌شود.'**
+  String get loginPhoneHelp;
+
+  /// No description provided for @loginPhoneInvalid.
+  ///
+  /// In fa, this message translates to:
+  /// **'شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود.'**
+  String get loginPhoneInvalid;
+
+  /// No description provided for @loginSendCode.
+  ///
+  /// In fa, this message translates to:
+  /// **'دریافت کد'**
+  String get loginSendCode;
+
+  /// No description provided for @loginCodeLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'کد پیامک‌شده'**
+  String get loginCodeLabel;
+
+  /// No description provided for @loginCodeSent.
+  ///
+  /// In fa, this message translates to:
+  /// **'کد {length} رقمی به {phone} فرستاده شد.'**
+  String loginCodeSent(int length, String phone);
+
+  /// No description provided for @loginVerify.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود'**
+  String get loginVerify;
+
+  /// No description provided for @loginChangePhone.
+  ///
+  /// In fa, this message translates to:
+  /// **'تغییر شماره'**
+  String get loginChangePhone;
+
+  /// No description provided for @loginResend.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال دوباره کد'**
+  String get loginResend;
+
+  /// No description provided for @loginResendIn.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال دوباره تا {seconds} ثانیه'**
+  String loginResendIn(int seconds);
+
+  /// No description provided for @loginTestCodeHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه آزمایشی: کد ۱۱۱۱۱'**
+  String get loginTestCodeHint;
+
+  /// No description provided for @lockTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'برنامه قفل است'**
+  String get lockTitle;
+
+  /// No description provided for @lockBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای دیدن اطلاعات، هویت خود را تأیید کنید.'**
+  String get lockBody;
+
+  /// No description provided for @lockUnlockDevice.
+  ///
+  /// In fa, this message translates to:
+  /// **'باز کردن با اثر انگشت'**
+  String get lockUnlockDevice;
+
+  /// No description provided for @lockReason.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای باز کردن مالک کاسپین هویت خود را تأیید کنید'**
+  String get lockReason;
+
+  /// No description provided for @lockUsePin.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود با رمز برنامه'**
+  String get lockUsePin;
+
+  /// No description provided for @pinLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز برنامه'**
+  String get pinLabel;
+
+  /// No description provided for @pinWrong.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز درست نیست. {left} بار دیگر می‌توانید امتحان کنید.'**
+  String pinWrong(int left);
+
+  /// No description provided for @pinSetupTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'ساختن رمز برنامه'**
+  String get pinSetupTitle;
+
+  /// No description provided for @pinSetupBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'این گوشی قفل اثر انگشت یا رمز ندارد. برای حفاظت از اطلاعات، یک رمز ۴ رقمی برای برنامه بسازید.'**
+  String get pinSetupBody;
+
+  /// No description provided for @pinRepeatLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'تکرار رمز'**
+  String get pinRepeatLabel;
+
+  /// No description provided for @pinTooShort.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز باید ۴ رقم باشد.'**
+  String get pinTooShort;
+
+  /// No description provided for @pinMismatch.
+  ///
+  /// In fa, this message translates to:
+  /// **'دو رمز یکی نیستند.'**
+  String get pinMismatch;
+
+  /// No description provided for @pinSave.
+  ///
+  /// In fa, this message translates to:
+  /// **'ذخیره رمز'**
+  String get pinSave;
+
+  /// No description provided for @signedOutTooManyAttempts.
+  ///
+  /// In fa, this message translates to:
+  /// **'به‌خاطر چند رمز اشتباه، دوباره وارد شوید.'**
+  String get signedOutTooManyAttempts;
+
+  /// No description provided for @homeGreeting.
+  ///
+  /// In fa, this message translates to:
+  /// **'سلام {name}'**
+  String homeGreeting(String name);
+
+  /// No description provided for @notificationsTooltip.
+  ///
+  /// In fa, this message translates to:
+  /// **'اعلان‌ها'**
+  String get notificationsTooltip;
+
+  /// No description provided for @accountTooltip.
+  ///
+  /// In fa, this message translates to:
+  /// **'حساب و گزینه‌های بیشتر'**
+  String get accountTooltip;
+
+  /// No description provided for @cancel.
+  ///
+  /// In fa, this message translates to:
+  /// **'انصراف'**
+  String get cancel;
+
+  /// No description provided for @logoutConfirmTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'از حساب خارج می‌شوید؟'**
+  String get logoutConfirmTitle;
+
+  /// No description provided for @logoutConfirmBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، کد پیامکی لازم است.'**
+  String get logoutConfirmBody;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In fa, this message translates to:
+  /// **'این بخش به‌زودی آماده می‌شود.'**
+  String get comingSoon;
 }
 
 class _AppLocalizationsDelegate
