@@ -17,7 +17,9 @@ abstract final class Routes {
   // Pushed screens (no bottom bar).
   static const more = '/more';
   static String request(String id) => '/requests/$id';
+  static const counts = '/counts';
   static const countNew = '/counts/new';
+  static String count(String id) => '/counts/$id';
 }
 
 /// Where to send the owner instead of [location], or null to stay.

@@ -260,27 +260,35 @@ class _CountCard extends StatelessWidget {
 
     return Card(
       color: theme.colorScheme.surfaceContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(Space.md),
-        child: Row(
-          children: [
-            Icon(AppIcons.count, color: theme.colorScheme.primary),
-            const SizedBox(width: Space.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.countCardTitle, style: theme.textTheme.titleMedium),
-                  Text(subtitle, style: theme.textTheme.bodySmall),
-                ],
+      clipBehavior: Clip.antiAlias,
+      // The card opens the count history; «شروع» starts a new count.
+      child: InkWell(
+        onTap: () => context.push(Routes.counts),
+        child: Padding(
+          padding: const EdgeInsets.all(Space.md),
+          child: Row(
+            children: [
+              Icon(AppIcons.count, color: theme.colorScheme.primary),
+              const SizedBox(width: Space.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.countCardTitle,
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    Text(subtitle, style: theme.textTheme.bodySmall),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: Space.sm),
-            FilledButton.tonal(
-              onPressed: () => context.push(Routes.countNew),
-              child: Text(l10n.countStart),
-            ),
-          ],
+              const SizedBox(width: Space.sm),
+              FilledButton.tonal(
+                onPressed: () => context.push(Routes.countNew),
+                child: Text(l10n.countStart),
+              ),
+            ],
+          ),
         ),
       ),
     );
