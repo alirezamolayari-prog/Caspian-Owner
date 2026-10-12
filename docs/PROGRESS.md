@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** M6 PR is open. Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M7 (Stock tab: search, «همه»/«کم‌موجود» chips, rows with «کم», hidden quantities during counts, movements bottom sheet) on branch `m07-stock`.
+**Next step:** M10 PR is open (branch `m10-more`). Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M11 (notifications: workmanager poll → local notifications → deep link) on branch `m11-notifications`.
 
 ## Environment (M0)
 | Item | Value |
@@ -25,8 +25,12 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | M3 | Done (PR #3) | `api/openapi.yaml`, freezed models, repository interfaces, mock backend + fixtures (scenarios), locations CSV, drift cache + pending queue, ApiConfig switch, module registry |
 | M4 | Done (PR #4) | Login (phone + OTP, `11111` in debug only), session in secure storage, app lock (fingerprint/device PIN; app PIN fallback; 5 wrong PINs → sign out), go_router shell with 4 tabs + deep links through the lock, FLAG_SECURE channel, logout wipes data |
 | M5 | Done (PR #5) | Home: hero card, latest 3 requests, surprise-count card; skeleton, error + retry, pull-to-refresh, offline cache; mock `offline` scenario |
-| M6 | PR open | Requests tab (filters «منتظر (n)»/«بررسی‌شده»/«همه», «مدیر انبار», «در صف ارسال»), Request Detail (stock/usage tiles, place label, note, same-place history, chat, decision banner «تأیید شد توسط …»), approve with one fingerprint + 5 s undo, reject with optional reason, offline queue (re-sent on refresh and app resume), 409 dialog; FLAG_SECURE scope; settings provider (defaults; UI in M10); acceptance flow login → approve → «بررسی‌شده» (headless + `integration_test/`); 163 tests |
-| M7–M13 | Not started | Tab goldens (requests/stock/assistant) are planned for M13 with a fixed clock |
+| M6 | Done (PR #6) | Requests tab + Request Detail, approve with fingerprint + 5 s undo, reject with reason, offline queue, 409 dialog, chat, same-place history; acceptance flow login → approve → «بررسی‌شده» |
+| M7 | Done (PR #7) | Stock tab: search, «کم‌موجود», hidden counts, movements sheet; large-text fixes |
+| M8 | Done (PR #8) | Surprise count: pick + confirm, status/results (difference in words + icon, every entry), history |
+| M9 | Done (PR #9) | Assistant (mock): suggestions (wrapping), history sheet, thinking/failed states |
+| M10 | PR open | More via module registry (admin-only users, «به‌زودی» purchase list), reports by floor (P4 → بام) / location, persistent settings (theme, notifications, fingerprint, FLAG_SECURE, app PIN), About + 7-tap developer screen (scenarios, finish count, log export), rotating on-device log; 198 tests |
+| M11–M13 | Not started | Tab goldens (requests/stock/assistant) are planned for M13 with a fixed clock |
 
 ## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)
