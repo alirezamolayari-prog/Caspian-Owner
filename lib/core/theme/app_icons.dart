@@ -19,6 +19,12 @@ abstract final class AppIcons {
 
   // Stock
   static const IconData low = Symbols.warning_rounded;
+  static const IconData search = Symbols.search_rounded;
+  static const IconData clear = Symbols.close_rounded;
+  static const IconData hidden = Symbols.visibility_off_rounded;
+  static const IconData incoming = Symbols.south_west_rounded;
+  static const IconData outgoing = Symbols.north_east_rounded;
+  static const IconData adjust = Symbols.tune_rounded;
 
   // Common actions
   static const IconData retry = Symbols.refresh_rounded;

@@ -238,6 +238,85 @@
   "chatSendFailed": "فرستاده نشد. برای تلاش دوباره لمس کنید.",
   "you": "شما",
 
+  "stockSearchLabel": "جستجوی کالا",
+  "stockSearchHint": "نام یا کد کالا",
+  "stockClearSearch": "پاک کردن جستجو",
+  "filterLow": "کم‌موجود",
+  "stockEmpty": "کالایی با این نام پیدا نشد.",
+  "stockNoLow": "کالای کم‌موجودی نیست.",
+  "stockHiddenExplain": "تا پایان شمارش غافلگیرانه، موجودی و گردش این کالا مخفی است.",
+  "movementsTitle": "ورود و خروج اخیر",
+  "movementsEmpty": "گردشی ثبت نشده است.",
+  "movementIn": "ورود",
+  "movementOut": "خروج",
+  "movementAdjustDown": "اصلاح موجودی (کم شد)",
+  "movementAdjustUp": "اصلاح موجودی (زیاد شد)",
+  "movementMeta": "{date} · سند {document}",
+  "@movementMeta": {
+    "placeholders": { "date": { "type": "String" }, "document": { "type": "String" } }
+  },
+  "itemCode": "کد {code}",
+  "@itemCode": { "placeholders": { "code": { "type": "String" } } },
+
+  "countPickTitle": "انتخاب اقلام برای شمارش",
+  "countPickHelp": "اقلامی را که می‌خواهید سرزده شمرده شوند انتخاب کنید.",
+  "countSelected": "{count} قلم انتخاب شد",
+  "@countSelected": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+  "countContinueCount": "ادامه ({count} قلم)",
+  "@countContinueCount": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+  "countAlreadyRunning": "در حال شمارش",
+  "countConfirmTitle": "شروع شمارش غافلگیرانه",
+  "countConfirmBody": "این اقلام در اپ انبار قفل و موجودی‌شان مخفی می‌شود تا شمارش انجام شود.",
+  "countConfirmStart": "شروع شمارش",
+  "countDetailTitle": "شمارش غافلگیرانه",
+  "countRunningTitle": "شمارش در حال انجام است",
+  "countRunningBody": "این اقلام در انبار قفل‌اند و موجودی‌شان برای همه مخفی است، حتی برای شما. وقتی کارکنان شمردند، نتیجه همین‌جا می‌آید.",
+  "countOrderedBy": "دستور: {name} · {time}",
+  "@countOrderedBy": {
+    "placeholders": { "name": { "type": "String" }, "time": { "type": "String" } }
+  },
+  "countDoneTitle": "نتیجه شمارش",
+  "countFinishedAt": "پایان: {date}",
+  "@countFinishedAt": { "placeholders": { "date": { "type": "String" } } },
+  "countSystem": "طبق سیستم",
+  "countCounted": "شمرده‌شده",
+  "countMatch": "درست است",
+  "countShort": "{qty} {unit} کمتر",
+  "@countShort": {
+    "placeholders": { "qty": { "type": "String" }, "unit": { "type": "String" } }
+  },
+  "countOver": "{qty} {unit} بیشتر",
+  "@countOver": {
+    "placeholders": { "qty": { "type": "String" }, "unit": { "type": "String" } }
+  },
+  "countEntries": "عددهای واردشده",
+  "countEntry": "{qty} · {name} · {time}",
+  "@countEntry": {
+    "placeholders": {
+      "qty": { "type": "String" },
+      "name": { "type": "String" },
+      "time": { "type": "String" }
+    }
+  },
+  "countNoAutoAdjust": "موجودی به‌طور خودکار اصلاح نمی‌شود. برای اصلاح، در اپ انبار سند اصلاح ثبت کنید.",
+  "countHistoryTitle": "تاریخچه شمارش‌ها",
+  "countHistoryEmpty": "هنوز شمارشی انجام نشده است.",
+  "countItemsCount": "{count} قلم",
+  "@countItemsCount": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+  "countDiscrepancies": "{count} مغایرت",
+  "@countDiscrepancies": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+  "countStatusRunning": "در حال انجام",
+  "countStatusDone": "تمام شد",
+  "countSeeHistory": "تاریخچه شمارش‌ها",
+
   "errorTitle": "اطلاعات دریافت نشد",
   "offlineShowingCached": "اتصال برقرار نیست؛ آخرین اطلاعات ذخیره‌شده نمایش داده می‌شود."
 }

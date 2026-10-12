@@ -456,6 +456,181 @@ class AppLocalizationsFa extends AppLocalizations {
   String get you => 'شما';
 
   @override
+  String get stockSearchLabel => 'جستجوی کالا';
+
+  @override
+  String get stockSearchHint => 'نام یا کد کالا';
+
+  @override
+  String get stockClearSearch => 'پاک کردن جستجو';
+
+  @override
+  String get filterLow => 'کم‌موجود';
+
+  @override
+  String get stockEmpty => 'کالایی با این نام پیدا نشد.';
+
+  @override
+  String get stockNoLow => 'کالای کم‌موجودی نیست.';
+
+  @override
+  String get stockHiddenExplain =>
+      'تا پایان شمارش غافلگیرانه، موجودی و گردش این کالا مخفی است.';
+
+  @override
+  String get movementsTitle => 'ورود و خروج اخیر';
+
+  @override
+  String get movementsEmpty => 'گردشی ثبت نشده است.';
+
+  @override
+  String get movementIn => 'ورود';
+
+  @override
+  String get movementOut => 'خروج';
+
+  @override
+  String get movementAdjustDown => 'اصلاح موجودی (کم شد)';
+
+  @override
+  String get movementAdjustUp => 'اصلاح موجودی (زیاد شد)';
+
+  @override
+  String movementMeta(String date, String document) {
+    return '$date · سند $document';
+  }
+
+  @override
+  String itemCode(String code) {
+    return 'کد $code';
+  }
+
+  @override
+  String get countPickTitle => 'انتخاب اقلام برای شمارش';
+
+  @override
+  String get countPickHelp =>
+      'اقلامی را که می‌خواهید سرزده شمرده شوند انتخاب کنید.';
+
+  @override
+  String countSelected(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString قلم انتخاب شد';
+  }
+
+  @override
+  String countContinueCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'ادامه ($countString قلم)';
+  }
+
+  @override
+  String get countAlreadyRunning => 'در حال شمارش';
+
+  @override
+  String get countConfirmTitle => 'شروع شمارش غافلگیرانه';
+
+  @override
+  String get countConfirmBody =>
+      'این اقلام در اپ انبار قفل و موجودی‌شان مخفی می‌شود تا شمارش انجام شود.';
+
+  @override
+  String get countConfirmStart => 'شروع شمارش';
+
+  @override
+  String get countDetailTitle => 'شمارش غافلگیرانه';
+
+  @override
+  String get countRunningTitle => 'شمارش در حال انجام است';
+
+  @override
+  String get countRunningBody =>
+      'این اقلام در انبار قفل‌اند و موجودی‌شان برای همه مخفی است، حتی برای شما. وقتی کارکنان شمردند، نتیجه همین‌جا می‌آید.';
+
+  @override
+  String countOrderedBy(String name, String time) {
+    return 'دستور: $name · $time';
+  }
+
+  @override
+  String get countDoneTitle => 'نتیجه شمارش';
+
+  @override
+  String countFinishedAt(String date) {
+    return 'پایان: $date';
+  }
+
+  @override
+  String get countSystem => 'طبق سیستم';
+
+  @override
+  String get countCounted => 'شمرده‌شده';
+
+  @override
+  String get countMatch => 'درست است';
+
+  @override
+  String countShort(String qty, String unit) {
+    return '$qty $unit کمتر';
+  }
+
+  @override
+  String countOver(String qty, String unit) {
+    return '$qty $unit بیشتر';
+  }
+
+  @override
+  String get countEntries => 'عددهای واردشده';
+
+  @override
+  String countEntry(String qty, String name, String time) {
+    return '$qty · $name · $time';
+  }
+
+  @override
+  String get countNoAutoAdjust =>
+      'موجودی به‌طور خودکار اصلاح نمی‌شود. برای اصلاح، در اپ انبار سند اصلاح ثبت کنید.';
+
+  @override
+  String get countHistoryTitle => 'تاریخچه شمارش‌ها';
+
+  @override
+  String get countHistoryEmpty => 'هنوز شمارشی انجام نشده است.';
+
+  @override
+  String countItemsCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString قلم';
+  }
+
+  @override
+  String countDiscrepancies(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString مغایرت';
+  }
+
+  @override
+  String get countStatusRunning => 'در حال انجام';
+
+  @override
+  String get countStatusDone => 'تمام شد';
+
+  @override
+  String get countSeeHistory => 'تاریخچه شمارش‌ها';
+
+  @override
   String get errorTitle => 'اطلاعات دریافت نشد';
 
   @override
