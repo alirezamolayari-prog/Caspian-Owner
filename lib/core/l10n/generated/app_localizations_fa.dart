@@ -631,6 +631,225 @@ class AppLocalizationsFa extends AppLocalizations {
   String get countSeeHistory => 'تاریخچه شمارش‌ها';
 
   @override
+  String get assistantSuggestionToday => 'خلاصه امروز';
+
+  @override
+  String get assistantSuggestionMonth => 'درخواست‌های این ماه';
+
+  @override
+  String get assistantSuggestionCount => 'نتیجه آخرین شمارش';
+
+  @override
+  String get assistantInputLabel => 'سؤال خود را بنویسید';
+
+  @override
+  String get assistantHistory => 'گفتگوهای قبلی';
+
+  @override
+  String get assistantHistoryEmpty => 'هنوز سؤالی نپرسیده‌اید.';
+
+  @override
+  String get assistantThinking => 'در حال آماده کردن پاسخ…';
+
+  @override
+  String get assistantFailed => 'پاسخ دریافت نشد؛ دوباره بپرسید';
+
+  @override
+  String get assistantEmpty =>
+      'درباره درخواست‌ها، موجودی و شمارش‌ها از دستیار کاسپین بپرسید.';
+
+  @override
+  String get assistantDemoNote =>
+      'نسخه آزمایشی: پاسخ‌ها نمونه‌اند. دستیار واقعی بعد از راه‌اندازی سرور فعال می‌شود.';
+
+  @override
+  String get moreReports => 'گزارش‌ها';
+
+  @override
+  String get morePurchaseList => 'لیست خرید';
+
+  @override
+  String get moreUsers => 'کاربران و دسترسی‌ها';
+
+  @override
+  String get moreSettings => 'تنظیمات';
+
+  @override
+  String get moreAbout => 'درباره و نسخه';
+
+  @override
+  String get comingSoonBadge => 'به‌زودی';
+
+  @override
+  String get reportsTitle => 'گزارش‌ها';
+
+  @override
+  String get reportByFloor => 'مصرف به تفکیک طبقه';
+
+  @override
+  String get reportByLocation => 'مصرف به تفکیک محل';
+
+  @override
+  String get periodThisMonth => 'این ماه';
+
+  @override
+  String get periodLast30 => '۳۰ روز اخیر';
+
+  @override
+  String get periodLast90 => '۹۰ روز اخیر';
+
+  @override
+  String reportRange(String from, String to) {
+    return 'از $from تا $to';
+  }
+
+  @override
+  String reportRowTotal(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString قلم';
+  }
+
+  @override
+  String get reportNoConsumption => 'بدون مصرف';
+
+  @override
+  String get reportEmpty => 'در این بازه مصرفی ثبت نشده است.';
+
+  @override
+  String get purchaseBody => 'لیست خرید در نسخه‌های بعدی اضافه می‌شود.';
+
+  @override
+  String get usersAdmin => 'مدیر سیستم';
+
+  @override
+  String get usersOwner => 'مالک';
+
+  @override
+  String get usersYou => 'شما';
+
+  @override
+  String get usersNote =>
+      'افزودن، حذف و تعیین دسترسی کاربران بعد از راه‌اندازی سرور فعال می‌شود.';
+
+  @override
+  String get settingsTheme => 'ظاهر';
+
+  @override
+  String get themeSystem => 'مطابق گوشی';
+
+  @override
+  String get themeLight => 'روشن';
+
+  @override
+  String get themeDark => 'تیره';
+
+  @override
+  String get settingsNotifications => 'اعلان‌ها';
+
+  @override
+  String get settingsNotificationsBody =>
+      'خبر درخواست‌های تازه، نتیجه شمارش و پیام‌ها';
+
+  @override
+  String get settingsFingerprint => 'تأیید با اثر انگشت برای تأیید درخواست';
+
+  @override
+  String get settingsFingerprintBody =>
+      'قبل از تأیید هر درخواست، یک بار اثر انگشت خواسته می‌شود.';
+
+  @override
+  String get settingsSecure => 'جلوگیری از عکس صفحه';
+
+  @override
+  String get settingsSecureBody =>
+      'در صفحه‌های موجودی، درخواست‌ها و شمارش، عکس گرفتن از صفحه ممکن نیست.';
+
+  @override
+  String get settingsPin => 'رمز برنامه';
+
+  @override
+  String get settingsPinBody => 'برای وقتی که اثر انگشت کار نمی‌کند';
+
+  @override
+  String get settingsPinSet => 'تعیین یا تغییر رمز';
+
+  @override
+  String get settingsPinSaved => 'رمز برنامه ذخیره شد.';
+
+  @override
+  String aboutVersion(String version, String build) {
+    return 'نسخه $version (ساخت $build)';
+  }
+
+  @override
+  String aboutMall(String mall) {
+    return 'ساخته‌شده برای $mall';
+  }
+
+  @override
+  String get devUnlocked => 'صفحه توسعه‌دهنده باز شد.';
+
+  @override
+  String get devTitle => 'صفحه توسعه‌دهنده';
+
+  @override
+  String get devScenario => 'سناریوی داده آزمایشی';
+
+  @override
+  String get scenarioNormal => 'عادی';
+
+  @override
+  String get scenarioEmpty => 'بدون داده';
+
+  @override
+  String get scenarioSlow => 'شبکه کند';
+
+  @override
+  String get scenarioServerError => 'خطای سرور';
+
+  @override
+  String get scenarioConflict => 'تصمیم هم‌زمان (۴۰۹)';
+
+  @override
+  String get scenarioOffline => 'بدون اینترنت';
+
+  @override
+  String get devCompleteCount => 'پایان شمارش در حال انجام';
+
+  @override
+  String get devCompleteCountBody =>
+      'شبیه‌سازی کار انبار: کارکنان شمارش را تمام می‌کنند.';
+
+  @override
+  String get devNoRunningCount => 'شمارشی در حال انجام نیست.';
+
+  @override
+  String get devCountCompleted => 'شمارش تمام شد.';
+
+  @override
+  String get devDataSource => 'منبع داده';
+
+  @override
+  String devDataSourceValue(String source, String url) {
+    return '$source · $url';
+  }
+
+  @override
+  String get devDebugOnly => 'فقط در نسخه آزمایشی قابل تغییر است.';
+
+  @override
+  String get devLogs => 'آخرین خطاها و رویدادها';
+
+  @override
+  String get devNoLogs => 'چیزی ثبت نشده است.';
+
+  @override
+  String get devExportLogs => 'فرستادن فایل گزارش';
+
+  @override
   String get errorTitle => 'اطلاعات دریافت نشد';
 
   @override

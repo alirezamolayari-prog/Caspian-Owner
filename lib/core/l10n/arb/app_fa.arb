@@ -317,6 +317,93 @@
   "countStatusDone": "تمام شد",
   "countSeeHistory": "تاریخچه شمارش‌ها",
 
+  "assistantSuggestionToday": "خلاصه امروز",
+  "assistantSuggestionMonth": "درخواست‌های این ماه",
+  "assistantSuggestionCount": "نتیجه آخرین شمارش",
+  "assistantInputLabel": "سؤال خود را بنویسید",
+  "assistantHistory": "گفتگوهای قبلی",
+  "assistantHistoryEmpty": "هنوز سؤالی نپرسیده‌اید.",
+  "assistantThinking": "در حال آماده کردن پاسخ…",
+  "assistantFailed": "پاسخ دریافت نشد؛ دوباره بپرسید",
+  "assistantEmpty": "درباره درخواست‌ها، موجودی و شمارش‌ها از دستیار کاسپین بپرسید.",
+  "assistantDemoNote": "نسخه آزمایشی: پاسخ‌ها نمونه‌اند. دستیار واقعی بعد از راه‌اندازی سرور فعال می‌شود.",
+
+  "moreReports": "گزارش‌ها",
+  "morePurchaseList": "لیست خرید",
+  "moreUsers": "کاربران و دسترسی‌ها",
+  "moreSettings": "تنظیمات",
+  "moreAbout": "درباره و نسخه",
+  "comingSoonBadge": "به‌زودی",
+
+  "reportsTitle": "گزارش‌ها",
+  "reportByFloor": "مصرف به تفکیک طبقه",
+  "reportByLocation": "مصرف به تفکیک محل",
+  "periodThisMonth": "این ماه",
+  "periodLast30": "۳۰ روز اخیر",
+  "periodLast90": "۹۰ روز اخیر",
+  "reportRange": "از {from} تا {to}",
+  "@reportRange": {
+    "placeholders": { "from": { "type": "String" }, "to": { "type": "String" } }
+  },
+  "reportRowTotal": "{count} قلم",
+  "@reportRowTotal": {
+    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
+  },
+  "reportNoConsumption": "بدون مصرف",
+  "reportEmpty": "در این بازه مصرفی ثبت نشده است.",
+
+  "purchaseBody": "لیست خرید در نسخه‌های بعدی اضافه می‌شود.",
+
+  "usersAdmin": "مدیر سیستم",
+  "usersOwner": "مالک",
+  "usersYou": "شما",
+  "usersNote": "افزودن، حذف و تعیین دسترسی کاربران بعد از راه‌اندازی سرور فعال می‌شود.",
+
+  "settingsTheme": "ظاهر",
+  "themeSystem": "مطابق گوشی",
+  "themeLight": "روشن",
+  "themeDark": "تیره",
+  "settingsNotifications": "اعلان‌ها",
+  "settingsNotificationsBody": "خبر درخواست‌های تازه، نتیجه شمارش و پیام‌ها",
+  "settingsFingerprint": "تأیید با اثر انگشت برای تأیید درخواست",
+  "settingsFingerprintBody": "قبل از تأیید هر درخواست، یک بار اثر انگشت خواسته می‌شود.",
+  "settingsSecure": "جلوگیری از عکس صفحه",
+  "settingsSecureBody": "در صفحه‌های موجودی، درخواست‌ها و شمارش، عکس گرفتن از صفحه ممکن نیست.",
+  "settingsPin": "رمز برنامه",
+  "settingsPinBody": "برای وقتی که اثر انگشت کار نمی‌کند",
+  "settingsPinSet": "تعیین یا تغییر رمز",
+  "settingsPinSaved": "رمز برنامه ذخیره شد.",
+
+  "aboutVersion": "نسخه {version} (ساخت {build})",
+  "@aboutVersion": {
+    "placeholders": { "version": { "type": "String" }, "build": { "type": "String" } }
+  },
+  "aboutMall": "ساخته‌شده برای {mall}",
+  "@aboutMall": { "placeholders": { "mall": { "type": "String" } } },
+  "devUnlocked": "صفحه توسعه‌دهنده باز شد.",
+
+  "devTitle": "صفحه توسعه‌دهنده",
+  "devScenario": "سناریوی داده آزمایشی",
+  "scenarioNormal": "عادی",
+  "scenarioEmpty": "بدون داده",
+  "scenarioSlow": "شبکه کند",
+  "scenarioServerError": "خطای سرور",
+  "scenarioConflict": "تصمیم هم‌زمان (۴۰۹)",
+  "scenarioOffline": "بدون اینترنت",
+  "devCompleteCount": "پایان شمارش در حال انجام",
+  "devCompleteCountBody": "شبیه‌سازی کار انبار: کارکنان شمارش را تمام می‌کنند.",
+  "devNoRunningCount": "شمارشی در حال انجام نیست.",
+  "devCountCompleted": "شمارش تمام شد.",
+  "devDataSource": "منبع داده",
+  "devDataSourceValue": "{source} · {url}",
+  "@devDataSourceValue": {
+    "placeholders": { "source": { "type": "String" }, "url": { "type": "String" } }
+  },
+  "devDebugOnly": "فقط در نسخه آزمایشی قابل تغییر است.",
+  "devLogs": "آخرین خطاها و رویدادها",
+  "devNoLogs": "چیزی ثبت نشده است.",
+  "devExportLogs": "فرستادن فایل گزارش",
+
   "errorTitle": "اطلاعات دریافت نشد",
   "offlineShowingCached": "اتصال برقرار نیست؛ آخرین اطلاعات ذخیره‌شده نمایش داده می‌شود."
 }
