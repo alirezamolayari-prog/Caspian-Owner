@@ -227,4 +227,74 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get comingSoon => 'این بخش به‌زودی آماده می‌شود.';
+
+  @override
+  String get homePendingTitle => 'منتظر تأیید شما';
+
+  @override
+  String homePendingCount(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString درخواست';
+  }
+
+  @override
+  String get homeReviewRequests => 'بررسی درخواست‌ها';
+
+  @override
+  String get homeAllReviewed => 'همه درخواست‌ها بررسی شده‌اند';
+
+  @override
+  String get homeAllReviewedBody => 'درخواستی منتظر تأیید شما نیست.';
+
+  @override
+  String get homeLatestRequests => 'آخرین درخواست‌ها';
+
+  @override
+  String get homeNoRequests => 'هنوز درخواستی ثبت نشده است.';
+
+  @override
+  String get countCardTitle => 'شمارش غافلگیرانه';
+
+  @override
+  String countLastTime(String date) {
+    return 'آخرین بار: $date';
+  }
+
+  @override
+  String get countNever => 'هنوز شمارشی انجام نشده است.';
+
+  @override
+  String get countRunningNow => 'یک شمارش در حال انجام است';
+
+  @override
+  String get countStart => 'شروع';
+
+  @override
+  String requestLineTitle(String item, String qty, String unit) {
+    return '$item · $qty $unit';
+  }
+
+  @override
+  String requestMoreItems(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'و $countString قلم دیگر';
+  }
+
+  @override
+  String senderAndTime(String sender, String time) {
+    return '$sender · $time';
+  }
+
+  @override
+  String get errorTitle => 'اطلاعات دریافت نشد';
+
+  @override
+  String get offlineShowingCached =>
+      'اتصال برقرار نیست؛ آخرین اطلاعات ذخیره‌شده نمایش داده می‌شود.';
 }

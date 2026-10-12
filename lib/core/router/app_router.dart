@@ -6,6 +6,7 @@ import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/auth/presentation/lock_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/pin_setup_screen.dart';
+import 'package:caspian_owner/features/count/presentation/count_start_screen.dart';
 import 'package:caspian_owner/features/home/presentation/home_screen.dart';
 import 'package:caspian_owner/features/more/presentation/more_screen.dart';
 import 'package:caspian_owner/features/requests/presentation/request_detail_screen.dart';
@@ -101,6 +102,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.more,
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const MoreScreen(),
+      ),
+      GoRoute(
+        path: Routes.countNew,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const CountStartScreen(),
       ),
     ],
   );
