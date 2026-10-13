@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** M13 PR is open (branch `m13-final-qa`). Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`), then tag `v0.1.0` on main and push the tag; check that `release.yml` publishes the Release with the APK and `update.json`.
+**Next step:** All milestones M0–M13 are done and **v0.1.0 is released** (GitHub Release with `caspian-owner-0.1.0.apk`, 43,096,946 B, SHA-256 `c2363ad7…2c4979`, signed with Alireza's key). Wait for Alireza's test feedback on a phone; next work comes from `docs/ROADMAP.md` (middle server / real API).
 
 ## Environment (M0)
 | Item | Value |
@@ -32,7 +32,7 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | M10 | Done (PR #10) | More via module registry, reports by floor/location, persistent settings, About + developer screen, on-device log |
 | M11 | Done (PR #11) | workmanager 15-min poll → local notifications (shown once per event) → deep link through the lock; permission on login/enable |
 | M12 | Done (PR #12) | In-app updates: manifest URL fallback, optional dialog (from the tab shell) / blocking screen, resumable download + SHA-256 check + cleanup, installer channel (FileProvider), install-permission explanation, About «بررسی به‌روزرسانی»; `tool/bump_version.ps1`, `tool/make_update_manifest.dart`, `release.yml` (ARM-only signed APK + update.json + notes), RELEASING.md; HTTPS-only network config (pinning prepared), **INTERNET permission added to release**; 225 tests; dry-run update.json verified |
-| M13 | PR open | Tab goldens (requests/stock/assistant, light + dark); lazy Requests/Stock lists (`CardSegment`); accessibility guideline tests on 7 screens + largest font on Request Detail; separator «·» → «–» everywhere (it read as Persian zero); USER_GUIDE_fa.md; CHANGELOG 0.1.0. **Spec deviation:** the mock now accepts `11111` in release builds too (the spec said debug only). Otherwise nobody could sign in to the mock-only v0.1.0. The mock is used only without a server, so the code can never open real data |
+| M13 | Done (PR #13, tag v0.1.0) | Tab goldens (requests/stock/assistant, light + dark); lazy Requests/Stock lists (`CardSegment`); accessibility guideline tests on 7 screens + largest font on Request Detail; separator «·» → «–» everywhere (it read as Persian zero); USER_GUIDE_fa.md; CHANGELOG 0.1.0. **Spec deviation:** the mock now accepts `11111` in release builds too (the spec said debug only). Otherwise nobody could sign in to the mock-only v0.1.0. The mock is used only without a server, so the code can never open real data |
 
 ## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)
