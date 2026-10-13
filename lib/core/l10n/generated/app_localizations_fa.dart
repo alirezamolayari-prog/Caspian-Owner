@@ -850,6 +850,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get devExportLogs => 'فرستادن فایل گزارش';
 
   @override
+  String get channelRequests => 'درخواست‌ها';
+
+  @override
+  String get channelCounts => 'شمارش غافلگیرانه';
+
+  @override
+  String get channelMessages => 'پیام‌ها';
+
+  @override
   String get errorTitle => 'اطلاعات دریافت نشد';
 
   @override
