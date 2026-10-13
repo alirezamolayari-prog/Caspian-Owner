@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** M10 PR is open (branch `m10-more`). Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M11 (notifications: workmanager poll → local notifications → deep link) on branch `m11-notifications`.
+**Next step:** M12 PR is open (branch `m12-updates`). Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M13 (final QA: tab goldens with a fixed clock, accessibility and large-text sweep, list performance, USER_GUIDE_fa.md, CHANGELOG, tag v0.1.0 — the signing secrets exist) on branch `m13-final-qa`.
 
 ## Environment (M0)
 | Item | Value |
@@ -29,8 +29,10 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | M7 | Done (PR #7) | Stock tab: search, «کم‌موجود», hidden counts, movements sheet; large-text fixes |
 | M8 | Done (PR #8) | Surprise count: pick + confirm, status/results (difference in words + icon, every entry), history |
 | M9 | Done (PR #9) | Assistant (mock): suggestions (wrapping), history sheet, thinking/failed states |
-| M10 | PR open | More via module registry (admin-only users, «به‌زودی» purchase list), reports by floor (P4 → بام) / location, persistent settings (theme, notifications, fingerprint, FLAG_SECURE, app PIN), About + 7-tap developer screen (scenarios, finish count, log export), rotating on-device log; 198 tests |
-| M11–M13 | Not started | Tab goldens (requests/stock/assistant) are planned for M13 with a fixed clock |
+| M10 | Done (PR #10) | More via module registry, reports by floor/location, persistent settings, About + developer screen, on-device log |
+| M11 | Done (PR #11) | workmanager 15-min poll → local notifications (shown once per event) → deep link through the lock; permission on login/enable |
+| M12 | PR open | In-app updates: manifest URL fallback, optional dialog (from the tab shell) / blocking screen, resumable download + SHA-256 check + cleanup, installer channel (FileProvider), install-permission explanation, About «بررسی به‌روزرسانی»; `tool/bump_version.ps1`, `tool/make_update_manifest.dart`, `release.yml` (ARM-only signed APK + update.json + notes), RELEASING.md; HTTPS-only network config (pinning prepared), **INTERNET permission added to release**; 225 tests; dry-run update.json verified |
+| M13 | Not started | Tab goldens (requests/stock/assistant) planned with a fixed clock |
 
 ## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)
