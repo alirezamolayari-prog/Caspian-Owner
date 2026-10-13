@@ -5,15 +5,16 @@ import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
 import 'package:clock/clock.dart';
 
-/// Mock login. The only accepted code is `11111`, and only when
-/// [allowTestCode] is true, which the app sets in debug builds only.
+/// Mock login. The only accepted code is `11111`. This repository exists
+/// only while the app runs on the in-app mock (no server, sample data), so
+/// the code works in release builds too: without it, nobody could sign in
+/// to a mock-only release. The server's auth never knows this code.
 class MockAuthRepository implements AuthRepository {
-  const new(this._backend, {required this.allowTestCode});
+  const new(this._backend);
 
   static const testCode = '11111';
 
   final MockBackend _backend;
-  final bool allowTestCode;
 
   static final _phone = RegExp(r'^09\d{9}$');
 
@@ -40,7 +41,7 @@ class MockAuthRepository implements AuthRepository {
     required String deviceId,
     required String code,
   }) => _backend.call(() {
-    if (!allowTestCode || toLatinDigits(code) != testCode) {
+    if (toLatinDigits(code) != testCode) {
       throw const ServerException(
         code: 'invalid_code',
         statusCode: 401,

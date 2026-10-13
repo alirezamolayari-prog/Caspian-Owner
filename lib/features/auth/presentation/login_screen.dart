@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:caspian_owner/core/brand/brand.dart';
-import 'package:caspian_owner/core/di/providers.dart';
+import 'package:caspian_owner/core/config/api_config.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
@@ -185,7 +185,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       decoration: InputDecoration(
         labelText: l10n.loginCodeLabel,
         errorText: _error,
-        helperText: ref.watch(appInfoProvider).isDebug
+        // The mock accepts only the test code, so say it while on the mock.
+        helperText: ApiConfig.dataSource == DataSource.mock
             ? l10n.loginTestCodeHint
             : null,
       ),

@@ -53,7 +53,7 @@ void main() {
     test('detail includes the usage history of the same place', () async {
       final request = await MockRequestsRepository(backend).get('r-124');
       final history = request.locationHistory!;
-      // Earlier issues to پلاک ۶۸ · همکف, newest first.
+      // Earlier issues to پلاک ۶۸ – همکف, newest first.
       expect(history.map((u) => u.documentNo), ['ح-۸۸۴', 'ح-۸۶۹', 'ح-۸۶۱']);
     });
 
@@ -246,25 +246,24 @@ void main() {
   });
 
   group('auth', () {
-    test('11111 works only when the test code is allowed', () async {
-      final debug = MockAuthRepository(backend, allowTestCode: true);
-      final session = await debug.verify(
+    test('only 11111 (in either digit set) signs in', () async {
+      final auth = MockAuthRepository(backend);
+      final session = await auth.verify(
         phone: '09120000000',
         deviceId: 'd',
         code: '۱۱۱۱۱',
       );
       expect(session.owner.isAdmin, isTrue);
 
-      final release = MockAuthRepository(backend, allowTestCode: false);
       await expectLater(
-        release.verify(phone: '09120000000', deviceId: 'd', code: '11111'),
+        auth.verify(phone: '09120000000', deviceId: 'd', code: '22222'),
         throwsA(isA<ServerException>()),
       );
     });
 
     test('rejects malformed phone numbers', () async {
       await expectLater(
-        MockAuthRepository(backend, allowTestCode: true).registerDevice(
+        MockAuthRepository(backend).registerDevice(
           phone: '12345',
           deviceId: 'd',
           deviceModel: 'm',
