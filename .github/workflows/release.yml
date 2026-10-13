@@ -1,0 +1,101 @@
+name: Release
+
+# Push a tag like v1.2.0 (see docs/RELEASING.md). The phones find the new
+# version through update.json on the GitHub Release.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    steps:
+      - name: Check signing secrets
+        run: |
+          missing=0
+          for name in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Signing secret $name is missing. Add it with 'gh secret set $name' (docs/RELEASING.md). The app must always be signed with the same release key."
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - uses: actions/checkout@v5
+
+      - name: Check the tag matches pubspec.yaml
+        run: |
+          version=$(sed -n 's/^version: *\([0-9.]*\)+[0-9]*.*/\1/p' pubspec.yaml)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match pubspec.yaml version $version. Run tool/bump_version.ps1 first."
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.7
+          cache: true
+
+      - name: Disable analytics
+        run: |
+          flutter config --no-analytics
+          dart --disable-analytics
+
+      - run: flutter pub get
+      - run: flutter analyze --fatal-infos
+      - run: flutter test
+
+      - name: Restore the release keystore
+        run: |
+          # Accepts plain base64 or `certutil -encode` output.
+          echo "$KEYSTORE_BASE64" | grep -v -- '-----' | tr -d '\r\n ' | base64 -d > android/app/release.jks
+          {
+            echo "storeFile=release.jks"
+            echo "storePassword=$KEYSTORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > android/key.properties
+
+      - name: Build the signed APK (ARM phones only)
+        run: |
+          flutter build apk --release --target-platform android-arm,android-arm64
+          cp build/app/outputs/flutter-apk/app-release.apk "caspian-owner-$VERSION.apk"
+
+      - name: Make update.json
+        run: |
+          dart run tool/make_update_manifest.dart \
+            --apk "caspian-owner-$VERSION.apk" \
+            --url "https://github.com/${GITHUB_REPOSITORY}/releases/download/${GITHUB_REF_NAME}/caspian-owner-$VERSION.apk" \
+            --out update.json
+          cat update.json
+
+      - name: Publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          awk -v v="## $VERSION" 'index($0, v) == 1 {p=1; next} /^## / {p=0} p' docs/CHANGELOG.md > notes.md
+          gh release create "$GITHUB_REF_NAME" \
+            "caspian-owner-$VERSION.apk" update.json \
+            --title "Caspian Owner $VERSION" \
+            --notes-file notes.md
+
+      - name: Remove the keystore
+        if: always()
+        run: rm -f android/app/release.jks android/key.properties
