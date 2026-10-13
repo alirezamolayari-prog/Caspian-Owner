@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/security/secure_screen_scope.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/card_segment.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
 import 'package:caspian_owner/core/widgets/status_chip.dart';
@@ -73,7 +74,7 @@ final List<StockItem> _placeholder = List.generate(
     nameFa: 'نام کالای انبار',
     unitFa: 'عدد',
     qty: 10,
-    shelfFa: 'قفسه ۱ · ردیف ۲',
+    shelfFa: 'قفسه ۱ – ردیف ۲',
     low: false,
     lockedByCount: false,
   ),
@@ -226,78 +227,66 @@ class _StockRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    const radius = Radius.circular(Radii.card);
     final qty = item.qty;
 
-    return Material(
-      color: theme.cardTheme.color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: first ? radius : Radius.zero,
-          bottom: last ? radius : Radius.zero,
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          InkWell(
-            onTap: () => showMovementsSheet(context, item),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 64),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Space.md,
-                  vertical: Space.md - Space.xs,
+    return CardSegment(
+      first: first,
+      last: last,
+      child: InkWell(
+        onTap: () => showMovementsSheet(context, item),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 64),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: Space.md,
+              vertical: Space.md - Space.xs,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(item.nameFa, style: theme.textTheme.titleSmall),
+                      if (item.shelfFa case final shelf?)
+                        Text(shelf, style: theme.textTheme.bodySmall),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(item.nameFa, style: theme.textTheme.titleSmall),
-                          if (item.shelfFa case final shelf?)
-                            Text(shelf, style: theme.textTheme.bodySmall),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: Space.sm),
-                    // Chip and quantity stack when there is no room side by
-                    // side (very large text).
-                    Flexible(
-                      child: Wrap(
-                        alignment: WrapAlignment.end,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        spacing: Space.sm,
-                        runSpacing: Space.xs,
-                        children: [
-                          if (item.lockedByCount || qty == null)
-                            StatusChip(
-                              label: l10n.hiddenByCount,
-                              icon: AppIcons.hidden,
-                            )
-                          else ...[
-                            if (item.low)
-                              StatusChip(
-                                label: l10n.lowStock,
-                                icon: AppIcons.low,
-                                tone: StatusTone.warning,
-                              ),
-                            Text(
-                              l10n.qtyWithUnit(formatNumber(qty), item.unitFa),
-                              style: theme.textTheme.titleMedium,
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ],
+                const SizedBox(width: Space.sm),
+                // Chip and quantity stack when there is no room side by
+                // side (very large text).
+                Flexible(
+                  child: Wrap(
+                    alignment: WrapAlignment.end,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: Space.sm,
+                    runSpacing: Space.xs,
+                    children: [
+                      if (item.lockedByCount || qty == null)
+                        StatusChip(
+                          label: l10n.hiddenByCount,
+                          icon: AppIcons.hidden,
+                        )
+                      else ...[
+                        if (item.low)
+                          StatusChip(
+                            label: l10n.lowStock,
+                            icon: AppIcons.low,
+                            tone: StatusTone.warning,
+                          ),
+                        Text(
+                          l10n.qtyWithUnit(formatNumber(qty), item.unitFa),
+                          style: theme.textTheme.titleMedium,
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-          if (!last) const Divider(indent: Space.md, endIndent: Space.md),
-        ],
+        ),
       ),
     );
   }

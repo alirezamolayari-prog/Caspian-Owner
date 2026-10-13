@@ -20,9 +20,10 @@ void main() {
     WidgetTester tester,
     String location, {
     MockScenario scenario = MockScenario.normal,
+    double height = 2400,
   }) async {
     tester.view
-      ..physicalSize = const Size(1080, 2400)
+      ..physicalSize = Size(1080, height)
       ..devicePixelRatio = 2.5;
     addTearDown(tester.view.reset);
     final harness = TestHarness.create(fixtures, signedIn: true);
@@ -50,7 +51,8 @@ void main() {
     testWidgets('«بررسی‌شده» shows decisions, including the manager ones', (
       tester,
     ) async {
-      await pumpAt(tester, '/requests');
+      // Tall screen: the list is lazy and builds only the visible tiles.
+      await pumpAt(tester, '/requests', height: 6000);
       await tester.tap(find.text('بررسی‌شده'));
       await tester.pumpAndSettle();
       // 121, 120, 119, 118, 117, 116 are approved or rejected.
@@ -59,7 +61,7 @@ void main() {
     });
 
     testWidgets('«همه» shows every request', (tester) async {
-      await pumpAt(tester, '/requests');
+      await pumpAt(tester, '/requests', height: 6000);
       await tester.tap(find.text('همه'));
       await tester.pumpAndSettle();
       expect(find.byType(RequestTile), findsNWidgets(11));
@@ -77,10 +79,10 @@ void main() {
     ) async {
       await pumpAt(tester, '/requests/r-124');
       expect(find.text('درخواست ۱۲۴'), findsOneWidget);
-      expect(find.text('لامپ LED ۱۸ وات · ۲۴ عدد'), findsOneWidget);
+      expect(find.text('لامپ LED ۱۸ وات – ۲۴ عدد'), findsOneWidget);
       expect(find.text('۴۲ عدد'), findsOneWidget, reason: 'موجودی فعلی');
       expect(find.text('۳۶ عدد'), findsOneWidget, reason: 'مصرف ماه قبل');
-      expect(find.text('پلاک ۶۸ · همکف'), findsOneWidget);
+      expect(find.text('پلاک ۶۸ – همکف'), findsOneWidget);
       expect(
         find.text('برای تعویض لامپ‌های راهروی همکف کنار پلاک ۶۸'),
         findsOneWidget,
@@ -201,7 +203,7 @@ void main() {
     ) async {
       await pumpAt(tester, '/requests/r-123');
       expect(find.text('در حال شمارش'), findsOneWidget);
-      expect(find.text('آسانسور باری اسدنژاد · طبقه دوم'), findsOneWidget);
+      expect(find.text('آسانسور باری اسدنژاد – طبقه دوم'), findsOneWidget);
     });
 
     testWidgets('sending a chat message shows it at once', (tester) async {
