@@ -5,6 +5,8 @@ import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
+import 'package:caspian_owner/core/update/update_controller.dart';
+import 'package:caspian_owner/core/update/update_manifest.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +32,26 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
       SnackBar(content: Text(AppLocalizations.of(context).devUnlocked)),
     );
     unawaited(context.push(Routes.developer));
+  }
+
+  Future<void> _checkForUpdate() async {
+    final l10n = AppLocalizations.of(context);
+    final manifest = await ref
+        .read(updateControllerProvider.notifier)
+        .check(force: true);
+    if (!mounted) return;
+    final update = ref.read(updateControllerProvider);
+    if (update.decision is NoUpdate) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            manifest == null ? l10n.aboutUpdateCheckFailed : l10n.aboutUpToDate,
+          ),
+        ),
+      );
+    } else if (!update.required) {
+      unawaited(context.push(Routes.update));
+    }
   }
 
   @override
@@ -63,7 +85,11 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
               ),
             ),
           ),
-          const SizedBox(height: Space.sm),
+          OutlinedButton(
+            onPressed: _checkForUpdate,
+            child: Text(l10n.aboutCheckUpdate),
+          ),
+          const SizedBox(height: Space.md),
           Text(Brand.supportContactFa, style: theme.textTheme.bodyMedium),
           const SizedBox(height: Space.lg),
           // The copyright line stays in English, as in LICENSE.

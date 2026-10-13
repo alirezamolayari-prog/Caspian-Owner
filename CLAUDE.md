@@ -66,6 +66,8 @@ flutter build apk --release   # signed with android/key.properties, else the DEB
 - Use the `ui-ux-pro-max` skill for UI decisions (`--stack flutter`, `--domain ux`).
 
 ## Updates and release
+- Local release builds: `flutter build apk --release --target-platform android-arm,android-arm64` (as CI does; owners' phones are ARM). `android/gradle.properties` sets in-process Kotlin with `kotlin.incremental=false` for this PC.
+- Release builds need the `INTERNET` permission in `src/main/AndroidManifest.xml` (Flutter's template only grants it to debug/profile).
 - `pubspec.yaml` `version: X.Y.Z+BUILD`; BUILD must always increase. Use `tool/bump_version.ps1`.
 - In-app updater (`lib/core/update/`) reads `update.json` (server URL first, then the GitHub Release asset), verifies SHA-256, then starts the installer.
 - The release keystore lives **only** on Alireza's PC (`E:\keys\`, KeePassXC, 3 backups) and in GitHub Actions secrets. If it's lost, the app can never be updated. Never read, print or commit it.

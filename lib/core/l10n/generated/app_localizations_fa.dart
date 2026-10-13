@@ -859,6 +859,71 @@ class AppLocalizationsFa extends AppLocalizations {
   String get channelMessages => 'پیام‌ها';
 
   @override
+  String get updateAvailableTitle => 'نسخه تازه آماده است';
+
+  @override
+  String updateVersion(String version) {
+    return 'نسخه $version';
+  }
+
+  @override
+  String get updateLater => 'بعداً';
+
+  @override
+  String get updateNow => 'به‌روزرسانی';
+
+  @override
+  String get updateRequiredTitle => 'برای ادامه، برنامه را به‌روز کنید';
+
+  @override
+  String get updateRequiredBody =>
+      'این نسخه دیگر پشتیبانی نمی‌شود. نسخه تازه را نصب کنید؛ اطلاعات شما سر جایش می‌ماند.';
+
+  @override
+  String get updateDownloadInstall => 'دانلود و نصب';
+
+  @override
+  String updateDownloading(int percent) {
+    final intl.NumberFormat percentNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String percentString = percentNumberFormat.format(percent);
+
+    return 'در حال دانلود… $percentString٪';
+  }
+
+  @override
+  String updateSize(String megabytes) {
+    return 'حجم: $megabytes مگابایت';
+  }
+
+  @override
+  String get updatePermissionTitle => 'یک اجازه لازم است';
+
+  @override
+  String get updatePermissionBody =>
+      'برای نصب به‌روزرسانی، در صفحه بعد گزینه «اجازه از این منبع» را برای مالک کاسپین روشن کنید و برگردید. این کار فقط یک بار لازم است.';
+
+  @override
+  String get updateOpenSettings => 'باز کردن تنظیمات';
+
+  @override
+  String get updateDownloadFailed =>
+      'دانلود کامل نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.';
+
+  @override
+  String get updateChecksumFailed =>
+      'فایل دانلودشده سالم نبود و پاک شد. دوباره تلاش کنید.';
+
+  @override
+  String get aboutCheckUpdate => 'بررسی به‌روزرسانی';
+
+  @override
+  String get aboutUpToDate => 'برنامه به‌روز است.';
+
+  @override
+  String get aboutUpdateCheckFailed => 'اطلاعات به‌روزرسانی دریافت نشد.';
+
+  @override
   String get errorTitle => 'اطلاعات دریافت نشد';
 
   @override

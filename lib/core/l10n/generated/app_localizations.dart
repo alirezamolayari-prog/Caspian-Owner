@@ -1474,6 +1474,108 @@ abstract class AppLocalizations {
   /// **'پیام‌ها'**
   String get channelMessages;
 
+  /// No description provided for @updateAvailableTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه تازه آماده است'**
+  String get updateAvailableTitle;
+
+  /// No description provided for @updateVersion.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه {version}'**
+  String updateVersion(String version);
+
+  /// No description provided for @updateLater.
+  ///
+  /// In fa, this message translates to:
+  /// **'بعداً'**
+  String get updateLater;
+
+  /// No description provided for @updateNow.
+  ///
+  /// In fa, this message translates to:
+  /// **'به‌روزرسانی'**
+  String get updateNow;
+
+  /// No description provided for @updateRequiredTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای ادامه، برنامه را به‌روز کنید'**
+  String get updateRequiredTitle;
+
+  /// No description provided for @updateRequiredBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'این نسخه دیگر پشتیبانی نمی‌شود. نسخه تازه را نصب کنید؛ اطلاعات شما سر جایش می‌ماند.'**
+  String get updateRequiredBody;
+
+  /// No description provided for @updateDownloadInstall.
+  ///
+  /// In fa, this message translates to:
+  /// **'دانلود و نصب'**
+  String get updateDownloadInstall;
+
+  /// No description provided for @updateDownloading.
+  ///
+  /// In fa, this message translates to:
+  /// **'در حال دانلود… {percent}٪'**
+  String updateDownloading(int percent);
+
+  /// No description provided for @updateSize.
+  ///
+  /// In fa, this message translates to:
+  /// **'حجم: {megabytes} مگابایت'**
+  String updateSize(String megabytes);
+
+  /// No description provided for @updatePermissionTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'یک اجازه لازم است'**
+  String get updatePermissionTitle;
+
+  /// No description provided for @updatePermissionBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای نصب به‌روزرسانی، در صفحه بعد گزینه «اجازه از این منبع» را برای مالک کاسپین روشن کنید و برگردید. این کار فقط یک بار لازم است.'**
+  String get updatePermissionBody;
+
+  /// No description provided for @updateOpenSettings.
+  ///
+  /// In fa, this message translates to:
+  /// **'باز کردن تنظیمات'**
+  String get updateOpenSettings;
+
+  /// No description provided for @updateDownloadFailed.
+  ///
+  /// In fa, this message translates to:
+  /// **'دانلود کامل نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.'**
+  String get updateDownloadFailed;
+
+  /// No description provided for @updateChecksumFailed.
+  ///
+  /// In fa, this message translates to:
+  /// **'فایل دانلودشده سالم نبود و پاک شد. دوباره تلاش کنید.'**
+  String get updateChecksumFailed;
+
+  /// No description provided for @aboutCheckUpdate.
+  ///
+  /// In fa, this message translates to:
+  /// **'بررسی به‌روزرسانی'**
+  String get aboutCheckUpdate;
+
+  /// No description provided for @aboutUpToDate.
+  ///
+  /// In fa, this message translates to:
+  /// **'برنامه به‌روز است.'**
+  String get aboutUpToDate;
+
+  /// No description provided for @aboutUpdateCheckFailed.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات به‌روزرسانی دریافت نشد.'**
+  String get aboutUpdateCheckFailed;
+
   /// No description provided for @errorTitle.
   ///
   /// In fa, this message translates to:
