@@ -10,6 +10,8 @@ import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/core/storage/app_database.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
+import 'package:caspian_owner/core/update/update_checker.dart';
+import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
 import 'package:drift/drift.dart' show DatabaseConnection, driftRuntimeOptions;
@@ -79,6 +81,7 @@ class TestHarness {
     bool hasPin = false,
     bool isDebug = true,
     Owner owner = testOwner,
+    UpdateChecker? updateChecker,
   }) {
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
     final backend = MockBackend(fixtures, latency: Duration.zero);
@@ -111,6 +114,10 @@ class TestHarness {
         deviceAuthenticatorProvider.overrideWithValue(authenticator),
         appDatabaseProvider.overrideWithValue(database),
         mockBackendProvider.overrideWithValue(backend),
+        // No network in tests: the update check finds nothing.
+        updateCheckerProvider.overrideWithValue(
+          updateChecker ?? UpdateChecker(urls: const []),
+        ),
         initialSessionProvider.overrideWithValue(
           signedIn ? testSession(owner) : null,
         ),
