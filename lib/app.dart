@@ -6,14 +6,16 @@ import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/requests/application/decision_controller.dart';
+import 'package:caspian_owner/features/settings/application/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Root widget. Persian only, right-to-left, theme follows the system.
 class CaspianOwnerApp extends ConsumerStatefulWidget {
-  const new({this.themeMode = ThemeMode.system, super.key});
+  const new({this.themeMode, super.key});
 
-  final ThemeMode themeMode;
+  /// Forces a theme (tests); otherwise the owner's setting is used.
+  final ThemeMode? themeMode;
 
   static const locale = Locale('fa');
 
@@ -54,7 +56,9 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: widget.themeMode,
+      themeMode:
+          widget.themeMode ??
+          ref.watch(settingsControllerProvider.select((s) => s.themeMode)),
       locale: CaspianOwnerApp.locale,
       supportedLocales: const [CaspianOwnerApp.locale],
       localizationsDelegates: AppLocalizations.localizationsDelegates,

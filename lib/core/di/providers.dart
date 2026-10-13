@@ -1,6 +1,7 @@
 import 'package:caspian_owner/core/config/api_config.dart';
 import 'package:caspian_owner/core/config/app_info.dart';
 import 'package:caspian_owner/core/domain/config_repository.dart';
+import 'package:caspian_owner/core/logging/app_log.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_config_repository.dart';
 import 'package:caspian_owner/core/mock/mock_notification_source.dart';
@@ -40,6 +41,9 @@ final appDatabaseProvider = Provider<AppDatabase>(
 final secureStoreProvider = Provider<SecureStore>(
   (ref) => throw UnimplementedError('Provided by bootstrap'),
 );
+
+/// The on-device log (null in tests that don't need it).
+final appLogProvider = Provider<AppLog?>((ref) => null);
 
 final deviceAuthenticatorProvider = Provider<DeviceAuthenticator>(
   (ref) => LocalDeviceAuthenticator(),

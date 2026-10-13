@@ -18,6 +18,7 @@ class MoreEntry {
     required this.path,
     this.adminOnly = false,
     this.requiredFlag,
+    this.comingSoon = false,
   });
 
   /// Localized label, read from the widget tree's localizations.
@@ -26,6 +27,9 @@ class MoreEntry {
   final String path;
   final bool adminOnly;
   final String? requiredFlag;
+
+  /// Shown with a «به‌زودی» badge (a placeholder for a later feature).
+  final bool comingSoon;
 }
 
 /// A part of the app that can be switched on per owner by the server

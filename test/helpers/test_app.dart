@@ -52,11 +52,11 @@ class FakeAuthenticator implements DeviceAuthenticator {
 
 const testOwner = Owner(id: 'o-1', nameFa: 'علیرضا', isAdmin: true);
 
-AuthSession testSession() => AuthSession(
+AuthSession testSession([Owner owner = testOwner]) => AuthSession(
   accessToken: 'a',
   refreshToken: 'r',
   expiresAt: DateTime(2030),
-  owner: testOwner,
+  owner: owner,
 );
 
 /// Everything the full app needs, with in-memory fakes.
@@ -78,6 +78,7 @@ class TestHarness {
     bool deviceAuthAvailable = true,
     bool hasPin = false,
     bool isDebug = true,
+    Owner owner = testOwner,
   }) {
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
     final backend = MockBackend(fixtures, latency: Duration.zero);
@@ -111,7 +112,7 @@ class TestHarness {
         appDatabaseProvider.overrideWithValue(database),
         mockBackendProvider.overrideWithValue(backend),
         initialSessionProvider.overrideWithValue(
-          signedIn ? testSession() : null,
+          signedIn ? testSession(owner) : null,
         ),
         lockSetupProvider.overrideWithValue(
           LockSetup(deviceAuthAvailable: deviceAuthAvailable, hasPin: hasPin),
