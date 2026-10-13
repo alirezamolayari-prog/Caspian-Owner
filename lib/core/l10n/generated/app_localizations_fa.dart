@@ -274,7 +274,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String requestLineTitle(String item, String qty, String unit) {
-    return '$item · $qty $unit';
+    return '$item – $qty $unit';
   }
 
   @override
@@ -288,7 +288,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String senderAndTime(String sender, String time) {
-    return '$sender · $time';
+    return '$sender – $time';
   }
 
   @override
@@ -328,7 +328,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String requestFrom(String sender, String time) {
-    return 'از طرف $sender · $time';
+    return 'از طرف $sender – $time';
   }
 
   @override
@@ -357,12 +357,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String decidedApprovedBy(String name, String time) {
-    return 'تأیید شد توسط $name · $time';
+    return 'تأیید شد توسط $name – $time';
   }
 
   @override
   String decidedRejectedBy(String name, String time) {
-    return 'رد شد توسط $name · $time';
+    return 'رد شد توسط $name – $time';
   }
 
   @override
@@ -429,12 +429,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String historyLine(String item, String qty, String unit) {
-    return '$item · $qty $unit';
+    return '$item – $qty $unit';
   }
 
   @override
   String historyMeta(String date, String document) {
-    return '$date · حواله $document';
+    return '$date – حواله $document';
   }
 
   @override
@@ -497,7 +497,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String movementMeta(String date, String document) {
-    return '$date · سند $document';
+    return '$date – سند $document';
   }
 
   @override
@@ -555,7 +555,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String countOrderedBy(String name, String time) {
-    return 'دستور: $name · $time';
+    return 'دستور: $name – $time';
   }
 
   @override
@@ -590,7 +590,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String countEntry(String qty, String name, String time) {
-    return '$qty · $name · $time';
+    return '$qty – $name – $time';
   }
 
   @override
@@ -834,7 +834,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String devDataSourceValue(String source, String url) {
-    return '$source · $url';
+    return '$source – $url';
   }
 
   @override

@@ -2,7 +2,7 @@ import 'package:caspian_owner/core/domain/place.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 
 /// Looks up locations and floors and builds display labels such as
-/// «پلاک ۶۸ · همکف» or «آسانسور باری اسدنژاد · طبقه دوم».
+/// «پلاک ۶۸ – همکف» or «آسانسور باری اسدنژاد – طبقه دوم».
 class LocationDirectory {
   new(LocationsSnapshot snapshot)
     : _locations = {for (final l in snapshot.locations) l.code: l},
@@ -21,7 +21,7 @@ class LocationDirectory {
   Floor? floor(String code) => _floors[code] ?? Floors.byCode(code);
 
   /// Display label of a place. A whole-floor place (parking, roof) shows
-  /// only its name; everything else shows «name · floor». Unknown codes
+  /// only its name; everything else shows «name – floor». Unknown codes
   /// fall back to the raw code so nothing is hidden.
   String label(ConsumptionPlace place) {
     final location = _locations[place.locationCode];
@@ -30,7 +30,7 @@ class LocationDirectory {
     if (location?.type == LocationType.floorPlace) {
       return toPersianDigits(name);
     }
-    return toPersianDigits('$name · $floorName');
+    return toPersianDigits('$name – $floorName');
   }
 
   /// Sort key for building order; unknown floors go last.

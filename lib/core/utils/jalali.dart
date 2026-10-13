@@ -21,6 +21,6 @@ String formatTime(DateTime dateTime) {
   return toPersianDigits('$hh:$mm');
 }
 
-/// «۲۰ مهر ۱۴۰۵ · ۰۹:۰۵»
+/// «۲۰ مهر ۱۴۰۵ – ۰۹:۰۵»
 String formatJalaliDateTime(DateTime dateTime) =>
-    '${formatJalaliDate(dateTime)} · ${formatTime(dateTime)}';
+    '${formatJalaliDate(dateTime)} – ${formatTime(dateTime)}';

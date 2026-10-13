@@ -82,8 +82,8 @@ void main() {
     // Filter matches.
     expect(find.text('درست است'), findsOneWidget);
     // Every entered number, including a correction.
-    expect(find.textContaining('۴ · سعید مرادی'), findsOneWidget);
-    expect(find.textContaining('۳ · سعید مرادی'), findsOneWidget);
+    expect(find.textContaining('۴ – سعید مرادی'), findsOneWidget);
+    expect(find.textContaining('۳ – سعید مرادی'), findsOneWidget);
     expect(find.textContaining('به‌طور خودکار اصلاح نمی‌شود'), findsOneWidget);
   });
 

@@ -9,7 +9,7 @@ import 'package:caspian_owner/features/requests/presentation/widgets/request_tex
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 
-/// One request in a list: initial avatar, title, «sender · time», status.
+/// One request in a list: initial avatar, title, «sender – time», status.
 /// Warehouse-manager decisions say «مدیر انبار»; decisions waiting offline
 /// say «در صف ارسال».
 class RequestTile extends StatelessWidget {
@@ -67,7 +67,7 @@ class RequestTile extends StatelessWidget {
                     ),
                     const SizedBox(height: Space.xs),
                     Text(
-                      byManager ? '$subtitle · ${l10n.managerLabel}' : subtitle,
+                      byManager ? '$subtitle – ${l10n.managerLabel}' : subtitle,
                       style: theme.textTheme.bodySmall,
                     ),
                   ],

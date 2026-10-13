@@ -39,7 +39,7 @@ Future<void> loginApproveAndFindReviewed(WidgetTester tester) async {
   await tester.tap(find.text('بررسی‌شده'));
   await tester.pumpAndSettle();
   final reviewed = find.ancestor(
-    of: find.text('لوله پی‌وی‌سی ۲ اینچ · ۸ شاخه'),
+    of: find.text('لوله پی‌وی‌سی ۲ اینچ – ۸ شاخه'),
     matching: find.byType(RequestTile),
   );
   expect(reviewed, findsOneWidget);

@@ -42,7 +42,7 @@ void main() {
     expect(find.text('موجودی انبار'), findsOneWidget);
     expect(find.text('لامپ LED ۱۸ وات'), findsOneWidget);
     expect(find.text('۴۲ عدد'), findsOneWidget);
-    expect(find.text('قفسه ۱ · ردیف ۲'), findsOneWidget);
+    expect(find.text('قفسه ۱ – ردیف ۲'), findsOneWidget);
     expect(rowsOf('کم'), findsNWidgets(4));
     expect(rowsOf('در حال شمارش'), findsNWidgets(2));
   });
@@ -92,10 +92,10 @@ void main() {
     await tester.tap(find.text('رنگ پلاستیک سفید'));
     await tester.pumpAndSettle();
     expect(find.text('ورود و خروج اخیر'), findsOneWidget);
-    expect(find.text('خروج · ۲ گالن'), findsNWidgets(2));
-    expect(find.text('اصلاح موجودی (کم شد) · ۲ گالن'), findsOneWidget);
-    expect(find.text('راهروی عمومی طبقه · طبقه اول'), findsNothing);
-    expect(find.text('مشاعات عمومی طبقه · طبقه اول'), findsOneWidget);
+    expect(find.text('خروج – ۲ گالن'), findsNWidgets(2));
+    expect(find.text('اصلاح موجودی (کم شد) – ۲ گالن'), findsOneWidget);
+    expect(find.text('راهروی عمومی طبقه – طبقه اول'), findsNothing);
+    expect(find.text('مشاعات عمومی طبقه – طبقه اول'), findsOneWidget);
   });
 
   testWidgets('a counted item explains why its history is hidden', (

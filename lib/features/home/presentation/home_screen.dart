@@ -103,7 +103,7 @@ class _HomeContent extends StatelessWidget {
   }
 }
 
-/// Hero card: «منتظر تأیید شما · ۴ درخواست», or a calm empty state.
+/// Hero card: «منتظر تأیید شما – ۴ درخواست», or a calm empty state.
 class _PendingCard extends StatelessWidget {
   const new({required this.count});
 

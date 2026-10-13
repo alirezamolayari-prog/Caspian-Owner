@@ -36,7 +36,7 @@ void main() {
     expect(find.text('آخرین درخواست‌ها'), findsOneWidget);
     expect(find.byType(RequestTile), findsNWidgets(3));
     expect(
-      find.text('لوله پی‌وی‌سی ۲ اینچ · ۸ شاخه'),
+      find.text('لوله پی‌وی‌سی ۲ اینچ – ۸ شاخه'),
       findsOneWidget,
       reason: 'newest request (۱۲۵) first',
     );
