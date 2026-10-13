@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- HTTPS only. Plain HTTP is refused everywhere in release builds. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <!--
+      Certificate pinning for the middle server, prepared but NOT enabled
+      (the server doesn't exist yet). To enable, fill in the domain and the
+      SHA-256 of its public key plus a backup key, and set an expiration:
+
+    <domain-config>
+        <domain includeSubdomains="true">api.example.ir</domain>
+        <pin-set expiration="2028-01-01">
+            <pin digest="SHA-256">BASE64_OF_PRIMARY_KEY=</pin>
+            <pin digest="SHA-256">BASE64_OF_BACKUP_KEY=</pin>
+        </pin-set>
+    </domain-config>
+    -->
+</network-security-config>
