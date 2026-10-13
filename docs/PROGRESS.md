@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** M12 PR is open (branch `m12-updates`). Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`; delete branches by hand), then start M13 (final QA: tab goldens with a fixed clock, accessibility and large-text sweep, list performance, USER_GUIDE_fa.md, CHANGELOG, tag v0.1.0 — the signing secrets exist) on branch `m13-final-qa`.
+**Next step:** M13 PR is open (branch `m13-final-qa`). Wait for green CI, squash-merge with `gh pr merge <n> --squash` (no `--delete-branch`), then tag `v0.1.0` on main and push the tag; check that `release.yml` publishes the Release with the APK and `update.json`.
 
 ## Environment (M0)
 | Item | Value |
@@ -23,7 +23,7 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | M1 | Done (PR #1) | Scaffold, signing, lints, LICENSE, CLAUDE.md, docs, CI |
 | M2 | Done (PR #2) | Brand, light/dark tokens, Vazirmatn UI-FD bundled, fa/RTL, ARB + gen-l10n, Persian digits, Jalali, relative time, StatusChip, AppIcons |
 | M3 | Done (PR #3) | `api/openapi.yaml`, freezed models, repository interfaces, mock backend + fixtures (scenarios), locations CSV, drift cache + pending queue, ApiConfig switch, module registry |
-| M4 | Done (PR #4) | Login (phone + OTP, `11111` in debug only), session in secure storage, app lock (fingerprint/device PIN; app PIN fallback; 5 wrong PINs → sign out), go_router shell with 4 tabs + deep links through the lock, FLAG_SECURE channel, logout wipes data |
+| M4 | Done (PR #4) | Login (phone + OTP, `11111`; debug only until M13, see M13), session in secure storage, app lock (fingerprint/device PIN; app PIN fallback; 5 wrong PINs → sign out), go_router shell with 4 tabs + deep links through the lock, FLAG_SECURE channel, logout wipes data |
 | M5 | Done (PR #5) | Home: hero card, latest 3 requests, surprise-count card; skeleton, error + retry, pull-to-refresh, offline cache; mock `offline` scenario |
 | M6 | Done (PR #6) | Requests tab + Request Detail, approve with fingerprint + 5 s undo, reject with reason, offline queue, 409 dialog, chat, same-place history; acceptance flow login → approve → «بررسی‌شده» |
 | M7 | Done (PR #7) | Stock tab: search, «کم‌موجود», hidden counts, movements sheet; large-text fixes |
@@ -31,8 +31,8 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | M9 | Done (PR #9) | Assistant (mock): suggestions (wrapping), history sheet, thinking/failed states |
 | M10 | Done (PR #10) | More via module registry, reports by floor/location, persistent settings, About + developer screen, on-device log |
 | M11 | Done (PR #11) | workmanager 15-min poll → local notifications (shown once per event) → deep link through the lock; permission on login/enable |
-| M12 | PR open | In-app updates: manifest URL fallback, optional dialog (from the tab shell) / blocking screen, resumable download + SHA-256 check + cleanup, installer channel (FileProvider), install-permission explanation, About «بررسی به‌روزرسانی»; `tool/bump_version.ps1`, `tool/make_update_manifest.dart`, `release.yml` (ARM-only signed APK + update.json + notes), RELEASING.md; HTTPS-only network config (pinning prepared), **INTERNET permission added to release**; 225 tests; dry-run update.json verified |
-| M13 | Not started | Tab goldens (requests/stock/assistant) planned with a fixed clock |
+| M12 | Done (PR #12) | In-app updates: manifest URL fallback, optional dialog (from the tab shell) / blocking screen, resumable download + SHA-256 check + cleanup, installer channel (FileProvider), install-permission explanation, About «بررسی به‌روزرسانی»; `tool/bump_version.ps1`, `tool/make_update_manifest.dart`, `release.yml` (ARM-only signed APK + update.json + notes), RELEASING.md; HTTPS-only network config (pinning prepared), **INTERNET permission added to release**; 225 tests; dry-run update.json verified |
+| M13 | PR open | Tab goldens (requests/stock/assistant, light + dark); lazy Requests/Stock lists (`CardSegment`); accessibility guideline tests on 7 screens + largest font on Request Detail; separator «·» → «–» everywhere (it read as Persian zero); USER_GUIDE_fa.md; CHANGELOG 0.1.0. **Spec deviation:** the mock now accepts `11111` in release builds too (the spec said debug only). Otherwise nobody could sign in to the mock-only v0.1.0. The mock is used only without a server, so the code can never open real data |
 
 ## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)
@@ -53,6 +53,6 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 - `build_runner` 2.16 removed `--delete-conflicting-outputs`; plain `dart run build_runner build`.
 - `csv` 8.0.0 API: `Csv(autoDetect: false).decode(text)` (auto-detect off: the `;` in aliases could fool it).
 - A local `.vscode/settings.json` (excluded via `.git/info/exclude`) points the Dart extension at `E:\dev\flutter`; this removed the false IDE errors.
-- Release APK is ~57 MB: one "fat" APK with native code for arm64, armv7 and x86_64, plus SQLite. Consider dropping x86_64 or splitting per ABI in M12 (download size on slow networks).
+- Release APK is ARM-only (arm64 + armv7), ~41 MB; the fat APK with x86_64 was ~62 MB.
 - Release builds take 15–20 minutes on this PC; run them in the background.
 - Widget tests: ListView doesn't build off-screen items; use `scrollUntilVisible` before expecting them. Goldens with relative times: add ~30 s slack so «۱۰ دقیقه پیش» doesn't round to ۹.

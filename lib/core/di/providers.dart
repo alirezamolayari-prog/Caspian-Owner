@@ -76,13 +76,7 @@ T _source<T>(Ref ref, T Function(MockBackend backend) mock) =>
     };
 
 final authRepositoryProvider = Provider<AuthRepository>(
-  (ref) => _source(
-    ref,
-    (b) => MockAuthRepository(
-      b,
-      allowTestCode: ref.watch(appInfoProvider).isDebug,
-    ),
-  ),
+  (ref) => _source(ref, MockAuthRepository.new),
 );
 
 final configRepositoryProvider = Provider<ConfigRepository>(

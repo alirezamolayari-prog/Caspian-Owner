@@ -63,6 +63,9 @@ flutter build apk --release   # signed with android/key.properties, else the DEB
 - Colors only from the theme tokens (no hex in widgets). Light and dark themes; follow the system.
 - RTL everywhere, Persian digits, Jalali dates, relative times. **All strings in ARB files**; no hard-coded text in widgets.
 - 48dp touch targets, contrast ≥ 4.5:1, status always as text (never color alone), no swipe-only actions, semantic labels on icon buttons, must work at the largest system font size.
+- Separator in visible text is « – » (en dash), never «·»: next to Persian digits the middle dot reads as Persian zero («۲۴ · عدد» looks like «۲۴۰ عدد»). So the UI spec's «پلاک ۶۸ · همکف» is shown as «پلاک ۶۸ – همکف».
+- Long lists are lazy (`ListView.builder` / `SliverList.builder` with `CardSegment` for the grouped-card look).
+- `test/features/accessibility_test.dart` checks tap targets, labels and contrast on the main screens; add new screens to it.
 - Use the `ui-ux-pro-max` skill for UI decisions (`--stack flutter`, `--domain ux`).
 
 ## Updates and release

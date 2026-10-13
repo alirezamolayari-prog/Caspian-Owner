@@ -49,7 +49,7 @@ abstract interface class AuthRepository {
   });
 
   /// Checks the code. Throws `ServerException` with code `invalid_code`.
-  /// The mock accepts `11111` in debug builds only.
+  /// The mock (no server) accepts only `11111`.
   Future<AuthSession> verify({
     required String phone,
     required String deviceId,

@@ -133,7 +133,7 @@
   "countRunningNow": "یک شمارش در حال انجام است",
   "countStart": "شروع",
 
-  "requestLineTitle": "{item} · {qty} {unit}",
+  "requestLineTitle": "{item} – {qty} {unit}",
   "@requestLineTitle": {
     "placeholders": {
       "item": { "type": "String" },
@@ -145,7 +145,7 @@
   "@requestMoreItems": {
     "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
   },
-  "senderAndTime": "{sender} · {time}",
+  "senderAndTime": "{sender} – {time}",
   "@senderAndTime": {
     "placeholders": {
       "sender": { "type": "String" },
@@ -167,7 +167,7 @@
 
   "requestTitle": "درخواست {number}",
   "@requestTitle": { "placeholders": { "number": { "type": "String" } } },
-  "requestFrom": "از طرف {sender} · {time}",
+  "requestFrom": "از طرف {sender} – {time}",
   "@requestFrom": {
     "placeholders": {
       "sender": { "type": "String" },
@@ -185,11 +185,11 @@
   "noteLabel": "یادداشت",
   "routineRequestNote": "این درخواست عادی است و مدیر انبار درباره آن تصمیم می‌گیرد.",
 
-  "decidedApprovedBy": "تأیید شد توسط {name} · {time}",
+  "decidedApprovedBy": "تأیید شد توسط {name} – {time}",
   "@decidedApprovedBy": {
     "placeholders": { "name": { "type": "String" }, "time": { "type": "String" } }
   },
-  "decidedRejectedBy": "رد شد توسط {name} · {time}",
+  "decidedRejectedBy": "رد شد توسط {name} – {time}",
   "@decidedRejectedBy": {
     "placeholders": { "name": { "type": "String" }, "time": { "type": "String" } }
   },
@@ -218,7 +218,7 @@
 
   "locationHistoryTitle": "مصرف قبلی همین محل",
   "locationHistoryEmpty": "تا حالا چیزی به این محل داده نشده است.",
-  "historyLine": "{item} · {qty} {unit}",
+  "historyLine": "{item} – {qty} {unit}",
   "@historyLine": {
     "placeholders": {
       "item": { "type": "String" },
@@ -226,7 +226,7 @@
       "unit": { "type": "String" }
     }
   },
-  "historyMeta": "{date} · حواله {document}",
+  "historyMeta": "{date} – حواله {document}",
   "@historyMeta": {
     "placeholders": { "date": { "type": "String" }, "document": { "type": "String" } }
   },
@@ -251,7 +251,7 @@
   "movementOut": "خروج",
   "movementAdjustDown": "اصلاح موجودی (کم شد)",
   "movementAdjustUp": "اصلاح موجودی (زیاد شد)",
-  "movementMeta": "{date} · سند {document}",
+  "movementMeta": "{date} – سند {document}",
   "@movementMeta": {
     "placeholders": { "date": { "type": "String" }, "document": { "type": "String" } }
   },
@@ -275,7 +275,7 @@
   "countDetailTitle": "شمارش غافلگیرانه",
   "countRunningTitle": "شمارش در حال انجام است",
   "countRunningBody": "این اقلام در انبار قفل‌اند و موجودی‌شان برای همه مخفی است، حتی برای شما. وقتی کارکنان شمردند، نتیجه همین‌جا می‌آید.",
-  "countOrderedBy": "دستور: {name} · {time}",
+  "countOrderedBy": "دستور: {name} – {time}",
   "@countOrderedBy": {
     "placeholders": { "name": { "type": "String" }, "time": { "type": "String" } }
   },
@@ -294,7 +294,7 @@
     "placeholders": { "qty": { "type": "String" }, "unit": { "type": "String" } }
   },
   "countEntries": "عددهای واردشده",
-  "countEntry": "{qty} · {name} · {time}",
+  "countEntry": "{qty} – {name} – {time}",
   "@countEntry": {
     "placeholders": {
       "qty": { "type": "String" },
@@ -395,7 +395,7 @@
   "devNoRunningCount": "شمارشی در حال انجام نیست.",
   "devCountCompleted": "شمارش تمام شد.",
   "devDataSource": "منبع داده",
-  "devDataSourceValue": "{source} · {url}",
+  "devDataSourceValue": "{source} – {url}",
   "@devDataSourceValue": {
     "placeholders": { "source": { "type": "String" }, "url": { "type": "String" } }
   },

@@ -517,7 +517,7 @@ abstract class AppLocalizations {
   /// No description provided for @requestLineTitle.
   ///
   /// In fa, this message translates to:
-  /// **'{item} · {qty} {unit}'**
+  /// **'{item} – {qty} {unit}'**
   String requestLineTitle(String item, String qty, String unit);
 
   /// No description provided for @requestMoreItems.
@@ -529,7 +529,7 @@ abstract class AppLocalizations {
   /// No description provided for @senderAndTime.
   ///
   /// In fa, this message translates to:
-  /// **'{sender} · {time}'**
+  /// **'{sender} – {time}'**
   String senderAndTime(String sender, String time);
 
   /// No description provided for @filterPending.
@@ -589,7 +589,7 @@ abstract class AppLocalizations {
   /// No description provided for @requestFrom.
   ///
   /// In fa, this message translates to:
-  /// **'از طرف {sender} · {time}'**
+  /// **'از طرف {sender} – {time}'**
   String requestFrom(String sender, String time);
 
   /// No description provided for @placeLabel.
@@ -637,13 +637,13 @@ abstract class AppLocalizations {
   /// No description provided for @decidedApprovedBy.
   ///
   /// In fa, this message translates to:
-  /// **'تأیید شد توسط {name} · {time}'**
+  /// **'تأیید شد توسط {name} – {time}'**
   String decidedApprovedBy(String name, String time);
 
   /// No description provided for @decidedRejectedBy.
   ///
   /// In fa, this message translates to:
-  /// **'رد شد توسط {name} · {time}'**
+  /// **'رد شد توسط {name} – {time}'**
   String decidedRejectedBy(String name, String time);
 
   /// No description provided for @decisionReason.
@@ -751,13 +751,13 @@ abstract class AppLocalizations {
   /// No description provided for @historyLine.
   ///
   /// In fa, this message translates to:
-  /// **'{item} · {qty} {unit}'**
+  /// **'{item} – {qty} {unit}'**
   String historyLine(String item, String qty, String unit);
 
   /// No description provided for @historyMeta.
   ///
   /// In fa, this message translates to:
-  /// **'{date} · حواله {document}'**
+  /// **'{date} – حواله {document}'**
   String historyMeta(String date, String document);
 
   /// No description provided for @chatTitle.
@@ -877,7 +877,7 @@ abstract class AppLocalizations {
   /// No description provided for @movementMeta.
   ///
   /// In fa, this message translates to:
-  /// **'{date} · سند {document}'**
+  /// **'{date} – سند {document}'**
   String movementMeta(String date, String document);
 
   /// No description provided for @itemCode.
@@ -955,7 +955,7 @@ abstract class AppLocalizations {
   /// No description provided for @countOrderedBy.
   ///
   /// In fa, this message translates to:
-  /// **'دستور: {name} · {time}'**
+  /// **'دستور: {name} – {time}'**
   String countOrderedBy(String name, String time);
 
   /// No description provided for @countDoneTitle.
@@ -1009,7 +1009,7 @@ abstract class AppLocalizations {
   /// No description provided for @countEntry.
   ///
   /// In fa, this message translates to:
-  /// **'{qty} · {name} · {time}'**
+  /// **'{qty} – {name} – {time}'**
   String countEntry(String qty, String name, String time);
 
   /// No description provided for @countNoAutoAdjust.
@@ -1429,7 +1429,7 @@ abstract class AppLocalizations {
   /// No description provided for @devDataSourceValue.
   ///
   /// In fa, this message translates to:
-  /// **'{source} · {url}'**
+  /// **'{source} – {url}'**
   String devDataSourceValue(String source, String url);
 
   /// No description provided for @devDebugOnly.

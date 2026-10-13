@@ -82,7 +82,7 @@ void main() {
         directory.label(
           const ConsumptionPlace(locationCode: '68', floorCode: 'G'),
         ),
-        'پلاک ۶۸ · همکف',
+        'پلاک ۶۸ – همکف',
       );
     });
 
@@ -91,7 +91,7 @@ void main() {
         directory.label(
           const ConsumptionPlace(locationCode: 'AB-ASD', floorCode: 'F2'),
         ),
-        'آسانسور باری اسدنژاد · طبقه دوم',
+        'آسانسور باری اسدنژاد – طبقه دوم',
       );
     });
 
@@ -109,7 +109,7 @@ void main() {
         directory.label(
           const ConsumptionPlace(locationCode: 'X-9', floorCode: 'F1'),
         ),
-        'X-۹ · طبقه اول',
+        'X-۹ – طبقه اول',
       );
     });
   });

@@ -2,6 +2,7 @@ import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/security/secure_screen_scope.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
+import 'package:caspian_owner/core/widgets/card_segment.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
 import 'package:caspian_owner/features/home/presentation/home_placeholder.dart';
@@ -97,48 +98,65 @@ class _RequestsList extends ConsumerWidget {
     final pendingCount = requests.where((r) => r.canDecide).length;
     final cachedAt = this.cachedAt;
 
-    return ListView(
+    return CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(Space.page, 0, Space.page, Space.lg),
-      children: [
-        if (cachedAt != null) ...[
-          StaleNotice(cachedAt: cachedAt),
-          const SizedBox(height: Space.md),
-        ],
-        _FilterChips(selected: filter, pendingCount: pendingCount),
-        const SizedBox(height: Space.md),
-        if (visible.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: Space.xl),
-            child: Text(
-              switch (filter) {
-                RequestFilter.pending => l10n.requestsEmptyPending,
-                RequestFilter.reviewed => l10n.requestsEmptyReviewed,
-                RequestFilter.all => l10n.requestsEmptyAll,
-              },
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          )
-        else
-          Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                for (final (i, request) in visible.indexed) ...[
-                  if (i > 0)
-                    const Divider(indent: Space.md, endIndent: Space.md),
-                  RequestTile(
-                    request: request,
-                    queued:
-                        queued.contains(request.id) ||
-                        local[request.id]?.phase == DecisionPhase.queued,
-                    onTap: () => context.push(Routes.request(request.id)),
-                  ),
-                ],
-              ],
-            ),
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(
+            Space.page,
+            0,
+            Space.page,
+            Space.md,
           ),
+          sliver: SliverList.list(
+            children: [
+              if (cachedAt != null) ...[
+                StaleNotice(cachedAt: cachedAt),
+                const SizedBox(height: Space.md),
+              ],
+              _FilterChips(selected: filter, pendingCount: pendingCount),
+              if (visible.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Space.xl),
+                  child: Text(
+                    switch (filter) {
+                      RequestFilter.pending => l10n.requestsEmptyPending,
+                      RequestFilter.reviewed => l10n.requestsEmptyReviewed,
+                      RequestFilter.all => l10n.requestsEmptyAll,
+                    },
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        // Built lazily: smooth with hundreds of requests.
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(
+            Space.page,
+            0,
+            Space.page,
+            Space.lg,
+          ),
+          sliver: SliverList.builder(
+            itemCount: visible.length,
+            itemBuilder: (context, i) {
+              final request = visible[i];
+              return CardSegment(
+                first: i == 0,
+                last: i == visible.length - 1,
+                child: RequestTile(
+                  request: request,
+                  queued:
+                      queued.contains(request.id) ||
+                      local[request.id]?.phase == DecisionPhase.queued,
+                  onTap: () => context.push(Routes.request(request.id)),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }

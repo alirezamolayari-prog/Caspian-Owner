@@ -18,7 +18,7 @@ void main() {
   });
 
   test('formats date and time', () {
-    expect(formatJalaliDateTime(date), '۲۰ مهر ۱۴۰۵ · ۰۹:۰۵');
+    expect(formatJalaliDateTime(date), '۲۰ مهر ۱۴۰۵ – ۰۹:۰۵');
   });
 
   test('handles Nowruz (1 Farvardin)', () {

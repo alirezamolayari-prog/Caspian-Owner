@@ -18,7 +18,7 @@ final _pendingUpdate = Provider<UpdateManifest?>((ref) {
       : null;
 });
 
-/// The four fixed tabs: خانه · درخواست‌ها · موجودی · دستیار.
+/// The four fixed tabs: خانه – درخواست‌ها – موجودی – دستیار.
 /// Each tab keeps its own navigation stack and scroll position.
 ///
 /// It also offers optional updates: the shell only exists once the app is

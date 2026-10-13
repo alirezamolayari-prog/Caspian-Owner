@@ -26,7 +26,7 @@ class MockNotificationSource implements NotificationSource {
                   'درخواست ${r.number} '
                   'منتظر تأیید شماست',
                 ),
-                bodyFa: '${r.lines.first.itemNameFa} · ${r.requester.nameFa}',
+                bodyFa: '${r.lines.first.itemNameFa} – ${r.requester.nameFa}',
                 target: '/requests/${r.id}',
               ),
           for (final c in _backend.counts)

@@ -47,7 +47,7 @@ requestDetailProvider = FutureProvider.family(
   ),
 );
 
-/// Floors and locations, for labels such as «پلاک ۶۸ · همکف».
+/// Floors and locations, for labels such as «پلاک ۶۸ – همکف».
 final locationDirectoryProvider = FutureProvider<LocationDirectory>((
   ref,
 ) async {

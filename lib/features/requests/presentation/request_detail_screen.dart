@@ -391,7 +391,7 @@ class _PlaceRow extends StatelessWidget {
     final place = request.place;
     final label =
         directory?.label(place) ??
-        toPersianDigits('${place.locationCode} · ${place.floorCode}');
+        toPersianDigits('${place.locationCode} – ${place.floorCode}');
     return Semantics(
       label: '${l10n.placeLabel}: $label',
       excludeSemantics: true,

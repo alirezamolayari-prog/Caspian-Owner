@@ -107,7 +107,7 @@ class _CountTile extends StatelessWidget {
                         count.orderedBy.nameFa,
                         l10n.countItemsCount(count.items.length),
                         if (!running) l10n.countDiscrepancies(discrepancies),
-                      ].join(' · '),
+                      ].join(' – '),
                       style: theme.textTheme.bodySmall,
                     ),
                   ],
