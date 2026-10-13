@@ -140,8 +140,8 @@ class TestHarness {
   );
 
   /// The whole app, as `main()` builds it.
-  Widget app() => ProviderScope(
-    overrides: overrides,
+  Widget app({List<Override> extra = const []}) => ProviderScope(
+    overrides: [...overrides, ...extra],
     retry: (retryCount, error) => null,
     child: const CaspianOwnerApp(themeMode: ThemeMode.light),
   );

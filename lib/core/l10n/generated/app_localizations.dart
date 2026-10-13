@@ -1456,6 +1456,24 @@ abstract class AppLocalizations {
   /// **'فرستادن فایل گزارش'**
   String get devExportLogs;
 
+  /// No description provided for @channelRequests.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست‌ها'**
+  String get channelRequests;
+
+  /// No description provided for @channelCounts.
+  ///
+  /// In fa, this message translates to:
+  /// **'شمارش غافلگیرانه'**
+  String get channelCounts;
+
+  /// No description provided for @channelMessages.
+  ///
+  /// In fa, this message translates to:
+  /// **'پیام‌ها'**
+  String get channelMessages;
+
   /// No description provided for @errorTitle.
   ///
   /// In fa, this message translates to:

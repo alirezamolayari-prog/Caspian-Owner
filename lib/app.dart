@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
+import 'package:caspian_owner/core/notifications/notification_providers.dart';
 import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
@@ -41,10 +42,48 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
         }
       },
     );
+
+    // Notification taps open their screen (through the lock if locked).
+    _taps = ref
+        .read(notificationTapsProvider)
+        .stream
+        .listen((target) => ref.read(routerProvider).go(target));
+    final launchTarget = ref.read(launchNotificationTargetProvider);
+    if (launchTarget != null) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ref.read(routerProvider).go(launchTarget),
+      );
+    }
+
+    // Background check runs only while signed in with notifications on.
+    ref.listenManual(
+      _notificationsWanted,
+      (previous, wanted) => _schedule(wanted: wanted, first: previous == null),
+      fireImmediately: true,
+    );
+  }
+
+  late final StreamSubscription<String> _taps;
+
+  static final _notificationsWanted = Provider<bool>(
+    (ref) =>
+        ref.watch(authControllerProvider) is SignedIn &&
+        ref.watch(settingsControllerProvider.select((s) => s.notifications)),
+  );
+
+  void _schedule({required bool wanted, required bool first}) {
+    final scheduler = ref.read(notificationSchedulerProvider);
+    if (wanted) {
+      unawaited(scheduler.start());
+      if (!first) unawaited(scheduler.askPermission());
+    } else {
+      unawaited(scheduler.stop());
+    }
   }
 
   @override
   void dispose() {
+    unawaited(_taps.cancel());
     _lifecycle.dispose();
     super.dispose();
   }

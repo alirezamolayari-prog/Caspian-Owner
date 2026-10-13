@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:caspian_owner/core/config/api_config.dart';
@@ -6,6 +7,9 @@ import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/logging/app_log.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
+import 'package:caspian_owner/core/notifications/background_poll.dart';
+import 'package:caspian_owner/core/notifications/local_notifications.dart';
+import 'package:caspian_owner/core/notifications/notification_providers.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
@@ -54,7 +58,30 @@ Future<List<Override>> bootstrap() async {
     hasPin: await store.read(SecureKeys.pinHash) != null,
   );
 
+  // Notifications: taps while running go through a stream; a tap that
+  // launched the app is opened after the first frame.
+  final taps = StreamController<String>.broadcast();
+  final notifications = LocalNotifications();
+  String? launchTarget;
+  try {
+    await notifications.init(onTap: taps.add);
+    launchTarget = await notifications.launchTarget();
+    await NotificationSchedule.initialize();
+  } on Object catch (e, s) {
+    log.error('Notifications setup failed', e, s);
+  }
+
   return [
+    localNotificationsProvider.overrideWithValue(notifications),
+    notificationTapsProvider.overrideWithValue(taps),
+    launchNotificationTargetProvider.overrideWithValue(launchTarget),
+    notificationSchedulerProvider.overrideWithValue(
+      NotificationScheduler(
+        start: NotificationSchedule.start,
+        stop: NotificationSchedule.stop,
+        askPermission: notifications.requestPermission,
+      ),
+    ),
     appLogProvider.overrideWithValue(log),
     initialSettingsProvider.overrideWithValue(await AppSettings.load(store)),
     appInfoProvider.overrideWithValue(info),

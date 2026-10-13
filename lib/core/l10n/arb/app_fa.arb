@@ -404,6 +404,10 @@
   "devNoLogs": "چیزی ثبت نشده است.",
   "devExportLogs": "فرستادن فایل گزارش",
 
+  "channelRequests": "درخواست‌ها",
+  "channelCounts": "شمارش غافلگیرانه",
+  "channelMessages": "پیام‌ها",
+
   "errorTitle": "اطلاعات دریافت نشد",
   "offlineShowingCached": "اتصال برقرار نیست؛ آخرین اطلاعات ذخیره‌شده نمایش داده می‌شود."
 }
