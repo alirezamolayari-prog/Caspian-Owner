@@ -408,6 +408,29 @@
   "channelCounts": "شمارش غافلگیرانه",
   "channelMessages": "پیام‌ها",
 
+  "updateAvailableTitle": "نسخه تازه آماده است",
+  "updateVersion": "نسخه {version}",
+  "@updateVersion": { "placeholders": { "version": { "type": "String" } } },
+  "updateLater": "بعداً",
+  "updateNow": "به‌روزرسانی",
+  "updateRequiredTitle": "برای ادامه، برنامه را به‌روز کنید",
+  "updateRequiredBody": "این نسخه دیگر پشتیبانی نمی‌شود. نسخه تازه را نصب کنید؛ اطلاعات شما سر جایش می‌ماند.",
+  "updateDownloadInstall": "دانلود و نصب",
+  "updateDownloading": "در حال دانلود… {percent}٪",
+  "@updateDownloading": {
+    "placeholders": { "percent": { "type": "int", "format": "decimalPattern" } }
+  },
+  "updateSize": "حجم: {megabytes} مگابایت",
+  "@updateSize": { "placeholders": { "megabytes": { "type": "String" } } },
+  "updatePermissionTitle": "یک اجازه لازم است",
+  "updatePermissionBody": "برای نصب به‌روزرسانی، در صفحه بعد گزینه «اجازه از این منبع» را برای مالک کاسپین روشن کنید و برگردید. این کار فقط یک بار لازم است.",
+  "updateOpenSettings": "باز کردن تنظیمات",
+  "updateDownloadFailed": "دانلود کامل نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.",
+  "updateChecksumFailed": "فایل دانلودشده سالم نبود و پاک شد. دوباره تلاش کنید.",
+  "aboutCheckUpdate": "بررسی به‌روزرسانی",
+  "aboutUpToDate": "برنامه به‌روز است.",
+  "aboutUpdateCheckFailed": "اطلاعات به‌روزرسانی دریافت نشد.",
+
   "errorTitle": "اطلاعات دریافت نشد",
   "offlineShowingCached": "اتصال برقرار نیست؛ آخرین اطلاعات ذخیره‌شده نمایش داده می‌شود."
 }

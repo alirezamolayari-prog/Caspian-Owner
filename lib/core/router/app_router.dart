@@ -1,6 +1,8 @@
 import 'package:caspian_owner/core/router/app_shell.dart';
 import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
+import 'package:caspian_owner/core/update/update_controller.dart';
+import 'package:caspian_owner/core/update/update_screen.dart';
 import 'package:caspian_owner/features/assistant/presentation/assistant_screen.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/auth/presentation/lock_screen.dart';
@@ -26,12 +28,20 @@ import 'package:go_router/go_router.dart';
 
 final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
-/// Re-runs the router's redirect whenever login or lock state changes.
+/// For dialogs shown from outside the widget tree (update prompt).
+GlobalKey<NavigatorState> get rootNavigatorKey => _rootKey;
+
+/// Re-runs the router's redirect whenever login, lock or a required update
+/// changes.
 class _RouterRefresh extends ChangeNotifier {
   new(Ref ref) {
     ref
       ..listen(authControllerProvider, (_, _) => notifyListeners())
-      ..listen(appLockControllerProvider, (_, _) => notifyListeners());
+      ..listen(appLockControllerProvider, (_, _) => notifyListeners())
+      ..listen(
+        updateControllerProvider.select((u) => u.required),
+        (_, _) => notifyListeners(),
+      );
   }
 }
 
@@ -45,8 +55,18 @@ final routerProvider = Provider<GoRouter>((ref) {
       auth: ref.read(authControllerProvider),
       lock: ref.read(appLockControllerProvider),
       location: state.uri,
+      updateRequired: ref.read(updateControllerProvider).required,
     ),
     routes: [
+      GoRoute(
+        path: Routes.updateRequired,
+        builder: (context, state) => const UpdateScreen(blocking: true),
+      ),
+      GoRoute(
+        path: Routes.update,
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const UpdateScreen(),
+      ),
       GoRoute(
         path: Routes.login,
         builder: (context, state) => const LoginScreen(),

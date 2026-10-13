@@ -5,6 +5,8 @@ import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 /// `/requests/r-124`), so they are part of the app's contract.
 abstract final class Routes {
   static const login = '/login';
+  static const update = '/update';
+  static const updateRequired = '/update-required';
   static const lock = '/lock';
   static const pinSetup = '/pin-setup';
 
@@ -36,8 +38,14 @@ String? appRedirect({
   required AuthState auth,
   required LockState lock,
   required Uri location,
+  bool updateRequired = false,
 }) {
   final path = location.path;
+  // A build below min_supported_build can't be used at all.
+  if (updateRequired) {
+    return path == Routes.updateRequired ? null : Routes.updateRequired;
+  }
+  if (path == Routes.updateRequired) return Routes.home;
   if (auth is SignedOut) return path == Routes.login ? null : Routes.login;
 
   if (lock.needsPinSetup) {

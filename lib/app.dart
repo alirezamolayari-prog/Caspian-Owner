@@ -5,6 +5,7 @@ import 'package:caspian_owner/core/notifications/notification_providers.dart';
 import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
+import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/requests/application/decision_controller.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
@@ -54,6 +55,14 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
         (_) => ref.read(routerProvider).go(launchTarget),
       );
     }
+
+    // Update check on launch (at most once a day), and the optional-update
+    // dialog once per new version.
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => unawaited(ref.read(updateControllerProvider.notifier).check()),
+    );
+    // The optional-update offer is shown by AppShell (the four tabs), so it
+    // never appears over the lock or login screen.
 
     // Background check runs only while signed in with notifications on.
     ref.listenManual(
