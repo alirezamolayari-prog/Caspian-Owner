@@ -7,6 +7,9 @@ part 'notification_event.g.dart';
 enum NotificationEventKind {
   requestEscalated,
   requestDecided,
+
+  /// Surprise counts were removed in v0.2.0; a server may still send this.
+  /// Parsed (so a batch never fails on it) but never shown: see [isShown].
   countResult,
   chatMessage,
 }
@@ -28,3 +31,7 @@ abstract class NotificationEvent with _$NotificationEvent {
   factory fromJson(Map<String, Object?> json) =>
       _$NotificationEventFromJson(json);
 }
+
+/// Whether the app shows [event] (as a notification or in the list).
+bool isShown(NotificationEvent event) =>
+    event.kind != NotificationEventKind.countResult;

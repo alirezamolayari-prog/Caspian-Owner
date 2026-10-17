@@ -2,6 +2,7 @@ import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_notification_source.dart';
 import 'package:caspian_owner/core/notifications/notification_event.dart';
 import 'package:caspian_owner/core/notifications/notification_poller.dart';
+import 'package:caspian_owner/core/notifications/notification_source.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +14,20 @@ class _Recorder implements LocalNotifier {
 
   @override
   Future<void> show(NotificationEvent event) async => shown.add(event);
+}
+
+/// A server that always answers with [events].
+class _Fixed implements NotificationSource {
+  new(this.events);
+
+  final List<NotificationEvent> events;
+
+  @override
+  Future<NotificationBatch> poll({required DateTime since}) async =>
+      NotificationBatch(events: events, serverTime: testNow);
+
+  @override
+  Future<List<NotificationEvent>> recent({int limit = 50}) async => events;
 }
 
 void main() {
@@ -55,20 +70,26 @@ void main() {
     expect(notifier.shown.length, first);
   });
 
-  test('a finished count produces a result notification', () async {
-    await withClock(Clock.fixed(testNow), poller().run);
-    withClock(Clock.fixed(testNow.add(const Duration(minutes: 1))), () {
-      backend.completeCount('c-7');
-    });
-    await withClock(
-      Clock.fixed(testNow.add(const Duration(minutes: 15))),
-      poller().run,
-    );
-    final result = notifier.shown.last;
-    expect(result.kind, NotificationEventKind.countResult);
-    expect(result.target, '/counts/c-7');
-  });
-
+  test(
+    'count results (removed in v0.2.0) are parsed but never shown',
+    () async {
+      final countResult = NotificationEvent.fromJson({
+        'id': 'n-c-7',
+        'kind': 'count_result',
+        'at': testNow.toIso8601String(),
+        'title_fa': 'نتیجه شمارش',
+        'body_fa': '-',
+        'target': '/counts/c-7',
+      });
+      final shown = await NotificationPoller(
+        source: _Fixed([countResult]),
+        store: store,
+        notifier: notifier,
+      ).run();
+      expect(shown, 0);
+      expect(notifier.shown, isEmpty);
+    },
+  );
   test('remembers when it last checked', () async {
     await withClock(Clock.fixed(testNow), poller().run);
     expect(DateTime.parse(store.values[NotificationPoller.sinceKey]!), testNow);

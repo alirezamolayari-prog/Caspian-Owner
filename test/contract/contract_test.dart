@@ -101,12 +101,9 @@ void main() {
     }
   });
 
-  test('chats, counts and assistant', () {
+  test('chats and assistant', () {
     for (final m in fixtures.chats) {
       check('ChatMessage', m.toJson(), m.id);
-    }
-    for (final c in fixtures.counts) {
-      check('SurpriseCount', c.toJson(), c.id);
     }
     for (final a in fixtures.assistantHistory) {
       check('AssistantMessage', a.toJson(), a.id);

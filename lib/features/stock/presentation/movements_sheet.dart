@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/jalali.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/card_segment.dart';
 import 'package:caspian_owner/core/widgets/code_text.dart';
 import 'package:caspian_owner/core/widgets/error_message.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
@@ -71,11 +72,18 @@ class _MovementsSheet extends ConsumerWidget {
               l10n.movementsEmpty,
               style: theme.textTheme.bodyMedium,
             ),
-            AsyncValue(:final value?) => Column(
-              children: [
-                for (final m in value.value)
-                  _MovementRow(movement: m, unit: item.unitFa),
-              ],
+            AsyncValue(:final value?) => ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(Radii.chip)),
+              child: Column(
+                children: [
+                  for (final (i, m) in value.value.indexed)
+                    ZebraRow(
+                      index: i,
+                      last: i == value.value.length - 1,
+                      child: _MovementRow(movement: m, unit: item.unitFa),
+                    ),
+                ],
+              ),
             ),
             AsyncValue(:final error?) => Text(
               errorMessage(error, l10n),
@@ -127,7 +135,10 @@ class _MovementRow extends ConsumerWidget {
     };
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: Space.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Space.sm,
+        vertical: Space.sm,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

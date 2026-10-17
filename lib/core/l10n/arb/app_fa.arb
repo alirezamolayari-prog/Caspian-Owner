@@ -134,12 +134,6 @@
   "homeLatestRequests": "آخرین درخواست‌ها",
   "homeNoRequests": "هنوز درخواستی ثبت نشده است.",
 
-  "countCardTitle": "شمارش غافلگیرانه",
-  "countLastTime": "آخرین بار: {date}",
-  "@countLastTime": { "placeholders": { "date": { "type": "String" } } },
-  "countNever": "هنوز شمارشی انجام نشده است.",
-  "countRunningNow": "یک شمارش در حال انجام است",
-  "countStart": "شروع",
 
   "requestLineTitle": "{item} – {qty} {unit}",
   "@requestLineTitle": {
@@ -185,7 +179,7 @@
   "placeLabel": "محل مصرف",
   "stockNow": "موجودی فعلی",
   "usedLastMonth": "مصرف ماه قبل",
-  "hiddenByCount": "در حال شمارش",
+  "hiddenByCount": "در حال شمارش در انبار",
   "qtyWithUnit": "{qty} {unit}",
   "@qtyWithUnit": {
     "placeholders": { "qty": { "type": "String" }, "unit": { "type": "String" } }
@@ -255,7 +249,7 @@
   "filterLow": "کم‌موجود",
   "stockEmpty": "کالایی با این نام پیدا نشد.",
   "stockNoLow": "کالای کم‌موجودی نیست.",
-  "stockHiddenExplain": "تا پایان شمارش غافلگیرانه، موجودی و گردش این کالا مخفی است.",
+  "stockHiddenExplain": "انبار در حال شمارش این کالاست. تا پایان شمارش، موجودی و گردش آن دیده نمی‌شود.",
   "movementsTitle": "ورود و خروج اخیر",
   "movementsEmpty": "گردشی ثبت نشده است.",
   "movementIn": "ورود",
@@ -268,74 +262,15 @@
   },
   "itemCodeLabel": "کد",
 
-  "countPickTitle": "انتخاب اقلام برای شمارش",
-  "countPickHelp": "اقلامی را که می‌خواهید سرزده شمرده شوند انتخاب کنید.",
-  "countSelected": "{count} قلم انتخاب شد",
-  "@countSelected": {
-    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
-  },
-  "countContinueCount": "ادامه ({count} قلم)",
-  "@countContinueCount": {
-    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
-  },
-  "countAlreadyRunning": "در حال شمارش",
-  "countConfirmTitle": "شروع شمارش غافلگیرانه",
-  "countConfirmBody": "این اقلام در اپ انبار قفل و موجودی‌شان مخفی می‌شود تا شمارش انجام شود.",
-  "countConfirmStart": "شروع شمارش",
-  "countDetailTitle": "شمارش غافلگیرانه",
-  "countRunningTitle": "شمارش در حال انجام است",
-  "countRunningBody": "این اقلام در انبار قفل‌اند و موجودی‌شان برای همه مخفی است، حتی برای شما. وقتی کارکنان شمردند، نتیجه همین‌جا می‌آید.",
-  "countOrderedBy": "دستور: {name} – {time}",
-  "@countOrderedBy": {
-    "placeholders": { "name": { "type": "String" }, "time": { "type": "String" } }
-  },
-  "countDoneTitle": "نتیجه شمارش",
-  "countFinishedAt": "پایان: {date}",
-  "@countFinishedAt": { "placeholders": { "date": { "type": "String" } } },
-  "countSystem": "طبق سیستم",
-  "countCounted": "شمرده‌شده",
-  "countMatch": "درست است",
-  "countShort": "{qty} {unit} کمتر",
-  "@countShort": {
-    "placeholders": { "qty": { "type": "String" }, "unit": { "type": "String" } }
-  },
-  "countOver": "{qty} {unit} بیشتر",
-  "@countOver": {
-    "placeholders": { "qty": { "type": "String" }, "unit": { "type": "String" } }
-  },
-  "countEntries": "عددهای واردشده",
-  "countEntry": "{qty} – {name} – {time}",
-  "@countEntry": {
-    "placeholders": {
-      "qty": { "type": "String" },
-      "name": { "type": "String" },
-      "time": { "type": "String" }
-    }
-  },
-  "countNoAutoAdjust": "موجودی به‌طور خودکار اصلاح نمی‌شود. برای اصلاح، در اپ انبار سند اصلاح ثبت کنید.",
-  "countHistoryTitle": "تاریخچه شمارش‌ها",
-  "countHistoryEmpty": "هنوز شمارشی انجام نشده است.",
-  "countItemsCount": "{count} قلم",
-  "@countItemsCount": {
-    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
-  },
-  "countDiscrepancies": "{count} مغایرت",
-  "@countDiscrepancies": {
-    "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
-  },
-  "countStatusRunning": "در حال انجام",
-  "countStatusDone": "تمام شد",
-  "countSeeHistory": "تاریخچه شمارش‌ها",
 
   "assistantSuggestionToday": "خلاصه امروز",
   "assistantSuggestionMonth": "درخواست‌های این ماه",
-  "assistantSuggestionCount": "نتیجه آخرین شمارش",
   "assistantInputLabel": "سؤال خود را بنویسید",
   "assistantHistory": "گفتگوهای قبلی",
   "assistantHistoryEmpty": "هنوز سؤالی نپرسیده‌اید.",
   "assistantThinking": "در حال آماده کردن پاسخ…",
   "assistantFailed": "پاسخ دریافت نشد؛ دوباره بپرسید",
-  "assistantEmpty": "درباره درخواست‌ها، موجودی و شمارش‌ها از دستیار کاسپین بپرسید.",
+  "assistantEmpty": "درباره درخواست‌ها و موجودی از دستیار کاسپین بپرسید.",
   "assistantDemoNote": "نسخه آزمایشی: پاسخ‌ها نمونه‌اند. دستیار واقعی بعد از راه‌اندازی سرور فعال می‌شود.",
 
   "moreReports": "گزارش‌ها",
@@ -374,11 +309,11 @@
   "themeLight": "روشن",
   "themeDark": "تیره",
   "settingsNotifications": "اعلان‌ها",
-  "settingsNotificationsBody": "خبر درخواست‌های تازه، نتیجه شمارش و پیام‌ها",
+  "settingsNotificationsBody": "خبر درخواست‌های تازه و پیام‌ها",
   "settingsFingerprint": "تأیید با اثر انگشت برای تأیید درخواست",
   "settingsFingerprintBody": "قبل از تأیید هر درخواست، یک بار اثر انگشت خواسته می‌شود.",
   "settingsSecure": "جلوگیری از عکس صفحه",
-  "settingsSecureBody": "در صفحه‌های موجودی، درخواست‌ها و شمارش، عکس گرفتن از صفحه ممکن نیست.",
+  "settingsSecureBody": "در صفحه‌های موجودی و درخواست‌ها، عکس گرفتن از صفحه ممکن نیست.",
   "settingsPin": "رمز برنامه",
   "settingsPinBody": "برای وقتی که اثر انگشت کار نمی‌کند",
   "settingsPinSet": "تعیین یا تغییر رمز",
@@ -400,10 +335,6 @@
   "scenarioServerError": "خطای سرور",
   "scenarioConflict": "تصمیم هم‌زمان (۴۰۹)",
   "scenarioOffline": "بدون اینترنت",
-  "devCompleteCount": "پایان شمارش در حال انجام",
-  "devCompleteCountBody": "شبیه‌سازی کار انبار: کارکنان شمارش را تمام می‌کنند.",
-  "devNoRunningCount": "شمارشی در حال انجام نیست.",
-  "devCountCompleted": "شمارش تمام شد.",
   "devDataSource": "منبع داده",
   "devDataSourceValue": "{source} – {url}",
   "@devDataSourceValue": {
@@ -415,7 +346,6 @@
   "devExportLogs": "فرستادن فایل گزارش",
 
   "channelRequests": "درخواست‌ها",
-  "channelCounts": "شمارش غافلگیرانه",
   "channelMessages": "پیام‌ها",
 
   "updateAvailableTitle": "نسخه تازه آماده است",

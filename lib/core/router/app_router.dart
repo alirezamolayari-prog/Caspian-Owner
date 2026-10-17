@@ -8,9 +8,6 @@ import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/auth/presentation/lock_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/pin_setup_screen.dart';
-import 'package:caspian_owner/features/count/presentation/count_detail_screen.dart';
-import 'package:caspian_owner/features/count/presentation/count_history_screen.dart';
-import 'package:caspian_owner/features/count/presentation/count_start_screen.dart';
 import 'package:caspian_owner/features/home/presentation/home_screen.dart';
 import 'package:caspian_owner/features/more/presentation/about_screen.dart';
 import 'package:caspian_owner/features/more/presentation/developer_screen.dart';
@@ -146,25 +143,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           parentNavigatorKey: _rootKey,
           builder: (context, state) => screen,
         ),
-      GoRoute(
-        path: Routes.counts,
-        parentNavigatorKey: _rootKey,
-        builder: (context, state) => const CountHistoryScreen(),
-        routes: [
-          // 'new' before ':id', so it isn't read as a count id.
-          GoRoute(
-            path: 'new',
-            parentNavigatorKey: _rootKey,
-            builder: (context, state) => const CountStartScreen(),
-          ),
-          GoRoute(
-            path: ':id',
-            parentNavigatorKey: _rootKey,
-            builder: (context, state) =>
-                CountDetailScreen(countId: state.pathParameters['id']!),
-          ),
-        ],
-      ),
     ],
   );
   ref

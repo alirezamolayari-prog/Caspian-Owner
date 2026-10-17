@@ -273,23 +273,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get homeNoRequests => 'هنوز درخواستی ثبت نشده است.';
 
   @override
-  String get countCardTitle => 'شمارش غافلگیرانه';
-
-  @override
-  String countLastTime(String date) {
-    return 'آخرین بار: $date';
-  }
-
-  @override
-  String get countNever => 'هنوز شمارشی انجام نشده است.';
-
-  @override
-  String get countRunningNow => 'یک شمارش در حال انجام است';
-
-  @override
-  String get countStart => 'شروع';
-
-  @override
   String requestLineTitle(String item, String qty, String unit) {
     return '$item – $qty $unit';
   }
@@ -358,7 +341,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get usedLastMonth => 'مصرف ماه قبل';
 
   @override
-  String get hiddenByCount => 'در حال شمارش';
+  String get hiddenByCount => 'در حال شمارش در انبار';
 
   @override
   String qtyWithUnit(String qty, String unit) {
@@ -499,7 +482,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get stockHiddenExplain =>
-      'تا پایان شمارش غافلگیرانه، موجودی و گردش این کالا مخفی است.';
+      'انبار در حال شمارش این کالاست. تا پایان شمارش، موجودی و گردش آن دیده نمی‌شود.';
 
   @override
   String get movementsTitle => 'ورود و خروج اخیر';
@@ -528,138 +511,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get itemCodeLabel => 'کد';
 
   @override
-  String get countPickTitle => 'انتخاب اقلام برای شمارش';
-
-  @override
-  String get countPickHelp =>
-      'اقلامی را که می‌خواهید سرزده شمرده شوند انتخاب کنید.';
-
-  @override
-  String countSelected(int count) {
-    final intl.NumberFormat countNumberFormat =
-        intl.NumberFormat.decimalPattern(localeName);
-    final String countString = countNumberFormat.format(count);
-
-    return '$countString قلم انتخاب شد';
-  }
-
-  @override
-  String countContinueCount(int count) {
-    final intl.NumberFormat countNumberFormat =
-        intl.NumberFormat.decimalPattern(localeName);
-    final String countString = countNumberFormat.format(count);
-
-    return 'ادامه ($countString قلم)';
-  }
-
-  @override
-  String get countAlreadyRunning => 'در حال شمارش';
-
-  @override
-  String get countConfirmTitle => 'شروع شمارش غافلگیرانه';
-
-  @override
-  String get countConfirmBody =>
-      'این اقلام در اپ انبار قفل و موجودی‌شان مخفی می‌شود تا شمارش انجام شود.';
-
-  @override
-  String get countConfirmStart => 'شروع شمارش';
-
-  @override
-  String get countDetailTitle => 'شمارش غافلگیرانه';
-
-  @override
-  String get countRunningTitle => 'شمارش در حال انجام است';
-
-  @override
-  String get countRunningBody =>
-      'این اقلام در انبار قفل‌اند و موجودی‌شان برای همه مخفی است، حتی برای شما. وقتی کارکنان شمردند، نتیجه همین‌جا می‌آید.';
-
-  @override
-  String countOrderedBy(String name, String time) {
-    return 'دستور: $name – $time';
-  }
-
-  @override
-  String get countDoneTitle => 'نتیجه شمارش';
-
-  @override
-  String countFinishedAt(String date) {
-    return 'پایان: $date';
-  }
-
-  @override
-  String get countSystem => 'طبق سیستم';
-
-  @override
-  String get countCounted => 'شمرده‌شده';
-
-  @override
-  String get countMatch => 'درست است';
-
-  @override
-  String countShort(String qty, String unit) {
-    return '$qty $unit کمتر';
-  }
-
-  @override
-  String countOver(String qty, String unit) {
-    return '$qty $unit بیشتر';
-  }
-
-  @override
-  String get countEntries => 'عددهای واردشده';
-
-  @override
-  String countEntry(String qty, String name, String time) {
-    return '$qty – $name – $time';
-  }
-
-  @override
-  String get countNoAutoAdjust =>
-      'موجودی به‌طور خودکار اصلاح نمی‌شود. برای اصلاح، در اپ انبار سند اصلاح ثبت کنید.';
-
-  @override
-  String get countHistoryTitle => 'تاریخچه شمارش‌ها';
-
-  @override
-  String get countHistoryEmpty => 'هنوز شمارشی انجام نشده است.';
-
-  @override
-  String countItemsCount(int count) {
-    final intl.NumberFormat countNumberFormat =
-        intl.NumberFormat.decimalPattern(localeName);
-    final String countString = countNumberFormat.format(count);
-
-    return '$countString قلم';
-  }
-
-  @override
-  String countDiscrepancies(int count) {
-    final intl.NumberFormat countNumberFormat =
-        intl.NumberFormat.decimalPattern(localeName);
-    final String countString = countNumberFormat.format(count);
-
-    return '$countString مغایرت';
-  }
-
-  @override
-  String get countStatusRunning => 'در حال انجام';
-
-  @override
-  String get countStatusDone => 'تمام شد';
-
-  @override
-  String get countSeeHistory => 'تاریخچه شمارش‌ها';
-
-  @override
   String get assistantSuggestionToday => 'خلاصه امروز';
 
   @override
   String get assistantSuggestionMonth => 'درخواست‌های این ماه';
-
-  @override
-  String get assistantSuggestionCount => 'نتیجه آخرین شمارش';
 
   @override
   String get assistantInputLabel => 'سؤال خود را بنویسید';
@@ -678,7 +533,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get assistantEmpty =>
-      'درباره درخواست‌ها، موجودی و شمارش‌ها از دستیار کاسپین بپرسید.';
+      'درباره درخواست‌ها و موجودی از دستیار کاسپین بپرسید.';
 
   @override
   String get assistantDemoNote =>
@@ -772,8 +627,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsNotifications => 'اعلان‌ها';
 
   @override
-  String get settingsNotificationsBody =>
-      'خبر درخواست‌های تازه، نتیجه شمارش و پیام‌ها';
+  String get settingsNotificationsBody => 'خبر درخواست‌های تازه و پیام‌ها';
 
   @override
   String get settingsFingerprint => 'تأیید با اثر انگشت برای تأیید درخواست';
@@ -787,7 +641,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get settingsSecureBody =>
-      'در صفحه‌های موجودی، درخواست‌ها و شمارش، عکس گرفتن از صفحه ممکن نیست.';
+      'در صفحه‌های موجودی و درخواست‌ها، عکس گرفتن از صفحه ممکن نیست.';
 
   @override
   String get settingsPin => 'رمز برنامه';
@@ -839,19 +693,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get scenarioOffline => 'بدون اینترنت';
 
   @override
-  String get devCompleteCount => 'پایان شمارش در حال انجام';
-
-  @override
-  String get devCompleteCountBody =>
-      'شبیه‌سازی کار انبار: کارکنان شمارش را تمام می‌کنند.';
-
-  @override
-  String get devNoRunningCount => 'شمارشی در حال انجام نیست.';
-
-  @override
-  String get devCountCompleted => 'شمارش تمام شد.';
-
-  @override
   String get devDataSource => 'منبع داده';
 
   @override
@@ -873,9 +714,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get channelRequests => 'درخواست‌ها';
-
-  @override
-  String get channelCounts => 'شمارش غافلگیرانه';
 
   @override
   String get channelMessages => 'پیام‌ها';

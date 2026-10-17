@@ -6,7 +6,6 @@ import 'package:caspian_owner/core/domain/person.dart';
 import 'package:caspian_owner/core/domain/place.dart';
 import 'package:caspian_owner/features/assistant/domain/assistant_message.dart';
 import 'package:caspian_owner/features/chat/domain/chat_message.dart';
-import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/stock/domain/stock.dart';
 import 'package:flutter/services.dart';
@@ -40,7 +39,6 @@ class MockFixtures {
     required this.requests,
     required this.movements,
     required this.chats,
-    required this.counts,
     required this.assistantHistory,
     required this.assistantAnswers,
     required this.assistantFallback,
@@ -62,7 +60,6 @@ class MockFixtures {
   final List<GoodsRequest> requests;
   final List<MockMovement> movements;
   final List<ChatMessage> chats;
-  final List<SurpriseCount> counts;
   final List<AssistantMessage> assistantHistory;
   final List<MockAnswer> assistantAnswers;
   final String assistantFallback;
@@ -116,9 +113,6 @@ class MockFixtures {
           ),
       ],
       chats: list(await json('chats.json')).map(ChatMessage.fromJson).toList(),
-      counts: list(await json('counts.json'))
-          .map(SurpriseCount.fromJson)
-          .toList(),
       assistantHistory: list(assistant['history'])
           .map(AssistantMessage.fromJson)
           .toList(),

@@ -3,12 +3,9 @@ import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
-import 'package:caspian_owner/core/utils/jalali.dart';
-import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
-import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/home/presentation/home_placeholder.dart';
 import 'package:caspian_owner/features/requests/presentation/widgets/request_tile.dart';
@@ -17,8 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-/// Home (UI spec 5.1): pending hero card, latest requests, surprise count.
-/// Nothing else.
+/// Home (UI spec 5.1): pending hero card and the latest requests. Nothing
+/// else (surprise counts were removed in v0.2.0).
 class HomeScreen extends ConsumerWidget {
   const new({super.key});
 
@@ -96,8 +93,6 @@ class _HomeContent extends StatelessWidget {
         _PendingCard(count: data.pendingCount),
         const SizedBox(height: Space.md),
         _LatestRequestsCard(data: data),
-        const SizedBox(height: Space.md),
-        _CountCard(lastCount: data.lastCount),
       ],
     );
   }
@@ -234,62 +229,6 @@ class _LatestRequestsCard extends StatelessWidget {
             ],
           const SizedBox(height: Space.xs),
         ],
-      ),
-    );
-  }
-}
-
-/// «شمارش غافلگیرانه»: when the last count was, and «شروع».
-class _CountCard extends StatelessWidget {
-  const new({required this.lastCount});
-
-  final SurpriseCount? lastCount;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    final count = lastCount;
-    final subtitle = switch (count) {
-      null => l10n.countNever,
-      SurpriseCount(status: CountStatus.running) => l10n.countRunningNow,
-      SurpriseCount(:final finishedAt, :final orderedAt) => l10n.countLastTime(
-        toPersianDigits(formatJalaliDate(finishedAt ?? orderedAt)),
-      ),
-    };
-
-    return Card(
-      color: theme.colorScheme.surfaceContainer,
-      clipBehavior: Clip.antiAlias,
-      // The card opens the count history; «شروع» starts a new count.
-      child: InkWell(
-        onTap: () => context.push(Routes.counts),
-        child: Padding(
-          padding: const EdgeInsets.all(Space.md),
-          child: Row(
-            children: [
-              Icon(AppIcons.count, color: theme.colorScheme.primary),
-              const SizedBox(width: Space.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.countCardTitle,
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    Text(subtitle, style: theme.textTheme.bodySmall),
-                  ],
-                ),
-              ),
-              const SizedBox(width: Space.sm),
-              FilledButton.tonal(
-                onPressed: () => context.push(Routes.countNew),
-                child: Text(l10n.countStart),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

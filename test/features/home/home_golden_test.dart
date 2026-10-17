@@ -4,7 +4,6 @@ import 'package:alchemist/alchemist.dart';
 import 'package:caspian_owner/core/domain/person.dart';
 import 'package:caspian_owner/core/domain/place.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
-import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/home/presentation/home_screen.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
@@ -83,13 +82,6 @@ HomeData _data() => HomeData(
       RequestStatus.rejected,
     ),
   ],
-  lastCount: SurpriseCount(
-    id: 'c',
-    orderedBy: testOwner,
-    orderedAt: DateTime.now(),
-    items: const [],
-    status: CountStatus.running,
-  ),
 );
 
 Widget _home(ThemeMode mode, {HomeData? data}) => SizedBox(

@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/domain/person.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
+import 'package:caspian_owner/core/widgets/card_segment.dart';
 import 'package:caspian_owner/core/widgets/status_chip.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:flutter/material.dart';
@@ -34,26 +35,30 @@ class UsersScreen extends ConsumerWidget {
             clipBehavior: Clip.antiAlias,
             child: Column(
               children: [
-                for (final owner in owners)
-                  ListTile(
-                    leading: CircleAvatar(
-                      child: Text(owner.nameFa.characters.first),
+                for (final (i, owner) in owners.indexed)
+                  ZebraRow(
+                    index: i,
+                    last: i == owners.length - 1,
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child: Text(owner.nameFa.characters.first),
+                      ),
+                      title: Text(
+                        owner.id == meId
+                            ? '${owner.nameFa} (${l10n.usersYou})'
+                            : owner.nameFa,
+                      ),
+                      trailing: owner.isAdmin
+                          ? StatusChip(
+                              label: l10n.usersAdmin,
+                              icon: AppIcons.admin,
+                              tone: StatusTone.success,
+                            )
+                          : StatusChip(
+                              label: l10n.usersOwner,
+                              icon: AppIcons.account,
+                            ),
                     ),
-                    title: Text(
-                      owner.id == meId
-                          ? '${owner.nameFa} (${l10n.usersYou})'
-                          : owner.nameFa,
-                    ),
-                    trailing: owner.isAdmin
-                        ? StatusChip(
-                            label: l10n.usersAdmin,
-                            icon: AppIcons.admin,
-                            tone: StatusTone.success,
-                          )
-                        : StatusChip(
-                            label: l10n.usersOwner,
-                            icon: AppIcons.account,
-                          ),
                   ),
               ],
             ),

@@ -46,12 +46,10 @@ class LocalNotifications implements LocalNotifier {
   Future<void> show(NotificationEvent event) {
     final l10n = lookupAppLocalizations(const Locale('fa'));
     final (String channel, String name) = switch (event.kind) {
+      // countResult is never shown (see isShown); listed for completeness.
       NotificationEventKind.requestEscalated ||
-      NotificationEventKind.requestDecided => (
-        'requests',
-        l10n.channelRequests,
-      ),
-      NotificationEventKind.countResult => ('counts', l10n.channelCounts),
+      NotificationEventKind.requestDecided ||
+      NotificationEventKind.countResult => ('requests', l10n.channelRequests),
       NotificationEventKind.chatMessage => ('messages', l10n.channelMessages),
     };
     return _plugin.show(

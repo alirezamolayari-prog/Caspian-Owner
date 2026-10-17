@@ -2,7 +2,6 @@ import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/notifications/notification_event.dart';
 import 'package:caspian_owner/core/notifications/notification_source.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
-import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:clock/clock.dart';
 
 /// Derives what `/v1/notifications/poll` would return from the mock data.
@@ -28,17 +27,6 @@ class MockNotificationSource implements NotificationSource {
                 ),
                 bodyFa: '${r.lines.first.itemNameFa} – ${r.requester.nameFa}',
                 target: '/requests/${r.id}',
-              ),
-          for (final c in _backend.counts)
-            if (c.status == CountStatus.done &&
-                (c.finishedAt?.isAfter(since) ?? false))
-              NotificationEvent(
-                id: 'n-${c.id}',
-                kind: NotificationEventKind.countResult,
-                at: c.finishedAt!,
-                titleFa: 'نتیجه شمارش غافلگیرانه آماده است',
-                bodyFa: c.items.map((i) => i.itemNameFa).join('، '),
-                target: '/counts/${c.id}',
               ),
           for (final m in _backend.chats)
             if (!m.author.isMe && m.sentAt.isAfter(since))

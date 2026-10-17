@@ -28,27 +28,25 @@ void main() {
     return harness;
   }
 
-  testWidgets('shows history, the demo note and three suggestions', (
+  testWidgets('shows history, the demo note and two suggestions', (
     tester,
   ) async {
     await pumpAssistant(tester);
     expect(find.text('دستیار کاسپین'), findsOneWidget);
     expect(find.textContaining('نسخه آزمایشی'), findsOneWidget);
     expect(find.text('این هفته چند درخواست رد شد؟'), findsOneWidget);
-    for (final chip in [
-      'خلاصه امروز',
-      'درخواست‌های این ماه',
-      'نتیجه آخرین شمارش',
-    ]) {
+    for (final chip in ['خلاصه امروز', 'درخواست‌های این ماه']) {
       expect(find.widgetWithText(ActionChip, chip), findsOneWidget);
     }
+    // Surprise counts were removed in v0.2.0.
+    expect(find.byType(ActionChip), findsNWidgets(2));
   });
 
   testWidgets('a suggestion chip asks and the answer appears', (tester) async {
     await pumpAssistant(tester);
-    await tester.tap(find.widgetWithText(ActionChip, 'نتیجه آخرین شمارش'));
+    await tester.tap(find.widgetWithText(ActionChip, 'درخواست‌های این ماه'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('آخرین شمارش تمام‌شده'), findsOneWidget);
+    expect(find.textContaining('این ماه ۱۱ درخواست ثبت شده'), findsOneWidget);
   });
 
   testWidgets('typed questions get the sample fallback answer', (tester) async {

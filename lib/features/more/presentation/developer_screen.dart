@@ -4,8 +4,6 @@ import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
-import 'package:caspian_owner/features/count/application/count_providers.dart';
-import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
 import 'package:caspian_owner/features/stock/application/stock_providers.dart';
@@ -13,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
-/// Hidden screen (7 taps on the version in About): mock scenarios, a
-/// simulated end of a running count, and the on-device log.
+/// Hidden screen (7 taps on the version in About): mock scenarios and the
+/// on-device log.
 class DeveloperScreen extends ConsumerStatefulWidget {
   const new({super.key});
 
@@ -28,37 +26,7 @@ class _DeveloperScreenState extends ConsumerState<DeveloperScreen> {
   void _refreshData() => ref
     ..invalidate(homeControllerProvider)
     ..invalidate(requestsControllerProvider)
-    ..invalidate(stockControllerProvider)
-    ..invalidate(countsControllerProvider);
-
-  void _completeCount() {
-    final l10n = AppLocalizations.of(context);
-    final backend = ref.read(mockBackendProvider);
-    final running = backend.counts
-        .where((c) => c.status == CountStatus.running)
-        .firstOrNull;
-    final message = running == null
-        ? l10n.devNoRunningCount
-        : l10n.devCountCompleted;
-    if (running != null) {
-      // One item short, so the results show a discrepancy.
-      backend.completeCount(
-        running.id,
-        counted: {
-          running.items.first.itemCode:
-              (backend.stock
-                      .firstWhere((s) => s.code == running.items.first.itemCode)
-                      .qty ??
-                  1) -
-              1,
-        },
-      );
-      _refreshData();
-      ref.invalidate(countDetailProvider(running.id));
-    }
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
+    ..invalidate(stockControllerProvider);
 
   Future<void> _exportLogs() async {
     final log = ref.read(appLogProvider);
@@ -117,16 +85,6 @@ class _DeveloperScreenState extends ConsumerState<DeveloperScreen> {
                       in scenarios.entries)
                     RadioListTile<MockScenario>(value: s, title: Text(label)),
                 ],
-              ),
-            ),
-            const SizedBox(height: Space.md),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(l10n.devCompleteCount),
-              subtitle: Text(l10n.devCompleteCountBody),
-              trailing: FilledButton.tonal(
-                onPressed: _completeCount,
-                child: Text(l10n.ok),
               ),
             ),
           ],

@@ -41,7 +41,7 @@ void main() {
     await tester.pumpWidget(
       h.app(
         extra: [
-          launchNotificationTargetProvider.overrideWithValue('/counts/c-6'),
+          launchNotificationTargetProvider.overrideWithValue('/requests/r-123'),
         ],
       ),
     );
@@ -51,6 +51,6 @@ void main() {
     h.authenticator.succeeds = true;
     await tester.tap(find.text('باز کردن با اثر انگشت'));
     await tester.pumpAndSettle();
-    expect(find.text('نتیجه شمارش'), findsOneWidget);
+    expect(find.text('درخواست ۱۲۳'), findsOneWidget);
   });
 }

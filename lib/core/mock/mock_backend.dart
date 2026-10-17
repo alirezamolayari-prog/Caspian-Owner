@@ -3,7 +3,6 @@ import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/network/api_exception.dart';
 import 'package:caspian_owner/features/assistant/domain/assistant_message.dart';
 import 'package:caspian_owner/features/chat/domain/chat_message.dart';
-import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/stock/domain/stock.dart';
 import 'package:clock/clock.dart';
@@ -13,7 +12,7 @@ enum MockScenario {
   /// Realistic data, short latency.
   normal,
 
-  /// No requests, no stock, no counts.
+  /// No requests, no stock.
   empty,
 
   /// Every call takes several seconds.
@@ -32,7 +31,7 @@ enum MockScenario {
 
 /// An in-memory stand-in for the middle server. Mock repositories call it;
 /// it applies the same rules the real server will (first decision wins,
-/// idempotency keys, counts hide stock).
+/// idempotency keys, locked items hide their stock).
 class MockBackend {
   new(
     MockFixtures fixtures, {
@@ -45,7 +44,6 @@ class MockBackend {
        stock = [...fixtures.stock],
        movements = [...fixtures.movements],
        chats = [...fixtures.chats],
-       counts = [...fixtures.counts],
        assistantHistory = [...fixtures.assistantHistory];
 
   final MockFixtures fixtures;
@@ -58,7 +56,6 @@ class MockBackend {
   final List<StockItem> stock;
   final List<MockMovement> movements;
   final List<ChatMessage> chats;
-  final List<SurpriseCount> counts;
   final List<AssistantMessage> assistantHistory;
 
   /// Results of already-applied idempotency keys.
@@ -158,100 +155,15 @@ class MockBackend {
     return usages.take(limit).toList();
   }
 
-  // ------------------------------------------------------------------ counts
+  // ------------------------------------------------------------ locked stock
 
+  /// Items the Warehouse app is counting right now (its own stock counts):
+  /// the server hides their quantity (qty: null, locked_by_count).
+  /// Owners can't order counts any more (removed in v0.2.0).
   Set<String> get lockedItemCodes => {
-    for (final c in counts)
-      if (c.status == CountStatus.running)
-        for (final item in c.items) item.itemCode,
+    for (final s in stock)
+      if (s.lockedByCount) s.code,
   };
-
-  /// Stock as owners see it: quantities hidden while a count runs.
-  List<StockItem> visibleStock() {
-    final locked = lockedItemCodes;
-    return [
-      for (final item in stock)
-        if (locked.contains(item.code))
-          item.copyWith(qty: null, lockedByCount: true)
-        else
-          item.copyWith(lockedByCount: false),
-    ];
-  }
-
-  SurpriseCount startCount(List<String> itemCodes, String idempotencyKey) =>
-      idempotent(idempotencyKey, () {
-        final locked = lockedItemCodes;
-        if (itemCodes.any(locked.contains)) {
-          throw const ConflictException(
-            messageFa: 'بعضی از این اقلام همین الان در شمارش هستند.',
-          );
-        }
-        final items = [
-          for (final code in itemCodes)
-            stock.firstWhere(
-              (s) => s.code == code,
-              orElse: () => throw const NotFoundException(),
-            ),
-        ];
-        final count = SurpriseCount(
-          id: nextId('c'),
-          orderedBy: me,
-          orderedAt: clock.now(),
-          status: CountStatus.running,
-          items: [
-            for (final s in items)
-              CountItem(
-                itemCode: s.code,
-                itemNameFa: s.nameFa,
-                unitFa: s.unitFa,
-              ),
-          ],
-        );
-        counts.insert(0, count);
-        return count;
-      });
-
-  /// Simulates staff finishing a running count (developer screen, tests).
-  /// [counted] maps item codes to counted quantities; missing items are
-  /// counted equal to the system quantity.
-  SurpriseCount completeCount(
-    String id, {
-    Map<String, double> counted = const {},
-    Person? countedBy,
-  }) {
-    final index = counts.indexWhere((c) => c.id == id);
-    if (index < 0) throw const NotFoundException();
-    final staff = countedBy ?? fixtures.persons.first;
-    final now = clock.now();
-    final done = counts[index].copyWith(
-      status: CountStatus.done,
-      finishedAt: now,
-      results: [
-        for (final item in counts[index].items)
-          _result(item.itemCode, counted[item.itemCode], staff, now),
-      ],
-    );
-    counts[index] = done;
-    return done;
-  }
-
-  CountResult _result(
-    String itemCode,
-    double? counted,
-    Person staff,
-    DateTime now,
-  ) {
-    final system = stock.firstWhere((s) => s.code == itemCode).qty ?? 0;
-    final qty = counted ?? system;
-    return CountResult(
-      itemCode: itemCode,
-      systemQty: system,
-      countedQty: qty,
-      entries: [CountEntry(qty: qty, enteredBy: staff, enteredAt: now)],
-      countedBy: [staff],
-    );
-  }
-
   // --------------------------------------------------------------- assistant
 
   AssistantMessage answer(String question) {

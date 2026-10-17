@@ -26,9 +26,6 @@ abstract final class Routes {
   static const settings = '/settings';
   static const about = '/about';
   static const developer = '/developer';
-  static const counts = '/counts';
-  static const countNew = '/counts/new';
-  static String count(String id) => '/counts/$id';
 }
 
 /// Where to send the owner instead of [location], or null to stay.

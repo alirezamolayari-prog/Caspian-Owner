@@ -46,7 +46,7 @@ class NotificationPoller {
     final batch = await source.poll(since: since);
     final fresh = [
       for (final e in batch.events)
-        if (!shown.contains(e.id)) e,
+        if (isShown(e) && !shown.contains(e.id)) e,
     ];
     for (final event in fresh) {
       await notifier.show(event);
