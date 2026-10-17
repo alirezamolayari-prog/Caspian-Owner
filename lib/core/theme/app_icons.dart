@@ -31,6 +31,7 @@ abstract final class AppIcons {
   static const IconData error = Symbols.error_rounded;
   static const IconData offline = Symbols.cloud_off_rounded;
   static const IconData allDone = Symbols.task_alt_rounded;
+  static const IconData check = Symbols.check_rounded;
   static const IconData count = Symbols.fact_check_rounded;
 
   // Bottom tabs

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:caspian_owner/core/domain/person.dart';
@@ -5,6 +6,8 @@ import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
+import 'package:caspian_owner/core/update/update_checker.dart';
+import 'package:caspian_owner/core/update/update_manifest.dart';
 import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:caspian_owner/features/more/presentation/developer_screen.dart';
 import 'package:caspian_owner/features/reports/presentation/reports_screen.dart';
@@ -24,12 +27,18 @@ void main() {
     WidgetTester tester,
     String location, {
     Owner owner = testOwner,
+    UpdateChecker? updateChecker,
   }) async {
     tester.view
       ..physicalSize = const Size(1080, 2600)
       ..devicePixelRatio = 2.5;
     addTearDown(tester.view.reset);
-    final harness = TestHarness.create(fixtures, signedIn: true, owner: owner);
+    final harness = TestHarness.create(
+      fixtures,
+      signedIn: true,
+      owner: owner,
+      updateChecker: updateChecker,
+    );
     addTearDown(harness.database.close);
     await tester.pumpWidget(harness.app());
     await tester.pumpAndSettle();
@@ -59,6 +68,12 @@ void main() {
       expect(find.text('به‌زودی'), findsOneWidget);
     });
 
+    testWidgets('starts with who is signed in: name and role', (tester) async {
+      await pumpAt(tester, '/more');
+      expect(find.text('علیرضا'), findsOneWidget);
+      expect(find.text('مالک – مدیر سیستم'), findsOneWidget);
+    });
+
     testWidgets('other owners do not see users and permissions', (
       tester,
     ) async {
@@ -69,6 +84,8 @@ void main() {
       );
       expect(find.text('کاربران و دسترسی‌ها'), findsNothing);
       expect(find.text('گزارش‌ها'), findsOneWidget);
+      expect(find.text('حسین کاظمی'), findsOneWidget);
+      expect(find.text('مالک'), findsOneWidget);
     });
   });
 
@@ -157,6 +174,25 @@ void main() {
       expect(find.byType(DeveloperScreen), findsOneWidget);
     });
 
+    testWidgets('«بررسی به‌روزرسانی» shows progress and waits', (tester) async {
+      final slow = _SlowChecker();
+      await pumpAt(tester, '/about', updateChecker: slow);
+      await tester.tap(find.text('بررسی به‌روزرسانی'));
+      await tester.pump();
+      expect(find.text('در حال بررسی…'), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      // Disabled while checking: a second tap starts nothing.
+      final calls = slow.calls;
+      await tester.tap(find.text('در حال بررسی…'), warnIfMissed: false);
+      await tester.pump();
+      expect(slow.calls, calls);
+
+      slow.finish();
+      await tester.pumpAndSettle();
+      expect(find.text('بررسی به‌روزرسانی'), findsOneWidget);
+      expect(find.text('اطلاعات به‌روزرسانی دریافت نشد.'), findsOneWidget);
+    });
+
     testWidgets('scenario switch and simulated count completion', (
       tester,
     ) async {
@@ -196,4 +232,20 @@ void main() {
     expect(find.text('مدیر سیستم'), findsOneWidget);
     expect(find.text('مالک'), findsNWidgets(4));
   });
+}
+
+/// An update check that waits until [finish] (a slow network).
+class _SlowChecker extends UpdateChecker {
+  new() : super(urls: const []);
+
+  final _done = Completer<UpdateManifest?>();
+  int calls = 0;
+
+  void finish() => _done.complete(null);
+
+  @override
+  Future<UpdateManifest?> fetch() {
+    calls++;
+    return _done.future;
+  }
 }

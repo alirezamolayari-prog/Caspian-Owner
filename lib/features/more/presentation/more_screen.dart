@@ -1,3 +1,4 @@
+import 'package:caspian_owner/core/domain/person.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/modules/app_module.dart';
 import 'package:caspian_owner/core/modules/module_providers.dart';
@@ -31,6 +32,7 @@ class MoreScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.moreTitle)),
       body: ListView(
         children: [
+          if (auth is SignedIn) _ProfileHeader(owner: auth.session.owner),
           for (final entry in entries)
             ListTile(
               leading: Icon(entry.icon),
@@ -90,5 +92,57 @@ class MoreScreen extends ConsumerWidget {
     if (confirmed ?? false) {
       await ref.read(authControllerProvider.notifier).signOut();
     }
+  }
+}
+
+/// Who is signed in: name and role (the avatar leads here).
+class _ProfileHeader extends StatelessWidget {
+  const new({required this.owner});
+
+  final Owner owner;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final role = owner.isAdmin
+        ? l10n.moreRoleAdmin(l10n.usersOwner, l10n.usersAdmin)
+        : l10n.usersOwner;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        Space.page,
+        Space.sm,
+        Space.page,
+        Space.md,
+      ),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(Space.md),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: theme.colorScheme.primaryContainer,
+                foregroundColor: theme.colorScheme.onPrimaryContainer,
+                child: Text(
+                  owner.nameFa.characters.first,
+                  style: theme.textTheme.titleLarge,
+                ),
+              ),
+              const SizedBox(width: Space.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(owner.nameFa, style: theme.textTheme.titleLarge),
+                    Text(role, style: theme.textTheme.bodyMedium),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
+import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
@@ -40,7 +41,12 @@ class _LockScreenState extends ConsumerState<LockScreen> {
 
   Future<void> _unlockWithDevice() => ref
       .read(appLockControllerProvider.notifier)
-      .unlockWithDevice(AppLocalizations.of(context).lockReason);
+      .unlockWithDevice(
+        AuthPrompt.of(
+          AppLocalizations.of(context),
+          AppLocalizations.of(context).lockReason,
+        ),
+      );
 
   Future<void> _unlockWithPin() async {
     final l10n = AppLocalizations.of(context);

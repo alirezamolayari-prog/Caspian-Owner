@@ -28,6 +28,8 @@ class _CountStartScreenState extends ConsumerState<CountStartScreen> {
     final l10n = AppLocalizations.of(context);
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
+      // Above the bottom tabs, so the sheet is never cut off.
+      useRootNavigator: true,
       builder: (context) => _ConfirmSheet(items: picked),
     );
     if (!(confirmed ?? false) || !mounted) return;
@@ -78,8 +80,7 @@ class _CountStartScreenState extends ConsumerState<CountStartScreen> {
               TextField(
                 onChanged: (value) => setState(() => _query = value),
                 decoration: InputDecoration(
-                  labelText: l10n.stockSearchLabel,
-                  hintText: l10n.stockSearchHint,
+                  hintText: l10n.stockSearchLabel,
                   prefixIcon: const Icon(AppIcons.search),
                 ),
               ),

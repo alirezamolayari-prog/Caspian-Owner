@@ -99,6 +99,11 @@ class AppLocalizationsFa extends AppLocalizations {
   String get moreTitle => 'بیشتر';
 
   @override
+  String moreRoleAdmin(String owner, String admin) {
+    return '$owner – $admin';
+  }
+
+  @override
   String get logout => 'خروج';
 
   @override
@@ -169,6 +174,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get lockUsePin => 'ورود با رمز برنامه';
 
   @override
+  String get authPromptTitle => 'تأیید هویت';
+
+  @override
+  String get authPromptHint => 'با اثر انگشت یا قفل گوشی';
+
+  @override
   String get pinLabel => 'رمز برنامه';
 
   @override
@@ -211,6 +222,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get notificationsTooltip => 'اعلان‌ها';
+
+  @override
+  String get notificationsTitle => 'اعلان‌ها';
+
+  @override
+  String get notificationsEmpty => 'در ۳۰ روز گذشته اعلانی نبوده است.';
 
   @override
   String get accountTooltip => 'حساب و گزینه‌های بیشتر';
@@ -391,6 +408,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get undo => 'بازگرداندن';
 
   @override
+  String undoApprovePending(String seconds) {
+    return 'تأیید درخواست – $seconds ثانیه تا ارسال';
+  }
+
+  @override
+  String undoRejectPending(String seconds) {
+    return 'رد درخواست – $seconds ثانیه تا ارسال';
+  }
+
+  @override
   String get decisionQueued =>
       'اینترنت وصل نیست. تصمیم شما در صف ارسال است و خودکار فرستاده می‌شود.';
 
@@ -459,9 +486,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get stockSearchLabel => 'جستجوی کالا';
 
   @override
-  String get stockSearchHint => 'نام یا کد کالا';
-
-  @override
   String get stockClearSearch => 'پاک کردن جستجو';
 
   @override
@@ -501,9 +525,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String itemCode(String code) {
-    return 'کد $code';
-  }
+  String get itemCodeLabel => 'کد';
 
   @override
   String get countPickTitle => 'انتخاب اقلام برای شمارش';
@@ -916,6 +938,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get aboutCheckUpdate => 'بررسی به‌روزرسانی';
+
+  @override
+  String get aboutCheckingUpdate => 'در حال بررسی…';
 
   @override
   String get aboutUpToDate => 'برنامه به‌روز است.';

@@ -24,6 +24,9 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
   static const _tapsToUnlock = 7;
   int _taps = 0;
 
+  /// The check can take a while on a slow network (both manifest URLs).
+  bool _checking = false;
+
   void _onVersionTap() {
     _taps++;
     if (_taps < _tapsToUnlock) return;
@@ -36,9 +39,15 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
 
   Future<void> _checkForUpdate() async {
     final l10n = AppLocalizations.of(context);
-    final manifest = await ref
-        .read(updateControllerProvider.notifier)
-        .check(force: true);
+    setState(() => _checking = true);
+    final UpdateManifest? manifest;
+    try {
+      manifest = await ref
+          .read(updateControllerProvider.notifier)
+          .check(force: true);
+    } finally {
+      if (mounted) setState(() => _checking = false);
+    }
     if (!mounted) return;
     final update = ref.read(updateControllerProvider);
     if (update.decision is NoUpdate) {
@@ -85,9 +94,17 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
               ),
             ),
           ),
-          OutlinedButton(
-            onPressed: _checkForUpdate,
-            child: Text(l10n.aboutCheckUpdate),
+          OutlinedButton.icon(
+            onPressed: _checking ? null : _checkForUpdate,
+            icon: _checking
+                ? const SizedBox.square(
+                    dimension: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : null,
+            label: Text(
+              _checking ? l10n.aboutCheckingUpdate : l10n.aboutCheckUpdate,
+            ),
           ),
           const SizedBox(height: Space.md),
           Text(Brand.supportContactFa, style: theme.textTheme.bodyMedium),

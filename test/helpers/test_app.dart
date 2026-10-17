@@ -7,6 +7,8 @@ import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/security/device_authenticator.dart';
+import 'package:caspian_owner/core/security/secure_screen.dart';
+import 'package:caspian_owner/core/security/secure_screen_scope.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/core/storage/app_database.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
@@ -41,15 +43,26 @@ class FakeAuthenticator implements DeviceAuthenticator {
   bool available;
   bool succeeds;
   int prompts = 0;
+  AuthPrompt? lastPrompt;
 
   @override
   Future<bool> isAvailable() async => available;
 
   @override
-  Future<bool> authenticate(String reason) async {
+  Future<bool> authenticate(AuthPrompt prompt) async {
     prompts++;
+    lastPrompt = prompt;
     return succeeds;
   }
+}
+
+/// Records what the app asked Android for (FLAG_SECURE).
+class FakeSecureScreen extends SecureScreen {
+  /// The last value sent; null before the first change.
+  bool? secure;
+
+  @override
+  Future<void> set({required bool secure}) async => this.secure = secure;
 }
 
 const testOwner = Owner(id: 'o-1', nameFa: 'علیرضا', isAdmin: true);
@@ -68,6 +81,7 @@ class TestHarness {
     required this.store,
     required this.authenticator,
     required this.database,
+    required this.secureScreen,
     required this.overrides,
   });
 
@@ -87,6 +101,7 @@ class TestHarness {
     final backend = MockBackend(fixtures, latency: Duration.zero);
     final store = MemorySecureStore();
     final authenticator = FakeAuthenticator(available: deviceAuthAvailable);
+    final secureScreen = FakeSecureScreen();
     // Synchronous stream closing: drift otherwise closes unused query
     // streams on a timer, which widget tests report as a pending Timer.
     final database = AppDatabase(
@@ -100,6 +115,7 @@ class TestHarness {
       store: store,
       authenticator: authenticator,
       database: database,
+      secureScreen: secureScreen,
       overrides: [
         appInfoProvider.overrideWithValue(
           AppInfo(
@@ -112,6 +128,7 @@ class TestHarness {
         ),
         secureStoreProvider.overrideWithValue(store),
         deviceAuthenticatorProvider.overrideWithValue(authenticator),
+        secureScreenProvider.overrideWithValue(secureScreen),
         appDatabaseProvider.overrideWithValue(database),
         mockBackendProvider.overrideWithValue(backend),
         // No network in tests: the update check finds nothing.
@@ -132,6 +149,7 @@ class TestHarness {
   final MemorySecureStore store;
   final FakeAuthenticator authenticator;
   final AppDatabase database;
+  final FakeSecureScreen secureScreen;
   final List<Override> overrides;
 
   /// Loads the fixtures, then creates. For plain (non-widget) tests.

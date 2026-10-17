@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:caspian_owner/core/domain/place_label.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
+import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/security/secure_screen_scope.dart';
 import 'package:caspian_owner/core/theme/app_colors.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
@@ -78,7 +79,14 @@ class RequestDetailScreen extends ConsumerWidget {
           ),
           _ => const Center(child: CircularProgressIndicator()),
         },
-        bottomNavigationBar: canAct ? _DecisionBar(request: request) : null,
+        bottomNavigationBar: switch (local) {
+          LocalDecision(phase: DecisionPhase.undoable) => _UndoBar(
+            requestId: requestId,
+            decision: local,
+          ),
+          _ when canAct => _DecisionBar(request: request),
+          _ => null,
+        },
       ),
     );
   }
@@ -260,6 +268,14 @@ class _DecisionBanner extends StatelessWidget {
         scheme.surfaceContainer,
         scheme.onSurfaceVariant,
         AppIcons.queued,
+      ),
+      // Not sent yet: the undo bar at the bottom says what happens.
+      (LocalDecision(phase: DecisionPhase.undoable), _, _) => (
+        '',
+        null,
+        scheme.surface,
+        scheme.onSurface,
+        AppIcons.pending,
       ),
       (LocalDecision(action: DecisionAction.approve), _, _) => (
         l10n.approvedDone,
@@ -494,29 +510,12 @@ class _DecisionBar extends ConsumerWidget {
     final number = toPersianDigits('${request.number}');
     final controller = ref.read(decisionControllerProvider.notifier);
 
-    void showUndo(String message) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Text(message),
-            duration: DecisionController.undoWindow,
-            action: SnackBarAction(
-              label: l10n.undo,
-              onPressed: () => controller.undo(request.id),
-            ),
-          ),
-        );
-    }
-
-    Future<void> approve() async {
-      final ok = await controller.decide(
-        request: request,
-        action: DecisionAction.approve,
-        fingerprintReason: l10n.approveReason(number),
-      );
-      if (ok && context.mounted) showUndo(l10n.approvedDone);
-    }
+    // The undo bar replaces this bar right away (see RequestDetailScreen).
+    Future<void> approve() => controller.decide(
+      request: request,
+      action: DecisionAction.approve,
+      fingerprint: AuthPrompt.of(l10n, l10n.approveReason(number)),
+    );
 
     Future<void> reject() async {
       final reason = await showRejectSheet(context, number: number);
@@ -525,9 +524,7 @@ class _DecisionBar extends ConsumerWidget {
         request: request,
         action: DecisionAction.reject,
         reason: reason.isEmpty ? null : reason,
-        fingerprintReason: '',
       );
-      if (context.mounted) showUndo(l10n.rejectedDone);
     }
 
     return SafeArea(
@@ -555,6 +552,95 @@ class _DecisionBar extends ConsumerWidget {
                   onPressed: approve,
                   child: Text(l10n.approve),
                 ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Replaces the decision buttons for the 5-second undo window: what will
+/// be sent, a countdown, and «بازگرداندن». It lives in this screen only, so
+/// it never covers another tab or a text field, and it is gone the moment
+/// the window ends (the decision then shows as being sent).
+class _UndoBar extends ConsumerStatefulWidget {
+  const new({required this.requestId, required this.decision});
+
+  final String requestId;
+  final LocalDecision decision;
+
+  @override
+  ConsumerState<_UndoBar> createState() => _UndoBarState();
+}
+
+class _UndoBarState extends ConsumerState<_UndoBar> {
+  Timer? _ticker;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = Timer.periodic(
+      const Duration(milliseconds: 250),
+      (_) => setState(() {}),
+    );
+  }
+
+  @override
+  void dispose() {
+    _ticker?.cancel();
+    super.dispose();
+  }
+
+  int get _secondsLeft {
+    final until = widget.decision.undoUntil;
+    if (until == null) return 0;
+    final ms = until.difference(clock.now()).inMilliseconds;
+    return ms <= 0 ? 0 : (ms / 1000).ceil();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final seconds = toPersianDigits('$_secondsLeft');
+    final message = widget.decision.action == DecisionAction.approve
+        ? l10n.undoApprovePending(seconds)
+        : l10n.undoRejectPending(seconds);
+    return SafeArea(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: scheme.inverseSurface,
+          border: Border(top: BorderSide(color: scheme.outlineVariant)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Space.md,
+            vertical: Space.sm,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Semantics(
+                  liveRegion: true,
+                  child: Text(
+                    message,
+                    style: Theme.of(context).textTheme.bodyMedium
+                        ?.copyWith(color: scheme.onInverseSurface),
+                  ),
+                ),
+              ),
+              const SizedBox(width: Space.sm),
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: scheme.inversePrimary,
+                  minimumSize: const Size(kMinTouchTarget, kMinTouchTarget),
+                ),
+                onPressed: () => ref
+                    .read(decisionControllerProvider.notifier)
+                    .undo(widget.requestId),
+                child: Text(l10n.undo),
               ),
             ],
           ),

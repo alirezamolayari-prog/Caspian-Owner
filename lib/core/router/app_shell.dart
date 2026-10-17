@@ -89,11 +89,16 @@ class _AppShellState extends ConsumerState<AppShell> {
       body: shell,
       bottomNavigationBar: NavigationBar(
         selectedIndex: shell.currentIndex,
-        onDestinationSelected: (index) => shell.goBranch(
-          index,
-          // Tapping the current tab again returns to its first screen.
-          initialLocation: index == shell.currentIndex,
-        ),
+        onDestinationSelected: (index) {
+          // Otherwise a field focused before (Stock search) takes focus
+          // back, and opens the keyboard, when its tab is shown again.
+          FocusManager.instance.primaryFocus?.unfocus();
+          shell.goBranch(
+            index,
+            // Tapping the current tab again returns to its first screen.
+            initialLocation: index == shell.currentIndex,
+          );
+        },
         destinations: [
           NavigationDestination(
             icon: const Icon(AppIcons.home),
