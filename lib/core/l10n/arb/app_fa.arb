@@ -61,6 +61,10 @@
   "stockTitle": "موجودی انبار",
   "assistantTitle": "دستیار کاسپین",
   "moreTitle": "بیشتر",
+  "moreRoleAdmin": "{owner} – {admin}",
+  "@moreRoleAdmin": {
+    "placeholders": { "owner": { "type": "String" }, "admin": { "type": "String" } }
+  },
   "logout": "خروج",
 
   "loginTitle": "ورود به مالک کاسپین",
@@ -91,6 +95,8 @@
   "lockUnlockDevice": "باز کردن با اثر انگشت",
   "lockReason": "برای باز کردن مالک کاسپین هویت خود را تأیید کنید",
   "lockUsePin": "ورود با رمز برنامه",
+  "authPromptTitle": "تأیید هویت",
+  "authPromptHint": "با اثر انگشت یا قفل گوشی",
   "pinLabel": "رمز برنامه",
   "pinWrong": "رمز درست نیست. {left} بار دیگر می‌توانید امتحان کنید.",
   "@pinWrong": {
@@ -107,6 +113,8 @@
   "homeGreeting": "سلام {name}",
   "@homeGreeting": { "placeholders": { "name": { "type": "String" } } },
   "notificationsTooltip": "اعلان‌ها",
+  "notificationsTitle": "اعلان‌ها",
+  "notificationsEmpty": "در ۳۰ روز گذشته اعلانی نبوده است.",
   "accountTooltip": "حساب و گزینه‌های بیشتر",
 
   "cancel": "انصراف",
@@ -203,6 +211,10 @@
   "approvedDone": "تأیید شد و به انبار خبر داده شد",
   "rejectedDone": "رد شد و به انبار خبر داده شد",
   "undo": "بازگرداندن",
+  "undoApprovePending": "تأیید درخواست – {seconds} ثانیه تا ارسال",
+  "@undoApprovePending": { "placeholders": { "seconds": { "type": "String" } } },
+  "undoRejectPending": "رد درخواست – {seconds} ثانیه تا ارسال",
+  "@undoRejectPending": { "placeholders": { "seconds": { "type": "String" } } },
   "decisionQueued": "اینترنت وصل نیست. تصمیم شما در صف ارسال است و خودکار فرستاده می‌شود.",
   "conflictTitle": "این درخواست قبلاً بررسی شده است",
   "conflictApproved": "تأیید شد توسط {name}. تصمیم شما ثبت نشد.",
@@ -239,7 +251,6 @@
   "you": "شما",
 
   "stockSearchLabel": "جستجوی کالا",
-  "stockSearchHint": "نام یا کد کالا",
   "stockClearSearch": "پاک کردن جستجو",
   "filterLow": "کم‌موجود",
   "stockEmpty": "کالایی با این نام پیدا نشد.",
@@ -255,8 +266,7 @@
   "@movementMeta": {
     "placeholders": { "date": { "type": "String" }, "document": { "type": "String" } }
   },
-  "itemCode": "کد {code}",
-  "@itemCode": { "placeholders": { "code": { "type": "String" } } },
+  "itemCodeLabel": "کد",
 
   "countPickTitle": "انتخاب اقلام برای شمارش",
   "countPickHelp": "اقلامی را که می‌خواهید سرزده شمرده شوند انتخاب کنید.",
@@ -428,6 +438,7 @@
   "updateDownloadFailed": "دانلود کامل نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.",
   "updateChecksumFailed": "فایل دانلودشده سالم نبود و پاک شد. دوباره تلاش کنید.",
   "aboutCheckUpdate": "بررسی به‌روزرسانی",
+  "aboutCheckingUpdate": "در حال بررسی…",
   "aboutUpToDate": "برنامه به‌روز است.",
   "aboutUpdateCheckFailed": "اطلاعات به‌روزرسانی دریافت نشد.",
 

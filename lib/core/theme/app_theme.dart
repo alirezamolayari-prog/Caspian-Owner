@@ -1,5 +1,6 @@
 import 'package:caspian_owner/core/brand/brand.dart';
 import 'package:caspian_owner/core/theme/app_colors.dart';
+import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:flutter/material.dart';
 
@@ -191,6 +192,32 @@ abstract final class AppTheme {
         contentTextStyle: text.bodyMedium?.copyWith(color: s.onPrimary),
       ),
       dividerTheme: DividerThemeData(color: s.outlineVariant, space: 1),
+      // On and off must not be told apart by color alone, and «off» must
+      // not look disabled: a dark thumb and outline (≥ 3:1 against the
+      // card) when off, a filled track when on, and ✓ / ✕ in the thumb.
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? s.onPrimary
+              : s.onSurfaceVariant,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? s.primary
+              : s.surfaceContainer,
+        ),
+        trackOutlineColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? s.primary
+              : s.onSurfaceVariant,
+        ),
+        trackOutlineWidth: const WidgetStatePropertyAll(2),
+        thumbIcon: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? Icon(AppIcons.check, color: s.primary)
+              : Icon(AppIcons.clear, color: s.surfaceContainer),
+        ),
+      ),
     );
   }
 }

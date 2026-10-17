@@ -41,6 +41,9 @@ void main() {
     '/stock',
     '/assistant',
     '/more',
+    '/notifications',
+    '/settings',
+    '/about',
     '/counts/new',
   ]) {
     testWidgets('$location meets the accessibility guidelines', (tester) async {

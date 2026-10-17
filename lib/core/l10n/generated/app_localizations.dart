@@ -232,6 +232,12 @@ abstract class AppLocalizations {
   /// **'بیشتر'**
   String get moreTitle;
 
+  /// No description provided for @moreRoleAdmin.
+  ///
+  /// In fa, this message translates to:
+  /// **'{owner} – {admin}'**
+  String moreRoleAdmin(String owner, String admin);
+
   /// No description provided for @logout.
   ///
   /// In fa, this message translates to:
@@ -346,6 +352,18 @@ abstract class AppLocalizations {
   /// **'ورود با رمز برنامه'**
   String get lockUsePin;
 
+  /// No description provided for @authPromptTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'تأیید هویت'**
+  String get authPromptTitle;
+
+  /// No description provided for @authPromptHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'با اثر انگشت یا قفل گوشی'**
+  String get authPromptHint;
+
   /// No description provided for @pinLabel.
   ///
   /// In fa, this message translates to:
@@ -411,6 +429,18 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'اعلان‌ها'**
   String get notificationsTooltip;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'اعلان‌ها'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In fa, this message translates to:
+  /// **'در ۳۰ روز گذشته اعلانی نبوده است.'**
+  String get notificationsEmpty;
 
   /// No description provided for @accountTooltip.
   ///
@@ -688,6 +718,18 @@ abstract class AppLocalizations {
   /// **'بازگرداندن'**
   String get undo;
 
+  /// No description provided for @undoApprovePending.
+  ///
+  /// In fa, this message translates to:
+  /// **'تأیید درخواست – {seconds} ثانیه تا ارسال'**
+  String undoApprovePending(String seconds);
+
+  /// No description provided for @undoRejectPending.
+  ///
+  /// In fa, this message translates to:
+  /// **'رد درخواست – {seconds} ثانیه تا ارسال'**
+  String undoRejectPending(String seconds);
+
   /// No description provided for @decisionQueued.
   ///
   /// In fa, this message translates to:
@@ -802,12 +844,6 @@ abstract class AppLocalizations {
   /// **'جستجوی کالا'**
   String get stockSearchLabel;
 
-  /// No description provided for @stockSearchHint.
-  ///
-  /// In fa, this message translates to:
-  /// **'نام یا کد کالا'**
-  String get stockSearchHint;
-
   /// No description provided for @stockClearSearch.
   ///
   /// In fa, this message translates to:
@@ -880,11 +916,11 @@ abstract class AppLocalizations {
   /// **'{date} – سند {document}'**
   String movementMeta(String date, String document);
 
-  /// No description provided for @itemCode.
+  /// No description provided for @itemCodeLabel.
   ///
   /// In fa, this message translates to:
-  /// **'کد {code}'**
-  String itemCode(String code);
+  /// **'کد'**
+  String get itemCodeLabel;
 
   /// No description provided for @countPickTitle.
   ///
@@ -1563,6 +1599,12 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'بررسی به‌روزرسانی'**
   String get aboutCheckUpdate;
+
+  /// No description provided for @aboutCheckingUpdate.
+  ///
+  /// In fa, this message translates to:
+  /// **'در حال بررسی…'**
+  String get aboutCheckingUpdate;
 
   /// No description provided for @aboutUpToDate.
   ///
