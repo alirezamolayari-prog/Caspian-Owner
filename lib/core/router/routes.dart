@@ -10,8 +10,15 @@ abstract final class Routes {
   static const lock = '/lock';
   static const pinSetup = '/pin-setup';
 
-  // The four tabs.
+  /// The «کاسپین» hub: one tile per module.
   static const home = '/';
+
+  /// A module that isn't built yet («به‌زودی»).
+  static String module(String id) => '/m/$id';
+
+  // The warehouse module's four tabs. Paths are unchanged since v0.1.0
+  // (notifications link to them), except its Home, now under the hub.
+  static const warehouse = '/warehouse';
   static const requests = '/requests';
   static const stock = '/stock';
   static const assistant = '/assistant';

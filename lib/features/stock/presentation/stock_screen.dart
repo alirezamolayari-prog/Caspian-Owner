@@ -5,6 +5,7 @@ import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/widgets/card_segment.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
+import 'package:caspian_owner/core/widgets/module_app_bar.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
 import 'package:caspian_owner/core/widgets/status_chip.dart';
 import 'package:caspian_owner/features/stock/application/stock_providers.dart';
@@ -25,7 +26,7 @@ class StockScreen extends ConsumerWidget {
     final controller = ref.read(stockControllerProvider.notifier);
     return SecureScreenScope(
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.stockTitle)),
+        appBar: ModuleAppBar(title: Text(l10n.stockTitle)),
         body: switch (stock) {
           AsyncValue(:final value?) => RefreshIndicator(
             onRefresh: controller.refresh,

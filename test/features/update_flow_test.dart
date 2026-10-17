@@ -1,7 +1,7 @@
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/update/update_checker.dart';
 import 'package:caspian_owner/core/update/update_screen.dart';
-import 'package:caspian_owner/features/home/presentation/home_screen.dart';
+import 'package:caspian_owner/features/hub/presentation/hub_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../core/update/update_test.dart' show manifestJson;
@@ -40,7 +40,7 @@ void main() {
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(find.byType(UpdateScreen), findsOneWidget);
-    expect(find.byType(HomeScreen), findsNothing);
+    expect(find.byType(HubScreen), findsNothing);
   });
 
   testWidgets('a newer build offers «به‌روزرسانی» or «بعداً»', (tester) async {
@@ -57,7 +57,7 @@ void main() {
     expect(find.textContaining('رفع اشکال'), findsOneWidget);
     await tester.tap(find.text('بعداً'));
     await tester.pumpAndSettle();
-    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.byType(HubScreen), findsOneWidget);
     expect(find.text('نسخه تازه آماده است'), findsNothing);
   });
 }

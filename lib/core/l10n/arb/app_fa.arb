@@ -123,6 +123,20 @@
 
   "comingSoon": "این بخش به‌زودی آماده می‌شود.",
 
+  "backToHub": "همه بخش‌های کاسپین",
+  "hubPendingBadge": "{count} منتظر",
+  "@hubPendingBadge": { "placeholders": { "count": { "type": "String" } } },
+  "moduleWarehouse": "انبار",
+  "moduleWarehouseSubtitle": "درخواست‌ها، موجودی و دستیار",
+  "moduleParking": "پارکینگ",
+  "moduleParkingSubtitle": "ورود و خروج و جای پارک",
+  "moduleCrm": "CRM",
+  "moduleCrmSubtitle": "مشتریان و پیگیری‌ها",
+  "moduleServices": "خدمات کاسپین",
+  "moduleServicesSubtitle": "تعمیرات و خدمات مجتمع",
+  "moduleComingSoonTitle": "{name} به‌زودی",
+  "@moduleComingSoonTitle": { "placeholders": { "name": { "type": "String" } } },
+  "moduleComingSoonBody": "این بخش هنوز ساخته نشده است. وقتی آماده شود، اینجا بخشی از آن برای شما باز می‌شود: تأییدها، گزارش کلی و گفتگو.",
   "homePendingTitle": "منتظر تأیید شما",
   "homePendingCount": "{count} درخواست",
   "@homePendingCount": {

@@ -3,7 +3,8 @@ import 'package:caspian_owner/features/requests/presentation/widgets/request_til
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The acceptance flow of M6: log in, approve the newest pending request,
+/// The acceptance flow of M6: log in, open the warehouse from the hub,
+/// approve the newest pending request,
 /// and find it under «بررسی‌شده». Shared by the headless test (CI) and the
 /// on-device integration test.
 Future<void> loginApproveAndFindReviewed(WidgetTester tester) async {
@@ -13,6 +14,11 @@ Future<void> loginApproveAndFindReviewed(WidgetTester tester) async {
   await tester.pumpAndSettle();
   await tester.enterText(find.byType(TextField), '11111');
   await tester.tap(find.text('ورود'));
+  await tester.pumpAndSettle();
+
+  // Hub → «انبار» (the pending count is on its tile).
+  expect(find.text('۴ منتظر'), findsOneWidget);
+  await tester.tap(find.text('انبار'));
   await tester.pumpAndSettle();
   expect(find.text('منتظر تأیید شما'), findsOneWidget);
 

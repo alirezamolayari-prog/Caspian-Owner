@@ -3,6 +3,7 @@ import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/jalali.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
+import 'package:caspian_owner/core/widgets/module_app_bar.dart';
 import 'package:caspian_owner/features/assistant/application/assistant_controller.dart';
 import 'package:caspian_owner/features/assistant/domain/assistant_message.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,7 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: ModuleAppBar(
         title: Text(l10n.assistantTitle),
         actions: [
           IconButton(
@@ -115,7 +116,6 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
             icon: const Icon(AppIcons.history),
             onPressed: _showHistory,
           ),
-          const SizedBox(width: Space.sm),
         ],
       ),
       body: Column(

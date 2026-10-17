@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/security/secure_screen_scope.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/widgets/card_segment.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
+import 'package:caspian_owner/core/widgets/module_app_bar.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
 import 'package:caspian_owner/features/home/presentation/home_placeholder.dart';
 import 'package:caspian_owner/features/requests/application/decision_controller.dart';
@@ -53,7 +54,7 @@ class RequestsScreen extends ConsumerWidget {
 
     return SecureScreenScope(
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.requestsTitle)),
+        appBar: ModuleAppBar(title: Text(l10n.requestsTitle)),
         body: switch (requests) {
           AsyncValue(:final value?) => RefreshIndicator(
             onRefresh: refresh,

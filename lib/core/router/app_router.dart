@@ -1,14 +1,16 @@
+import 'package:caspian_owner/core/modules/module_providers.dart';
 import 'package:caspian_owner/core/router/app_shell.dart';
+import 'package:caspian_owner/core/router/navigator_keys.dart';
 import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/core/update/update_screen.dart';
-import 'package:caspian_owner/features/assistant/presentation/assistant_screen.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/auth/presentation/lock_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/pin_setup_screen.dart';
-import 'package:caspian_owner/features/home/presentation/home_screen.dart';
+import 'package:caspian_owner/features/hub/presentation/hub_screen.dart';
+import 'package:caspian_owner/features/hub/presentation/module_placeholder_screen.dart';
 import 'package:caspian_owner/features/more/presentation/about_screen.dart';
 import 'package:caspian_owner/features/more/presentation/developer_screen.dart';
 import 'package:caspian_owner/features/more/presentation/more_screen.dart';
@@ -16,18 +18,10 @@ import 'package:caspian_owner/features/more/presentation/purchase_list_screen.da
 import 'package:caspian_owner/features/more/presentation/users_screen.dart';
 import 'package:caspian_owner/features/notifications/presentation/notifications_screen.dart';
 import 'package:caspian_owner/features/reports/presentation/reports_screen.dart';
-import 'package:caspian_owner/features/requests/presentation/request_detail_screen.dart';
-import 'package:caspian_owner/features/requests/presentation/requests_screen.dart';
 import 'package:caspian_owner/features/settings/presentation/settings_screen.dart';
-import 'package:caspian_owner/features/stock/presentation/stock_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-final _rootKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-
-/// For dialogs shown from outside the widget tree (update prompt).
-GlobalKey<NavigatorState> get rootNavigatorKey => _rootKey;
 
 /// Re-runs the router's redirect whenever login, lock or a required update
 /// changes.
@@ -46,7 +40,7 @@ class _RouterRefresh extends ChangeNotifier {
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = _RouterRefresh(ref);
   final router = GoRouter(
-    navigatorKey: _rootKey,
+    navigatorKey: rootNavigatorKey,
     initialLocation: Routes.home,
     refreshListenable: refresh,
     redirect: (context, state) => appRedirect(
@@ -62,7 +56,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.update,
-        parentNavigatorKey: _rootKey,
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const UpdateScreen(),
       ),
       GoRoute(
@@ -77,56 +71,39 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.pinSetup,
         builder: (context, state) => const PinSetupScreen(),
       ),
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, shell) => AppShell(shell: shell),
-        branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: Routes.home,
-                builder: (context, state) => const HomeScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: Routes.requests,
-                builder: (context, state) => const RequestsScreen(),
-                routes: [
-                  // Detail covers the bottom bar (UI spec 5.3).
-                  GoRoute(
-                    path: ':id',
-                    parentNavigatorKey: _rootKey,
-                    builder: (context, state) => RequestDetailScreen(
-                      requestId: state.pathParameters['id']!,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: Routes.stock,
-                builder: (context, state) => const StockScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: Routes.assistant,
-                builder: (context, state) => const AssistantScreen(),
-              ),
-            ],
-          ),
-        ],
+      // Where the app opens: one tile per Caspian module.
+      GoRoute(
+        path: Routes.home,
+        builder: (context, state) => const HubScreen(),
       ),
       GoRoute(
+        path: '/m/:id',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) =>
+            ModulePlaceholderScreen(moduleId: state.pathParameters['id']!),
+      ),
+      // Each module with screens gets its own bottom tabs.
+      for (final module in ref.read(moduleRegistryProvider).modules)
+        if (module.tabs.isNotEmpty)
+          StatefulShellRoute.indexedStack(
+            builder: (context, state, shell) =>
+                ModuleShell(module: module, shell: shell),
+            branches: [
+              for (final tab in module.tabs)
+                StatefulShellBranch(
+                  routes: [
+                    GoRoute(
+                      path: tab.path,
+                      builder: (context, state) => tab.builder(context),
+                      routes: tab.routes,
+                    ),
+                  ],
+                ),
+            ],
+          ),
+      GoRoute(
         path: Routes.more,
-        parentNavigatorKey: _rootKey,
+        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const MoreScreen(),
       ),
       for (final (path, screen) in <(String, Widget)>[
@@ -140,7 +117,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ])
         GoRoute(
           path: path,
-          parentNavigatorKey: _rootKey,
+          parentNavigatorKey: rootNavigatorKey,
           builder: (context, state) => screen,
         ),
     ],
