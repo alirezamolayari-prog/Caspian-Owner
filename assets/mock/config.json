@@ -1,5 +1,5 @@
 {
-  "feature_flags": ["surprise_count", "assistant", "reports"],
+  "feature_flags": ["assistant", "reports"],
   "modules": ["warehouse"],
   "min_supported_build": 1
 }
