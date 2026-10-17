@@ -1,0 +1,12 @@
+# Launcher icon. The PNGs are drawn from lib/core/brand/brand.dart and the
+# theme tokens by tool/brand/render_launcher_icon_test.dart; see
+# tool/brand/README.md. Don't edit the generated android/ files by hand.
+flutter_launcher_icons:
+  android: true
+  ios: false
+  min_sdk_android: 24
+  image_path: tool/brand/out/icon.png
+  adaptive_icon_background: tool/brand/out/icon_background.png
+  adaptive_icon_foreground: tool/brand/out/icon_foreground.png
+  # Android 13+ themed icons use the letter's shape only.
+  adaptive_icon_monochrome: tool/brand/out/icon_foreground.png
