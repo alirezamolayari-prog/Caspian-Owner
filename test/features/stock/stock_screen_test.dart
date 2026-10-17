@@ -98,6 +98,31 @@ void main() {
     expect(find.text('مشاعات عمومی طبقه – طبقه اول'), findsOneWidget);
   });
 
+  testWidgets('item codes stay Latin and left-to-right', (tester) async {
+    await pumpStock(tester);
+    await tester.tap(find.text('رنگ پلاستیک سفید'));
+    await tester.pumpAndSettle();
+    // Inside an LTR isolate, in a Latin font (the app font draws all
+    // digits as Persian and its «I» looks like «۱»).
+    final code = find.textContaining('\u2066I-1003\u2069', findRichText: true);
+    expect(code, findsOneWidget);
+    TextSpan? span;
+    tester.widget<RichText>(code).text.visitChildren((s) {
+      if (s is TextSpan && (s.text?.contains('I-1003') ?? false)) span = s;
+      return span == null;
+    });
+    expect(span!.style!.fontFamily, 'Roboto');
+  });
+
+  testWidgets('the search field has a hint only (no floating label)', (
+    tester,
+  ) async {
+    await pumpStock(tester);
+    final field = tester.widget<TextField>(find.byType(TextField));
+    expect(field.decoration!.labelText, isNull);
+    expect(field.decoration!.hintText, 'جستجوی کالا');
+  });
+
   testWidgets('a counted item explains why its history is hidden', (
     tester,
   ) async {

@@ -196,9 +196,10 @@ class _SearchFieldState extends ConsumerState<_SearchField> {
         // Show or hide the clear button.
         setState(() {});
       },
+      // A hint only: a floating label collides with the rounded outline
+      // when the field is focused. TalkBack reads the hint as the label.
       decoration: InputDecoration(
-        labelText: l10n.stockSearchLabel,
-        hintText: l10n.stockSearchHint,
+        hintText: l10n.stockSearchLabel,
         prefixIcon: const Icon(AppIcons.search),
         suffixIcon: _controller.text.isEmpty
             ? null
