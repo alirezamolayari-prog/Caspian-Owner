@@ -249,7 +249,7 @@ paths:
   /v1/stock:
     get:
       tags: [stock]
-      summary: Warehouse stock. Quantities are null while a count hides them.
+      summary: Warehouse stock. Quantities are null while the Warehouse app counts an item.
       parameters:
         - name: q
           in: query
@@ -286,7 +286,7 @@ paths:
         - $ref: '#/components/parameters/Limit'
       responses:
         '200':
-          description: Movements. Empty while the item is hidden by a count.
+          description: Movements. Empty while the Warehouse app counts the item.
           content:
             application/json:
               schema:
@@ -297,6 +297,8 @@ paths:
     get:
       tags: [counts]
       summary: Surprise counts, newest first.
+      deprecated: true
+      description: Owners can no longer order surprise counts (removed from the app in v0.2.0; may come back later). Kept so the server and old app builds stay compatible.
       responses:
         '200':
           description: Counts.
@@ -308,6 +310,8 @@ paths:
     post:
       tags: [counts]
       summary: Start a surprise count now. Locks the items and hides their stock.
+      deprecated: true
+      description: Owners can no longer order surprise counts (removed from the app in v0.2.0; may come back later). Kept so the server and old app builds stay compatible.
       parameters:
         - $ref: '#/components/parameters/DeviceId'
         - $ref: '#/components/parameters/AppVersion'
@@ -340,6 +344,8 @@ paths:
     get:
       tags: [counts]
       summary: One count with results once done.
+      deprecated: true
+      description: Owners can no longer order surprise counts (removed from the app in v0.2.0; may come back later). Kept so the server and old app builds stay compatible.
       parameters:
         - $ref: '#/components/parameters/Id'
       responses:
@@ -621,7 +627,7 @@ components:
         unit_fa: { type: string }
         stock_now:
           type: [number, 'null']
-          description: Null while the item is hidden by a running count.
+          description: Null while the Warehouse app counts the item.
         used_last_30d: { type: number }
 
     RequestStatus:
@@ -733,7 +739,7 @@ components:
         unit_fa: { type: string }
         qty:
           type: [number, 'null']
-          description: Null while hidden by a running surprise count.
+          description: Null while the Warehouse app counts the item (locked_by_count).
         shelf_fa: { type: [string, 'null'] }
         low: { type: boolean }
         locked_by_count: { type: boolean }
@@ -850,7 +856,7 @@ components:
         feature_flags:
           type: array
           items: { type: string }
-          examples: [[surprise_count, assistant, reports]]
+          examples: [[assistant, reports]]
         modules:
           type: array
           items: { type: string }
@@ -859,6 +865,7 @@ components:
 
     NotificationEventKind:
       type: string
+      description: count_result is deprecated (v0.2.0); the app ignores it.
       enum: [request_escalated, request_decided, count_result, chat_message]
 
     NotificationEvent:
@@ -872,7 +879,7 @@ components:
         body_fa: { type: string }
         target:
           type: string
-          description: In-app deep link, e.g. /requests/r-124 or /counts/c-7.
+          description: In-app deep link, e.g. /requests/r-124.
 
     UpdateManifest:
       type: object

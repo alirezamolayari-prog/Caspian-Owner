@@ -8,7 +8,6 @@ import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/core/update/update_checker.dart';
 import 'package:caspian_owner/core/update/update_manifest.dart';
-import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:caspian_owner/features/more/presentation/developer_screen.dart';
 import 'package:caspian_owner/features/reports/presentation/reports_screen.dart';
 import 'package:clock/clock.dart';
@@ -56,7 +55,6 @@ void main() {
       await pumpAt(tester, '/more');
       for (final label in [
         'گزارش‌ها',
-        'تاریخچه شمارش‌ها',
         'لیست خرید',
         'کاربران و دسترسی‌ها',
         'تنظیمات',
@@ -193,9 +191,7 @@ void main() {
       expect(find.text('اطلاعات به‌روزرسانی دریافت نشد.'), findsOneWidget);
     });
 
-    testWidgets('scenario switch and simulated count completion', (
-      tester,
-    ) async {
+    testWidgets('scenario switch', (tester) async {
       final h = await pumpAt(tester, '/developer');
       await tester.tap(find.text('بدون اینترنت'));
       await tester.pumpAndSettle();
@@ -203,18 +199,7 @@ void main() {
 
       await tester.tap(find.text('عادی'));
       await tester.pumpAndSettle();
-      await tester.scrollUntilVisible(
-        find.text('پایان شمارش در حال انجام'),
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.tap(find.widgetWithText(FilledButton, 'باشه'));
-      await tester.pumpAndSettle();
-      expect(find.text('شمارش تمام شد.'), findsOneWidget);
-      expect(
-        h.backend.counts.firstWhere((c) => c.id == 'c-7').status,
-        CountStatus.done,
-      );
+      expect(h.backend.scenario, MockScenario.normal);
     });
   });
 

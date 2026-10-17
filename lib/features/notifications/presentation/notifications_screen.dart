@@ -13,7 +13,10 @@ import 'package:go_router/go_router.dart';
 
 /// The last 30 days of events, newest first (`/v1/notifications`).
 final recentNotificationsProvider = FutureProvider<List<NotificationEvent>>(
-  (ref) => ref.watch(notificationSourceProvider).recent(),
+  (ref) async => [
+    for (final e in await ref.watch(notificationSourceProvider).recent())
+      if (isShown(e)) e,
+  ],
 );
 
 /// «اعلان‌ها», behind the Home bell. Tapping an event opens its screen.
@@ -40,19 +43,21 @@ class NotificationsScreen extends ConsumerWidget {
         ),
         AsyncValue(:final value?) => RefreshIndicator(
           onRefresh: () => ref.refresh(recentNotificationsProvider.future),
-          child: ListView.builder(
+          child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            // Edge to edge (Android 15): keep the last row above the
-            // system navigation bar.
-            padding: const EdgeInsets.all(Space.page).add(
-              EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
-            ),
-            itemCount: value.length,
-            itemBuilder: (context, i) => CardSegment(
-              first: i == 0,
-              last: i == value.length - 1,
-              child: _EventTile(event: value[i]),
-            ),
+            slivers: [
+              SliverPadding(
+                // Edge to edge (Android 15): keep the last row above the
+                // system navigation bar.
+                padding: const EdgeInsets.all(Space.page).add(
+                  EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+                ),
+                sliver: CardSliverList(
+                  itemCount: value.length,
+                  itemBuilder: (context, i) => _EventTile(event: value[i]),
+                ),
+              ),
+            ],
           ),
         ),
         AsyncValue(:final error?) => ErrorState(

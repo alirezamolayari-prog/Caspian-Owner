@@ -7,7 +7,7 @@ part 'app_config.g.dart';
 @freezed
 abstract class AppConfig with _$AppConfig {
   const factory({
-    /// Enabled features, e.g. `surprise_count`, `assistant`, `reports`.
+    /// Enabled features, e.g. `assistant`, `reports`.
     required List<String> featureFlags,
 
     /// Enabled modules, e.g. `warehouse`. Other Caspian apps plug in here.
@@ -26,7 +26,6 @@ abstract class AppConfig with _$AppConfig {
 
 /// Feature flag names used by the app.
 abstract final class FeatureFlags {
-  static const surpriseCount = 'surprise_count';
   static const assistant = 'assistant';
   static const reports = 'reports';
   static const purchaseList = 'purchase_list';

@@ -5,8 +5,6 @@ import 'package:caspian_owner/core/notifications/notification_event.dart';
 import 'package:caspian_owner/features/assistant/data/mock_assistant_repository.dart';
 import 'package:caspian_owner/features/auth/data/mock_auth_repository.dart';
 import 'package:caspian_owner/features/chat/data/mock_chat_repository.dart';
-import 'package:caspian_owner/features/count/data/mock_count_repository.dart';
-import 'package:caspian_owner/features/count/domain/surprise_count.dart';
 import 'package:caspian_owner/features/reports/data/mock_reports_repository.dart';
 import 'package:caspian_owner/features/reports/domain/consumption_report.dart';
 import 'package:caspian_owner/features/requests/data/mock_requests_repository.dart';
@@ -128,12 +126,11 @@ void main() {
       backend.scenario = MockScenario.empty;
       expect(await MockRequestsRepository(backend).list(), isEmpty);
       expect(await MockStockRepository(backend).list(), isEmpty);
-      expect(await MockCountRepository(backend).list(), isEmpty);
     });
   });
 
   group('stock', () {
-    test('items in a running count are hidden', () async {
+    test('items the warehouse is counting are hidden', () async {
       final stock = await MockStockRepository(backend).list();
       final locked = stock.where((s) => s.lockedByCount).toList();
       expect(locked.map((s) => s.code), ['I-1012', 'I-1013']);
@@ -167,45 +164,6 @@ void main() {
       final moves = await MockStockRepository(backend).movements('I-1001');
       expect(moves.first.documentNo, 'ح-۸۸۴');
       expect(moves.last.documentNo, 'ر-۲۱۲');
-    });
-  });
-
-  group('counts', () {
-    test('starting a count locks and hides its items', () async {
-      final repo = MockCountRepository(backend);
-      final count = await at(
-        () => repo.start(itemCodes: ['I-1001'], idempotencyKey: 'c-key'),
-      );
-      expect(count.status, CountStatus.running);
-      expect(count.orderedAt, testNow);
-      final item = (await MockStockRepository(backend).list(query: 'I-1001'))
-          .single;
-      expect(item.qty, isNull);
-      expect(item.lockedByCount, isTrue);
-    });
-
-    test('items already being counted are refused', () async {
-      await expectLater(
-        MockCountRepository(backend)
-            .start(itemCodes: ['I-1012'], idempotencyKey: 'k'),
-        throwsA(isA<ConflictException>()),
-      );
-    });
-
-    test('finished count shows discrepancies; stock is not adjusted', () async {
-      final done = await MockCountRepository(backend).get('c-6');
-      final paint = done.results!.firstWhere((r) => r.itemCode == 'I-1003');
-      expect(paint.difference, -2);
-      expect(paint.entries, hasLength(2));
-      expect(paint.countedBy, hasLength(2));
-      final filter = done.results!.firstWhere((r) => r.itemCode == 'I-1009');
-      expect(filter.hasDiscrepancy, isFalse);
-    });
-
-    test('completing a count unlocks the items', () async {
-      backend.completeCount('c-7', counted: {'I-1013': 4});
-      final stock = await MockStockRepository(backend).list();
-      expect(stock.any((s) => s.lockedByCount), isFalse);
     });
   });
 

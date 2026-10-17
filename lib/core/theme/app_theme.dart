@@ -24,12 +24,12 @@ abstract final class AppTheme {
     onSurface: LightTokens.onSurface,
     onSurfaceVariant: LightTokens.onSurfaceVariant,
     surfaceContainerLowest: LightTokens.card,
-    surfaceContainerLow: LightTokens.card,
+    surfaceContainerLow: LightTokens.rowAlt,
     surfaceContainer: LightTokens.surfaceContainer,
     surfaceContainerHigh: LightTokens.surfaceContainer,
     surfaceContainerHighest: LightTokens.primaryContainer,
     outline: LightTokens.outline,
-    outlineVariant: LightTokens.surfaceContainer,
+    outlineVariant: LightTokens.border,
   );
 
   static const ColorScheme darkScheme = ColorScheme(
@@ -50,12 +50,12 @@ abstract final class AppTheme {
     onSurface: DarkTokens.onSurface,
     onSurfaceVariant: DarkTokens.onSurfaceVariant,
     surfaceContainerLowest: DarkTokens.card,
-    surfaceContainerLow: DarkTokens.card,
+    surfaceContainerLow: DarkTokens.rowAlt,
     surfaceContainer: DarkTokens.surfaceContainer,
     surfaceContainerHigh: DarkTokens.surfaceContainer,
     surfaceContainerHighest: DarkTokens.primaryContainer,
     outline: DarkTokens.outline,
-    outlineVariant: DarkTokens.surfaceContainer,
+    outlineVariant: DarkTokens.border,
   );
 
   static ThemeData get light => _build(lightScheme, AppColors.light);
@@ -117,8 +117,11 @@ abstract final class AppTheme {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         margin: EdgeInsets.zero,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(Radii.card)),
+        // A thin border instead of a shadow: cards stand out from the
+        // off-white page without looking heavy.
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(Radii.card)),
+          side: BorderSide(color: s.outlineVariant),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(

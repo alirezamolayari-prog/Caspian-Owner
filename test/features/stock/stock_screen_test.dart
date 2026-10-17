@@ -2,7 +2,6 @@ import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
-import 'package:caspian_owner/features/count/presentation/count_start_screen.dart';
 import 'package:caspian_owner/features/stock/presentation/stock_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,7 +43,7 @@ void main() {
     expect(find.text('۴۲ عدد'), findsOneWidget);
     expect(find.text('قفسه ۱ – ردیف ۲'), findsOneWidget);
     expect(rowsOf('کم'), findsNWidgets(4));
-    expect(rowsOf('در حال شمارش'), findsNWidgets(2));
+    expect(rowsOf('در حال شمارش در انبار'), findsNWidgets(2));
   });
 
   testWidgets('search by name, by Persian or Latin digits, and clear', (
@@ -130,7 +129,10 @@ void main() {
     await tester.tap(find.text('سیمان سفید'));
     await tester.pumpAndSettle();
     expect(
-      find.text('تا پایان شمارش غافلگیرانه، موجودی و گردش این کالا مخفی است.'),
+      find.text(
+        'انبار در حال شمارش این کالاست. تا پایان شمارش، موجودی و گردش آن '
+        'دیده نمی‌شود.',
+      ),
       findsOneWidget,
     );
   });
@@ -148,16 +150,11 @@ void main() {
     expect(find.text('۴۲ عدد'), findsOneWidget);
   });
 
-  testWidgets('«شمارش غافلگیرانه» opens the count start', (tester) async {
+  testWidgets('owners can no longer order a count (removed in v0.2.0)', (
+    tester,
+  ) async {
     await pumpStock(tester);
-    await tester.tap(
-      find.descendant(
-        of: find.byType(AppBar),
-        matching: find.text('شمارش غافلگیرانه'),
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(find.byType(CountStartScreen), findsOneWidget);
+    expect(find.text('شمارش غافلگیرانه'), findsNothing);
   });
 
   testWidgets('largest font scale: no overflow', (tester) async {

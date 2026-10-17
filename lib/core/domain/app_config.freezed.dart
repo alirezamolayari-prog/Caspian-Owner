@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppConfig {
 
-/// Enabled features, e.g. `surprise_count`, `assistant`, `reports`.
+/// Enabled features, e.g. `assistant`, `reports`.
  List<String> get featureFlags;/// Enabled modules, e.g. `warehouse`. Other Caspian apps plug in here.
  List<String> get modules;/// Builds below this must update before use (blocking update screen).
  int get minSupportedBuild;
@@ -223,9 +223,9 @@ class _AppConfig extends AppConfig {
   const _AppConfig({required  List<String> featureFlags, required  List<String> modules, required this.minSupportedBuild}): _featureFlags = featureFlags,_modules = modules,super._();
   factory _AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
 
-/// Enabled features, e.g. `surprise_count`, `assistant`, `reports`.
+/// Enabled features, e.g. `assistant`, `reports`.
  final  List<String> _featureFlags;
-/// Enabled features, e.g. `surprise_count`, `assistant`, `reports`.
+/// Enabled features, e.g. `assistant`, `reports`.
 @override List<String> get featureFlags {
   if (_featureFlags is EqualUnmodifiableListView) return _featureFlags;
   // ignore: implicit_dynamic_type

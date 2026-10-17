@@ -2,6 +2,7 @@ import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/jalali.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/card_segment.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
 import 'package:caspian_owner/features/reports/application/report_providers.dart';
 import 'package:caspian_owner/features/reports/domain/consumption_report.dart';
@@ -123,50 +124,53 @@ class _ReportRows extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          for (final (i, row) in rows.indexed) ...[
-            if (i > 0) const Divider(indent: Space.md, endIndent: Space.md),
-            ExpansionTile(
-              title: Text(toPersianDigits(row.nameFa)),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    row.total == 0
-                        ? l10n.reportNoConsumption
-                        : l10n.reportRowTotal(row.total.round()),
-                  ),
-                  const SizedBox(height: Space.xs),
-                  // Decorative: the number above carries the value.
-                  ExcludeSemantics(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(Space.xs),
-                      ),
-                      child: LinearProgressIndicator(
-                        value: row.total / maxTotal,
-                        minHeight: 6,
-                        backgroundColor: theme.colorScheme.surfaceContainer,
+          for (final (i, row) in rows.indexed)
+            ZebraRow(
+              index: i,
+              last: i == rows.length - 1,
+              child: ExpansionTile(
+                title: Text(toPersianDigits(row.nameFa)),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      row.total == 0
+                          ? l10n.reportNoConsumption
+                          : l10n.reportRowTotal(row.total.round()),
+                    ),
+                    const SizedBox(height: Space.xs),
+                    // Decorative: the number above carries the value.
+                    ExcludeSemantics(
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(Space.xs),
+                        ),
+                        child: LinearProgressIndicator(
+                          value: row.total / maxTotal,
+                          minHeight: 6,
+                          // Visible on both stripes (white and light grey).
+                          backgroundColor: theme.colorScheme.outlineVariant,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
+                ),
+                enabled: (row.lines ?? const []).isNotEmpty,
+                children: [
+                  for (final line in row.lines ?? const <ConsumptionLine>[])
+                    ListTile(
+                      dense: true,
+                      title: Text(
+                        l10n.historyLine(
+                          line.itemNameFa,
+                          formatNumber(line.qty),
+                          line.unitFa,
+                        ),
+                      ),
+                    ),
                 ],
               ),
-              enabled: (row.lines ?? const []).isNotEmpty,
-              children: [
-                for (final line in row.lines ?? const <ConsumptionLine>[])
-                  ListTile(
-                    dense: true,
-                    title: Text(
-                      l10n.historyLine(
-                        line.itemNameFa,
-                        formatNumber(line.qty),
-                        line.unitFa,
-                      ),
-                    ),
-                  ),
-              ],
             ),
-          ],
         ],
       ),
     );

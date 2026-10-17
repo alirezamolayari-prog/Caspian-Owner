@@ -104,7 +104,6 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
     final suggestions = [
       l10n.assistantSuggestionToday,
       l10n.assistantSuggestionMonth,
-      l10n.assistantSuggestionCount,
     ];
 
     return Scaffold(

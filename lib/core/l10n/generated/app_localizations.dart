@@ -514,36 +514,6 @@ abstract class AppLocalizations {
   /// **'هنوز درخواستی ثبت نشده است.'**
   String get homeNoRequests;
 
-  /// No description provided for @countCardTitle.
-  ///
-  /// In fa, this message translates to:
-  /// **'شمارش غافلگیرانه'**
-  String get countCardTitle;
-
-  /// No description provided for @countLastTime.
-  ///
-  /// In fa, this message translates to:
-  /// **'آخرین بار: {date}'**
-  String countLastTime(String date);
-
-  /// No description provided for @countNever.
-  ///
-  /// In fa, this message translates to:
-  /// **'هنوز شمارشی انجام نشده است.'**
-  String get countNever;
-
-  /// No description provided for @countRunningNow.
-  ///
-  /// In fa, this message translates to:
-  /// **'یک شمارش در حال انجام است'**
-  String get countRunningNow;
-
-  /// No description provided for @countStart.
-  ///
-  /// In fa, this message translates to:
-  /// **'شروع'**
-  String get countStart;
-
   /// No description provided for @requestLineTitle.
   ///
   /// In fa, this message translates to:
@@ -643,7 +613,7 @@ abstract class AppLocalizations {
   /// No description provided for @hiddenByCount.
   ///
   /// In fa, this message translates to:
-  /// **'در حال شمارش'**
+  /// **'در حال شمارش در انبار'**
   String get hiddenByCount;
 
   /// No description provided for @qtyWithUnit.
@@ -871,7 +841,7 @@ abstract class AppLocalizations {
   /// No description provided for @stockHiddenExplain.
   ///
   /// In fa, this message translates to:
-  /// **'تا پایان شمارش غافلگیرانه، موجودی و گردش این کالا مخفی است.'**
+  /// **'انبار در حال شمارش این کالاست. تا پایان شمارش، موجودی و گردش آن دیده نمی‌شود.'**
   String get stockHiddenExplain;
 
   /// No description provided for @movementsTitle.
@@ -922,180 +892,6 @@ abstract class AppLocalizations {
   /// **'کد'**
   String get itemCodeLabel;
 
-  /// No description provided for @countPickTitle.
-  ///
-  /// In fa, this message translates to:
-  /// **'انتخاب اقلام برای شمارش'**
-  String get countPickTitle;
-
-  /// No description provided for @countPickHelp.
-  ///
-  /// In fa, this message translates to:
-  /// **'اقلامی را که می‌خواهید سرزده شمرده شوند انتخاب کنید.'**
-  String get countPickHelp;
-
-  /// No description provided for @countSelected.
-  ///
-  /// In fa, this message translates to:
-  /// **'{count} قلم انتخاب شد'**
-  String countSelected(int count);
-
-  /// No description provided for @countContinueCount.
-  ///
-  /// In fa, this message translates to:
-  /// **'ادامه ({count} قلم)'**
-  String countContinueCount(int count);
-
-  /// No description provided for @countAlreadyRunning.
-  ///
-  /// In fa, this message translates to:
-  /// **'در حال شمارش'**
-  String get countAlreadyRunning;
-
-  /// No description provided for @countConfirmTitle.
-  ///
-  /// In fa, this message translates to:
-  /// **'شروع شمارش غافلگیرانه'**
-  String get countConfirmTitle;
-
-  /// No description provided for @countConfirmBody.
-  ///
-  /// In fa, this message translates to:
-  /// **'این اقلام در اپ انبار قفل و موجودی‌شان مخفی می‌شود تا شمارش انجام شود.'**
-  String get countConfirmBody;
-
-  /// No description provided for @countConfirmStart.
-  ///
-  /// In fa, this message translates to:
-  /// **'شروع شمارش'**
-  String get countConfirmStart;
-
-  /// No description provided for @countDetailTitle.
-  ///
-  /// In fa, this message translates to:
-  /// **'شمارش غافلگیرانه'**
-  String get countDetailTitle;
-
-  /// No description provided for @countRunningTitle.
-  ///
-  /// In fa, this message translates to:
-  /// **'شمارش در حال انجام است'**
-  String get countRunningTitle;
-
-  /// No description provided for @countRunningBody.
-  ///
-  /// In fa, this message translates to:
-  /// **'این اقلام در انبار قفل‌اند و موجودی‌شان برای همه مخفی است، حتی برای شما. وقتی کارکنان شمردند، نتیجه همین‌جا می‌آید.'**
-  String get countRunningBody;
-
-  /// No description provided for @countOrderedBy.
-  ///
-  /// In fa, this message translates to:
-  /// **'دستور: {name} – {time}'**
-  String countOrderedBy(String name, String time);
-
-  /// No description provided for @countDoneTitle.
-  ///
-  /// In fa, this message translates to:
-  /// **'نتیجه شمارش'**
-  String get countDoneTitle;
-
-  /// No description provided for @countFinishedAt.
-  ///
-  /// In fa, this message translates to:
-  /// **'پایان: {date}'**
-  String countFinishedAt(String date);
-
-  /// No description provided for @countSystem.
-  ///
-  /// In fa, this message translates to:
-  /// **'طبق سیستم'**
-  String get countSystem;
-
-  /// No description provided for @countCounted.
-  ///
-  /// In fa, this message translates to:
-  /// **'شمرده‌شده'**
-  String get countCounted;
-
-  /// No description provided for @countMatch.
-  ///
-  /// In fa, this message translates to:
-  /// **'درست است'**
-  String get countMatch;
-
-  /// No description provided for @countShort.
-  ///
-  /// In fa, this message translates to:
-  /// **'{qty} {unit} کمتر'**
-  String countShort(String qty, String unit);
-
-  /// No description provided for @countOver.
-  ///
-  /// In fa, this message translates to:
-  /// **'{qty} {unit} بیشتر'**
-  String countOver(String qty, String unit);
-
-  /// No description provided for @countEntries.
-  ///
-  /// In fa, this message translates to:
-  /// **'عددهای واردشده'**
-  String get countEntries;
-
-  /// No description provided for @countEntry.
-  ///
-  /// In fa, this message translates to:
-  /// **'{qty} – {name} – {time}'**
-  String countEntry(String qty, String name, String time);
-
-  /// No description provided for @countNoAutoAdjust.
-  ///
-  /// In fa, this message translates to:
-  /// **'موجودی به‌طور خودکار اصلاح نمی‌شود. برای اصلاح، در اپ انبار سند اصلاح ثبت کنید.'**
-  String get countNoAutoAdjust;
-
-  /// No description provided for @countHistoryTitle.
-  ///
-  /// In fa, this message translates to:
-  /// **'تاریخچه شمارش‌ها'**
-  String get countHistoryTitle;
-
-  /// No description provided for @countHistoryEmpty.
-  ///
-  /// In fa, this message translates to:
-  /// **'هنوز شمارشی انجام نشده است.'**
-  String get countHistoryEmpty;
-
-  /// No description provided for @countItemsCount.
-  ///
-  /// In fa, this message translates to:
-  /// **'{count} قلم'**
-  String countItemsCount(int count);
-
-  /// No description provided for @countDiscrepancies.
-  ///
-  /// In fa, this message translates to:
-  /// **'{count} مغایرت'**
-  String countDiscrepancies(int count);
-
-  /// No description provided for @countStatusRunning.
-  ///
-  /// In fa, this message translates to:
-  /// **'در حال انجام'**
-  String get countStatusRunning;
-
-  /// No description provided for @countStatusDone.
-  ///
-  /// In fa, this message translates to:
-  /// **'تمام شد'**
-  String get countStatusDone;
-
-  /// No description provided for @countSeeHistory.
-  ///
-  /// In fa, this message translates to:
-  /// **'تاریخچه شمارش‌ها'**
-  String get countSeeHistory;
-
   /// No description provided for @assistantSuggestionToday.
   ///
   /// In fa, this message translates to:
@@ -1107,12 +903,6 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'درخواست‌های این ماه'**
   String get assistantSuggestionMonth;
-
-  /// No description provided for @assistantSuggestionCount.
-  ///
-  /// In fa, this message translates to:
-  /// **'نتیجه آخرین شمارش'**
-  String get assistantSuggestionCount;
 
   /// No description provided for @assistantInputLabel.
   ///
@@ -1147,7 +937,7 @@ abstract class AppLocalizations {
   /// No description provided for @assistantEmpty.
   ///
   /// In fa, this message translates to:
-  /// **'درباره درخواست‌ها، موجودی و شمارش‌ها از دستیار کاسپین بپرسید.'**
+  /// **'درباره درخواست‌ها و موجودی از دستیار کاسپین بپرسید.'**
   String get assistantEmpty;
 
   /// No description provided for @assistantDemoNote.
@@ -1315,7 +1105,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsNotificationsBody.
   ///
   /// In fa, this message translates to:
-  /// **'خبر درخواست‌های تازه، نتیجه شمارش و پیام‌ها'**
+  /// **'خبر درخواست‌های تازه و پیام‌ها'**
   String get settingsNotificationsBody;
 
   /// No description provided for @settingsFingerprint.
@@ -1339,7 +1129,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsSecureBody.
   ///
   /// In fa, this message translates to:
-  /// **'در صفحه‌های موجودی، درخواست‌ها و شمارش، عکس گرفتن از صفحه ممکن نیست.'**
+  /// **'در صفحه‌های موجودی و درخواست‌ها، عکس گرفتن از صفحه ممکن نیست.'**
   String get settingsSecureBody;
 
   /// No description provided for @settingsPin.
@@ -1432,30 +1222,6 @@ abstract class AppLocalizations {
   /// **'بدون اینترنت'**
   String get scenarioOffline;
 
-  /// No description provided for @devCompleteCount.
-  ///
-  /// In fa, this message translates to:
-  /// **'پایان شمارش در حال انجام'**
-  String get devCompleteCount;
-
-  /// No description provided for @devCompleteCountBody.
-  ///
-  /// In fa, this message translates to:
-  /// **'شبیه‌سازی کار انبار: کارکنان شمارش را تمام می‌کنند.'**
-  String get devCompleteCountBody;
-
-  /// No description provided for @devNoRunningCount.
-  ///
-  /// In fa, this message translates to:
-  /// **'شمارشی در حال انجام نیست.'**
-  String get devNoRunningCount;
-
-  /// No description provided for @devCountCompleted.
-  ///
-  /// In fa, this message translates to:
-  /// **'شمارش تمام شد.'**
-  String get devCountCompleted;
-
   /// No description provided for @devDataSource.
   ///
   /// In fa, this message translates to:
@@ -1497,12 +1263,6 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'درخواست‌ها'**
   String get channelRequests;
-
-  /// No description provided for @channelCounts.
-  ///
-  /// In fa, this message translates to:
-  /// **'شمارش غافلگیرانه'**
-  String get channelCounts;
 
   /// No description provided for @channelMessages.
   ///

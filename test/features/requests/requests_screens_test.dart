@@ -233,11 +233,9 @@ void main() {
       expect(find.text('رد کردن'), findsNothing);
     });
 
-    testWidgets('an item hidden by a count says «در حال شمارش»', (
-      tester,
-    ) async {
+    testWidgets('an item the warehouse is counting says so', (tester) async {
       await pumpAt(tester, '/requests/r-123');
-      expect(find.text('در حال شمارش'), findsOneWidget);
+      expect(find.text('در حال شمارش در انبار'), findsOneWidget);
       expect(find.text('آسانسور باری اسدنژاد – طبقه دوم'), findsOneWidget);
     });
 

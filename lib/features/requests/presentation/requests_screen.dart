@@ -139,20 +139,16 @@ class _RequestsList extends ConsumerWidget {
             Space.page,
             Space.lg,
           ),
-          sliver: SliverList.builder(
+          sliver: CardSliverList(
             itemCount: visible.length,
             itemBuilder: (context, i) {
               final request = visible[i];
-              return CardSegment(
-                first: i == 0,
-                last: i == visible.length - 1,
-                child: RequestTile(
-                  request: request,
-                  queued:
-                      queued.contains(request.id) ||
-                      local[request.id]?.phase == DecisionPhase.queued,
-                  onTap: () => context.push(Routes.request(request.id)),
-                ),
+              return RequestTile(
+                request: request,
+                queued:
+                    queued.contains(request.id) ||
+                    local[request.id]?.phase == DecisionPhase.queued,
+                onTap: () => context.push(Routes.request(request.id)),
               );
             },
           ),

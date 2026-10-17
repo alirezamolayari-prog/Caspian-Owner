@@ -40,12 +40,8 @@ void main() {
       findsOneWidget,
       reason: 'newest request (۱۲۵) first',
     );
-    // The count card is below the fold; scroll like a person would.
-    await tester.scrollUntilVisible(
-      find.text('یک شمارش در حال انجام است'),
-      200,
-    );
-    expect(find.text('یک شمارش در حال انجام است'), findsOneWidget);
+    // Surprise counts were removed in v0.2.0.
+    expect(find.textContaining('شمارش'), findsNothing);
   });
 
   testWidgets('nothing pending: calm empty state', (tester) async {
@@ -53,7 +49,6 @@ void main() {
     expect(find.text('همه درخواست‌ها بررسی شده‌اند'), findsOneWidget);
     expect(find.text('بررسی درخواست‌ها'), findsNothing);
     expect(find.text('هنوز درخواستی ثبت نشده است.'), findsOneWidget);
-    expect(find.text('هنوز شمارشی انجام نشده است.'), findsOneWidget);
   });
 
   testWidgets('server error shows «تلاش دوباره», which recovers', (

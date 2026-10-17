@@ -17,8 +17,6 @@ import 'package:caspian_owner/features/auth/data/mock_auth_repository.dart';
 import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
 import 'package:caspian_owner/features/chat/data/mock_chat_repository.dart';
 import 'package:caspian_owner/features/chat/domain/chat_repository.dart';
-import 'package:caspian_owner/features/count/data/mock_count_repository.dart';
-import 'package:caspian_owner/features/count/domain/count_repository.dart';
 import 'package:caspian_owner/features/reports/data/mock_reports_repository.dart';
 import 'package:caspian_owner/features/reports/domain/reports_repository.dart';
 import 'package:caspian_owner/features/requests/data/mock_requests_repository.dart';
@@ -93,10 +91,6 @@ final chatRepositoryProvider = Provider<ChatRepository>(
 
 final stockRepositoryProvider = Provider<StockRepository>(
   (ref) => _source(ref, MockStockRepository.new),
-);
-
-final countRepositoryProvider = Provider<CountRepository>(
-  (ref) => _source(ref, MockCountRepository.new),
 );
 
 final assistantRepositoryProvider = Provider<AssistantRepository>(

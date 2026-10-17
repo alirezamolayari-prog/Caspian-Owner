@@ -14,7 +14,7 @@ class MockStockRepository implements StockRepository {
         if (_backend.isEmpty) return const <StockItem>[];
         final q = toLatinDigits(query?.trim() ?? '');
         return [
-          for (final item in _backend.visibleStock())
+          for (final item in _backend.stock)
             if ((!lowOnly || item.low) &&
                 (q.isEmpty ||
                     toLatinDigits(item.nameFa).contains(q) ||
