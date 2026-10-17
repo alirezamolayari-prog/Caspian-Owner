@@ -19,7 +19,8 @@ mixin _$AppConfig {
 /// Enabled features, e.g. `assistant`, `reports`.
  List<String> get featureFlags;/// Enabled modules, e.g. `warehouse`. Other Caspian apps plug in here.
  List<String> get modules;/// Builds below this must update before use (blocking update screen).
- int get minSupportedBuild;
+ int get minSupportedBuild;/// Announced modules, shown on the hub as «به‌زودی» (e.g. `parking`).
+ List<String> get upcomingModules;
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -33,20 +34,20 @@ $AppConfigCopyWith<AppConfig> get copyWith => _$AppConfigCopyWithImpl<AppConfig>
 @override
 bool operator ==(Object other) {
   final _this = this as AppConfig;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&const DeepCollectionEquality().equals(other.featureFlags, _this.featureFlags)&&const DeepCollectionEquality().equals(other.modules, _this.modules)&&(identical(other.minSupportedBuild, _this.minSupportedBuild) || other.minSupportedBuild == _this.minSupportedBuild));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&const DeepCollectionEquality().equals(other.featureFlags, _this.featureFlags)&&const DeepCollectionEquality().equals(other.modules, _this.modules)&&(identical(other.minSupportedBuild, _this.minSupportedBuild) || other.minSupportedBuild == _this.minSupportedBuild)&&const DeepCollectionEquality().equals(other.upcomingModules, _this.upcomingModules));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as AppConfig;
-  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.featureFlags),const DeepCollectionEquality().hash(_this.modules),_this.minSupportedBuild);
+  return Object.hash(runtimeType,const DeepCollectionEquality().hash(_this.featureFlags),const DeepCollectionEquality().hash(_this.modules),_this.minSupportedBuild,const DeepCollectionEquality().hash(_this.upcomingModules));
 }
 
 @override
 String toString() {
   final _this = this as AppConfig;
-  return 'AppConfig(featureFlags: ${_this.featureFlags}, modules: ${_this.modules}, minSupportedBuild: ${_this.minSupportedBuild})';
+  return 'AppConfig(featureFlags: ${_this.featureFlags}, modules: ${_this.modules}, minSupportedBuild: ${_this.minSupportedBuild}, upcomingModules: ${_this.upcomingModules})';
 }
 
 
@@ -57,7 +58,7 @@ abstract mixin class $AppConfigCopyWith<$Res>  {
   factory $AppConfigCopyWith(AppConfig value, $Res Function(AppConfig) _then) = _$AppConfigCopyWithImpl;
 @useResult
 $Res call({
- List<String> featureFlags, List<String> modules, int minSupportedBuild
+ List<String> featureFlags, List<String> modules, int minSupportedBuild, List<String> upcomingModules
 });
 
 
@@ -74,12 +75,13 @@ class _$AppConfigCopyWithImpl<$Res>
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? featureFlags = null,Object? modules = null,Object? minSupportedBuild = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? featureFlags = null,Object? modules = null,Object? minSupportedBuild = null,Object? upcomingModules = null,}) {
   return _then(AppConfig(
 featureFlags: null == featureFlags ? _self.featureFlags : featureFlags // ignore: cast_nullable_to_non_nullable
 as List<String>,modules: null == modules ? _self.modules : modules // ignore: cast_nullable_to_non_nullable
 as List<String>,minSupportedBuild: null == minSupportedBuild ? _self.minSupportedBuild : minSupportedBuild // ignore: cast_nullable_to_non_nullable
-as int,
+as int,upcomingModules: null == upcomingModules ? _self.upcomingModules : upcomingModules // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 
@@ -164,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> featureFlags,  List<String> modules,  int minSupportedBuild)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<String> featureFlags,  List<String> modules,  int minSupportedBuild,  List<String> upcomingModules)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppConfig() when $default != null:
-return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild);case _:
+return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild,_that.upcomingModules);case _:
   return orElse();
 
 }
@@ -185,10 +187,10 @@ return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> featureFlags,  List<String> modules,  int minSupportedBuild)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<String> featureFlags,  List<String> modules,  int minSupportedBuild,  List<String> upcomingModules)  $default,) {final _that = this;
 switch (_that) {
 case _AppConfig():
-return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild);case _:
+return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild,_that.upcomingModules);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +207,10 @@ return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> featureFlags,  List<String> modules,  int minSupportedBuild)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<String> featureFlags,  List<String> modules,  int minSupportedBuild,  List<String> upcomingModules)?  $default,) {final _that = this;
 switch (_that) {
 case _AppConfig() when $default != null:
-return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild);case _:
+return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild,_that.upcomingModules);case _:
   return null;
 
 }
@@ -220,7 +222,7 @@ return $default(_that.featureFlags,_that.modules,_that.minSupportedBuild);case _
 @JsonSerializable()
 
 class _AppConfig extends AppConfig {
-  const _AppConfig({required  List<String> featureFlags, required  List<String> modules, required this.minSupportedBuild}): _featureFlags = featureFlags,_modules = modules,super._();
+  const _AppConfig({required  List<String> featureFlags, required  List<String> modules, required this.minSupportedBuild,  List<String> upcomingModules = const <String>[]}): _featureFlags = featureFlags,_modules = modules,_upcomingModules = upcomingModules,super._();
   factory _AppConfig.fromJson(Map<String, dynamic> json) => _$AppConfigFromJson(json);
 
 /// Enabled features, e.g. `assistant`, `reports`.
@@ -243,6 +245,15 @@ class _AppConfig extends AppConfig {
 
 /// Builds below this must update before use (blocking update screen).
 @override final  int minSupportedBuild;
+/// Announced modules, shown on the hub as «به‌زودی» (e.g. `parking`).
+ final  List<String> _upcomingModules;
+/// Announced modules, shown on the hub as «به‌زودی» (e.g. `parking`).
+@override@JsonKey() List<String> get upcomingModules {
+  if (_upcomingModules is EqualUnmodifiableListView) return _upcomingModules;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_upcomingModules);
+}
+
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
@@ -257,18 +268,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppConfig&&const DeepCollectionEquality().equals(other.featureFlags, _featureFlags)&&const DeepCollectionEquality().equals(other.modules, _modules)&&(identical(other.minSupportedBuild, minSupportedBuild) || other.minSupportedBuild == minSupportedBuild));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppConfig&&const DeepCollectionEquality().equals(other.featureFlags, _featureFlags)&&const DeepCollectionEquality().equals(other.modules, _modules)&&(identical(other.minSupportedBuild, minSupportedBuild) || other.minSupportedBuild == minSupportedBuild)&&const DeepCollectionEquality().equals(other.upcomingModules, _upcomingModules));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_featureFlags),const DeepCollectionEquality().hash(_modules),minSupportedBuild);
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_featureFlags),const DeepCollectionEquality().hash(_modules),minSupportedBuild,const DeepCollectionEquality().hash(_upcomingModules));
 }
 
 @override
 String toString() {
-    return 'AppConfig(featureFlags: $featureFlags, modules: $modules, minSupportedBuild: $minSupportedBuild)';
+    return 'AppConfig(featureFlags: $featureFlags, modules: $modules, minSupportedBuild: $minSupportedBuild, upcomingModules: $upcomingModules)';
 }
 
 
@@ -279,7 +290,7 @@ abstract mixin class _$AppConfigCopyWith<$Res> implements $AppConfigCopyWith<$Re
   factory _$AppConfigCopyWith(_AppConfig value, $Res Function(_AppConfig) _then) = __$AppConfigCopyWithImpl;
 @override @useResult
 $Res call({
- List<String> featureFlags, List<String> modules, int minSupportedBuild
+ List<String> featureFlags, List<String> modules, int minSupportedBuild, List<String> upcomingModules
 });
 
 
@@ -296,12 +307,13 @@ class __$AppConfigCopyWithImpl<$Res>
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? featureFlags = null,Object? modules = null,Object? minSupportedBuild = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? featureFlags = null,Object? modules = null,Object? minSupportedBuild = null,Object? upcomingModules = null,}) {
   return _then(_AppConfig(
 featureFlags: null == featureFlags ? _self._featureFlags : featureFlags // ignore: cast_nullable_to_non_nullable
 as List<String>,modules: null == modules ? _self._modules : modules // ignore: cast_nullable_to_non_nullable
 as List<String>,minSupportedBuild: null == minSupportedBuild ? _self.minSupportedBuild : minSupportedBuild // ignore: cast_nullable_to_non_nullable
-as int,
+as int,upcomingModules: null == upcomingModules ? _self._upcomingModules : upcomingModules // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 

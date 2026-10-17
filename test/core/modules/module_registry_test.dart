@@ -6,47 +6,69 @@ import 'package:flutter_test/flutter_test.dart';
 
 String _label(BuildContext _) => '';
 
-class _Warehouse extends AppModule {
-  const new();
+ModuleTab _tab(String path) => ModuleTab(
+  label: _label,
+  icon: const IconData(9),
+  path: path,
+  builder: (_) => const SizedBox(),
+);
+
+/// A module with screens.
+class _Module extends AppModule {
+  const new(this.id, this.paths, this.moreEntries);
 
   @override
-  String get id => 'warehouse';
+  final String id;
+  final List<String> paths;
+  @override
+  final List<MoreEntry> moreEntries;
 
   @override
-  List<MoreEntry> get moreEntries => const [
-    MoreEntry(label: _label, icon: IconData(1), path: '/reports'),
-    MoreEntry(
-      label: _label,
-      icon: IconData(2),
-      path: '/users',
-      adminOnly: true,
-    ),
-    MoreEntry(
-      label: _label,
-      icon: IconData(3),
-      path: '/purchases',
-      requiredFlag: FeatureFlags.purchaseList,
-    ),
-  ];
-}
-
-class _Parking extends AppModule {
-  const new();
-
+  LocalizedText get title => _label;
   @override
-  String get id => 'parking';
-
+  LocalizedText get subtitle => _label;
   @override
-  List<MoreEntry> get moreEntries => const [
-    MoreEntry(label: _label, icon: IconData(4), path: '/parking'),
-  ];
+  IconData get icon => const IconData(1);
+  @override
+  List<ModuleTab> get tabs => [for (final p in paths) _tab(p)];
 }
 
 void main() {
-  const registry = ModuleRegistry([_Warehouse(), _Parking()]);
+  const warehouse = _Module(
+    'warehouse',
+    ['/warehouse', '/requests'],
+    [
+      MoreEntry(label: _label, icon: IconData(1), path: '/reports'),
+      MoreEntry(
+        label: _label,
+        icon: IconData(2),
+        path: '/users',
+        adminOnly: true,
+      ),
+      MoreEntry(
+        label: _label,
+        icon: IconData(3),
+        path: '/purchases',
+        requiredFlag: FeatureFlags.purchaseList,
+      ),
+    ],
+  );
+  const parking = _Module(
+    'parking',
+    ['/parking'],
+    [MoreEntry(label: _label, icon: IconData(4), path: '/parking-report')],
+  );
+  const crm = ComingSoonModule(
+    id: 'crm',
+    title: _label,
+    subtitle: _label,
+    icon: IconData(5),
+  );
+  const registry = ModuleRegistry([warehouse, parking, crm]);
   const config = AppConfig(
     featureFlags: [FeatureFlags.reports],
     modules: ['warehouse'],
+    upcomingModules: ['crm'],
     minSupportedBuild: 1,
   );
   const admin = Owner(id: 'o-1', nameFa: 'علیرضا', isAdmin: true);
@@ -55,8 +77,26 @@ void main() {
   List<String> paths(AppConfig c, Owner o) =>
       registry.moreEntriesFor(c, o).map((e) => e.path).toList();
 
+  List<(String, ModuleAvailability)> tiles(AppConfig c) => [
+    for (final (m, a) in registry.hubTiles(c)) (m.id, a),
+  ];
+
   test('only modules enabled by the server are active', () {
     expect(registry.enabled(config).map((m) => m.id), ['warehouse']);
+  });
+
+  test('the hub shows active modules and announced ones as coming soon', () {
+    expect(tiles(config), [
+      ('warehouse', ModuleAvailability.active),
+      ('crm', ModuleAvailability.comingSoon),
+    ]);
+    // Parking is compiled in, but the server doesn't mention it: hidden.
+  });
+
+  test('a module without screens is never active, even if enabled', () {
+    final enabled = config.copyWith(modules: ['warehouse', 'crm']);
+    expect(tiles(enabled), contains(('crm', ModuleAvailability.comingSoon)));
+    expect(registry.enabled(enabled).map((m) => m.id), ['warehouse']);
   });
 
   test('admin-only entries are hidden from other owners', () {
@@ -71,6 +111,8 @@ void main() {
 
   test('a new module plugs in by being enabled in config', () {
     final both = config.copyWith(modules: ['warehouse', 'parking']);
-    expect(paths(both, owner), ['/reports', '/parking']);
+    expect(paths(both, owner), ['/reports', '/parking-report']);
+    expect(tiles(both).first, ('warehouse', ModuleAvailability.active));
+    expect(tiles(both)[1], ('parking', ModuleAvailability.active));
   });
 }

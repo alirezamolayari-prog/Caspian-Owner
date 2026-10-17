@@ -15,6 +15,9 @@ abstract class AppConfig with _$AppConfig {
 
     /// Builds below this must update before use (blocking update screen).
     required int minSupportedBuild,
+
+    /// Announced modules, shown on the hub as «به‌زودی» (e.g. `parking`).
+    @Default(<String>[]) List<String> upcomingModules,
   }) = _AppConfig;
 
   const new _();

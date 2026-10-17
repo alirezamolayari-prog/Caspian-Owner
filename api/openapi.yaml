@@ -861,6 +861,11 @@ components:
           type: array
           items: { type: string }
           examples: [[warehouse]]
+        upcoming_modules:
+          type: array
+          description: Announced modules the hub shows as «به‌زودی» (coming soon). Optional; empty when absent.
+          items: { type: string }
+          examples: [[parking, crm, services]]
         min_supported_build: { type: integer }
 
     NotificationEventKind:
