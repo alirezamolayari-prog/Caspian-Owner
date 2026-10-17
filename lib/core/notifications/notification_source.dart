@@ -13,4 +13,8 @@ class NotificationBatch {
 /// can replace it without touching the UI.
 abstract interface class NotificationSource {
   Future<NotificationBatch> poll({required DateTime since});
+
+  /// The last 30 days, newest first (`/v1/notifications`), for the list
+  /// behind the Home bell.
+  Future<List<NotificationEvent>> recent({int limit = 50});
 }

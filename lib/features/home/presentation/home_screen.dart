@@ -46,7 +46,7 @@ class HomeScreen extends ConsumerWidget {
           IconButton(
             tooltip: l10n.notificationsTooltip,
             icon: const Icon(AppIcons.notifications),
-            onPressed: () {},
+            onPressed: () => context.push(Routes.notifications),
           ),
           IconButton(
             tooltip: l10n.accountTooltip,

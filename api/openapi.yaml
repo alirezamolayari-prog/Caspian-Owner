@@ -428,6 +428,23 @@ paths:
                     items: { $ref: '#/components/schemas/NotificationEvent' }
                   server_time: { type: string, format: date-time }
 
+  /v1/notifications:
+    get:
+      tags: [notifications]
+      summary: Recent events for the in-app list behind the bell (last 30 days).
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+      responses:
+        '200':
+          description: Events, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/NotificationEvent' }
+
   /v1/app/update:
     get:
       tags: [app]

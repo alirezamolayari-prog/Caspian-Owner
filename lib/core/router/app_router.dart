@@ -17,6 +17,7 @@ import 'package:caspian_owner/features/more/presentation/developer_screen.dart';
 import 'package:caspian_owner/features/more/presentation/more_screen.dart';
 import 'package:caspian_owner/features/more/presentation/purchase_list_screen.dart';
 import 'package:caspian_owner/features/more/presentation/users_screen.dart';
+import 'package:caspian_owner/features/notifications/presentation/notifications_screen.dart';
 import 'package:caspian_owner/features/reports/presentation/reports_screen.dart';
 import 'package:caspian_owner/features/requests/presentation/request_detail_screen.dart';
 import 'package:caspian_owner/features/requests/presentation/requests_screen.dart';
@@ -132,6 +133,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const MoreScreen(),
       ),
       for (final (path, screen) in <(String, Widget)>[
+        (Routes.notifications, const NotificationsScreen()),
         (Routes.reports, const ReportsScreen()),
         (Routes.purchases, const PurchaseListScreen()),
         (Routes.users, const UsersScreen()),

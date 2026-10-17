@@ -18,6 +18,7 @@ abstract final class Routes {
 
   // Pushed screens (no bottom bar).
   static const more = '/more';
+  static const notifications = '/notifications';
   static String request(String id) => '/requests/$id';
   static const reports = '/reports';
   static const purchases = '/purchases';

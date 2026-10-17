@@ -53,4 +53,12 @@ class MockNotificationSource implements NotificationSource {
         ]..sort((a, b) => a.at.compareTo(b.at));
         return NotificationBatch(events: events, serverTime: clock.now());
       });
+
+  @override
+  Future<List<NotificationEvent>> recent({int limit = 50}) async {
+    final batch = await poll(
+      since: clock.now().subtract(const Duration(days: 30)),
+    );
+    return batch.events.reversed.take(limit).toList();
+  }
 }
