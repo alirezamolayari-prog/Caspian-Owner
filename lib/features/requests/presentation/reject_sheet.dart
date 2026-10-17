@@ -8,8 +8,13 @@ Future<String?> showRejectSheet(
   BuildContext context, {
   required String number,
 }) {
+  // Close the keyboard first, or focus (and the keyboard) comes back to the
+  // field under the sheet when it closes.
+  FocusManager.instance.primaryFocus?.unfocus();
   return showModalBottomSheet<String>(
     context: context,
+    // Above the bottom tabs, so the sheet is never cut off.
+    useRootNavigator: true,
     isScrollControlled: true,
     builder: (context) => _RejectSheet(number: number),
   );

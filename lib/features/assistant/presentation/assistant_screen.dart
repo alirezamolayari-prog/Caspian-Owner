@@ -49,11 +49,16 @@ class _AssistantScreenState extends ConsumerState<AssistantScreen> {
 
   Future<void> _showHistory() async {
     final l10n = AppLocalizations.of(context);
+    // Close the keyboard first, or focus (and the keyboard) comes back to the
+    // field under the sheet when it closes.
+    FocusManager.instance.primaryFocus?.unfocus();
     final questions = ref
         .read(assistantControllerProvider.notifier)
         .previousQuestions;
     final picked = await showModalBottomSheet<String>(
       context: context,
+      // Above the bottom tabs, so the sheet is never cut off.
+      useRootNavigator: true,
       builder: (context) => SafeArea(
         child: ListView(
           shrinkWrap: true,

@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/jalali.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/code_text.dart';
 import 'package:caspian_owner/core/widgets/error_message.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
 import 'package:caspian_owner/features/stock/application/stock_providers.dart';
@@ -13,8 +14,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Recent in/out history of one item (UI spec 5.4).
 Future<void> showMovementsSheet(BuildContext context, StockItem item) {
+  // Close the keyboard first, or focus (and the keyboard) comes back to the
+  // field under the sheet when it closes.
+  FocusManager.instance.primaryFocus?.unfocus();
   return showModalBottomSheet<void>(
     context: context,
+    // Above the bottom tabs, so the sheet is never cut off.
+    useRootNavigator: true,
     isScrollControlled: true,
     builder: (context) => DraggableScrollableSheet(
       expand: false,
@@ -46,7 +52,11 @@ class _MovementsSheet extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(Space.lg, 0, Space.lg, Space.lg),
       children: [
         Text(item.nameFa, style: theme.textTheme.titleLarge),
-        Text(l10n.itemCode(item.code), style: theme.textTheme.bodySmall),
+        LabeledCode(
+          label: l10n.itemCodeLabel,
+          code: item.code,
+          style: theme.textTheme.bodySmall,
+        ),
         const SizedBox(height: Space.md),
         Semantics(
           header: true,
