@@ -110,11 +110,17 @@ void main() {
       await tester.tap(find.text('تأیید'));
       await tester.pump();
       expect(h.authenticator.prompts, 2, reason: 'unlock + approve');
+      expect(h.authenticator.lastPrompt!.title, 'تأیید هویت');
+      expect(h.authenticator.lastPrompt!.cancel, 'انصراف');
       await tester.pump();
-      expect(find.text('تأیید شد و به انبار خبر داده شد'), findsWidgets);
+      expect(find.text('تأیید درخواست – ۵ ثانیه تا ارسال'), findsOneWidget);
       expect(find.text('بازگرداندن'), findsOneWidget);
       expect(find.text('رد کردن'), findsNothing, reason: 'bar is hidden');
+      expect(find.byType(SnackBar), findsNothing);
       expect(backendRequest(h, 'r-124').status, RequestStatus.pending);
+
+      await tester.pump(const Duration(seconds: 2));
+      expect(find.text('تأیید درخواست – ۳ ثانیه تا ارسال'), findsOneWidget);
 
       await tester.pump(DecisionController.undoWindow);
       await tester.pumpAndSettle();
@@ -122,19 +128,48 @@ void main() {
       expect(find.textContaining('تأیید شد توسط علیرضا'), findsOneWidget);
     });
 
-    testWidgets('undo brings the buttons back and sends nothing', (
+    testWidgets('the undo bar is gone when the window ends', (tester) async {
+      await pumpAt(tester, '/requests/r-124');
+      await tester.tap(find.text('تأیید'));
+      await tester.pump();
+      await tester.pump(DecisionController.undoWindow);
+      await tester.pumpAndSettle();
+      expect(find.text('بازگرداندن'), findsNothing);
+      expect(find.textContaining('ثانیه تا ارسال'), findsNothing);
+    });
+
+    testWidgets('undo brings the buttons back everywhere and sends nothing', (
       tester,
     ) async {
       final h = await pumpAt(tester, '/requests/r-124');
       await tester.tap(find.text('تأیید'));
       await tester.pump();
-      // Let the snackbar finish sliding in before tapping its action.
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(seconds: 2));
       await tester.tap(find.text('بازگرداندن'));
-      await tester.pump(const Duration(seconds: 6));
-      await tester.pumpAndSettle();
+      await tester.pump();
       expect(find.text('تأیید'), findsOneWidget);
+      expect(find.text('بازگرداندن'), findsNothing);
+
+      await tester.pump(const Duration(seconds: 10));
+      await tester.pumpAndSettle();
       expect(backendRequest(h, 'r-124').status, RequestStatus.pending);
+      expect(find.text('منتظر'), findsOneWidget, reason: 'status chip');
+
+      // The list (and the Home count) still say pending.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('منتظر (۴)'), findsOneWidget);
+    });
+
+    testWidgets('leaving the screen still sends the decision', (tester) async {
+      final h = await pumpAt(tester, '/requests/r-124');
+      await tester.tap(find.text('تأیید'));
+      await tester.pump();
+      await tester.binding.handlePopRoute();
+      await tester.pump(DecisionController.undoWindow);
+      await tester.pumpAndSettle();
+      expect(backendRequest(h, 'r-124').status, RequestStatus.approved);
+      expect(find.text('بازگرداندن'), findsNothing);
     });
 
     testWidgets('reject asks for an optional reason', (tester) async {

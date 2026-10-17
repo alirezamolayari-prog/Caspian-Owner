@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:caspian_owner/core/di/providers.dart';
+import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
+import 'package:clock/clock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Where an owner's decision is, from the tap to the server.
@@ -28,6 +30,7 @@ class LocalDecision {
     required this.phase,
     this.reason,
     this.winner,
+    this.undoUntil,
   });
 
   final DecisionAction action;
@@ -37,12 +40,16 @@ class LocalDecision {
   /// The request as decided by someone else (conflict only).
   final GoodsRequest? winner;
 
+  /// When the undo window ends (undoable only).
+  final DateTime? undoUntil;
+
   LocalDecision copyWith({DecisionPhase? phase, GoodsRequest? winner}) =>
       LocalDecision(
         action: action,
         reason: reason,
         phase: phase ?? this.phase,
         winner: winner ?? this.winner,
+        undoUntil: undoUntil,
       );
 }
 
@@ -72,18 +79,19 @@ class DecisionController extends Notifier<Map<String, LocalDecision>> {
     return const {};
   }
 
-  /// Starts a decision. Returns false if the fingerprint check failed.
+  /// Starts a decision. [fingerprint] (approvals) asks for one touch if that
+  /// setting is on. Returns false if the fingerprint check failed.
   Future<bool> decide({
     required GoodsRequest request,
     required DecisionAction action,
-    required String fingerprintReason,
+    AuthPrompt? fingerprint,
     String? reason,
   }) async {
     final settings = ref.read(settingsControllerProvider);
-    if (action == DecisionAction.approve && settings.fingerprintForApproval) {
+    if (fingerprint != null && settings.fingerprintForApproval) {
       final ok = await ref
           .read(deviceAuthenticatorProvider)
-          .authenticate(fingerprintReason);
+          .authenticate(fingerprint);
       if (!ok) return false;
     }
     _set(
@@ -92,6 +100,7 @@ class DecisionController extends Notifier<Map<String, LocalDecision>> {
         action: action,
         reason: reason,
         phase: DecisionPhase.undoable,
+        undoUntil: clock.now().add(undoWindow),
       ),
     );
     _timers[request.id]?.cancel();
@@ -100,11 +109,13 @@ class DecisionController extends Notifier<Map<String, LocalDecision>> {
   }
 
   /// Cancels a decision within the undo window. Nothing was sent.
-  void undo(String requestId) {
+  /// Returns false when it's too late (already being sent).
+  bool undo(String requestId) {
     final local = state[requestId];
-    if (local == null || local.phase != DecisionPhase.undoable) return;
+    if (local == null || local.phase != DecisionPhase.undoable) return false;
     _timers.remove(requestId)?.cancel();
     _remove(requestId);
+    return true;
   }
 
   /// The owner saw the conflict message.

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
+import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/features/requests/application/decision_controller.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
@@ -54,7 +55,9 @@ void main() {
             request: request(h, 'r-124'),
             action: action,
             reason: reason,
-            fingerprintReason: 'ok?',
+            fingerprint: action == DecisionAction.approve
+                ? const AuthPrompt(title: 't', reason: 'ok?', cancel: 'c')
+                : null,
           ),
     );
     time.flushMicrotasks();
@@ -83,12 +86,38 @@ void main() {
     run((time, c, h) {
       decide(time, c, h, DecisionAction.approve);
       time.elapse(const Duration(seconds: 3));
-      c.read(decisionControllerProvider.notifier).undo('r-124');
+      expect(c.read(decisionControllerProvider.notifier).undo('r-124'), isTrue);
       time
         ..elapse(const Duration(seconds: 10))
         ..flushMicrotasks();
       expect(request(h, 'r-124').status, RequestStatus.pending);
       expect(c.read(decisionControllerProvider), isEmpty);
+    });
+  });
+
+  test('undo after the window is too late and changes nothing', () {
+    run((time, c, h) {
+      decide(time, c, h, DecisionAction.approve);
+      time
+        ..elapse(DecisionController.undoWindow)
+        ..flushMicrotasks();
+      expect(
+        c.read(decisionControllerProvider.notifier).undo('r-124'),
+        isFalse,
+      );
+      expect(request(h, 'r-124').status, RequestStatus.approved);
+    });
+  });
+
+  test('the undo deadline is 5 seconds after the decision', () {
+    run((time, c, h) {
+      final start = DateTime.now();
+      decide(time, c, h, DecisionAction.reject);
+      final until = c.read(decisionControllerProvider)['r-124']!.undoUntil!;
+      expect(
+        until.difference(start).inMilliseconds,
+        closeTo(DecisionController.undoWindow.inMilliseconds, 1000),
+      );
     });
   });
 
