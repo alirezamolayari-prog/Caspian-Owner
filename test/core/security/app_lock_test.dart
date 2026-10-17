@@ -1,4 +1,5 @@
 import 'package:caspian_owner/core/security/app_lock.dart';
+import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:clock/clock.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/test_app.dart';
+
+const _prompt = AuthPrompt(title: 't', reason: 'r', cancel: 'c');
 
 void main() {
   late TestHarness harness;
@@ -42,20 +45,20 @@ void main() {
 
   test('fingerprint unlocks', () async {
     await setUpWith();
-    expect(await lock().unlockWithDevice('reason'), isTrue);
+    expect(await lock().unlockWithDevice(_prompt), isTrue);
     expect(state().locked, isFalse);
   });
 
   test('a failed fingerprint stays locked', () async {
     await setUpWith();
     harness.authenticator.succeeds = false;
-    expect(await lock().unlockWithDevice('reason'), isFalse);
+    expect(await lock().unlockWithDevice(_prompt), isFalse);
     expect(state().locked, isTrue);
   });
 
   test('relocks after 5 minutes in the background, not before', () async {
     await setUpWith();
-    await lock().unlockWithDevice('reason');
+    await lock().unlockWithDevice(_prompt);
     final start = DateTime(2026, 10, 12, 12);
 
     withClock(Clock.fixed(start), lock().onBackgrounded);

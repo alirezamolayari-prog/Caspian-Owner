@@ -1,4 +1,5 @@
 import 'package:caspian_owner/core/di/providers.dart';
+import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/security/pin_hasher.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
@@ -90,8 +91,8 @@ class AppLockController extends Notifier<LockState> {
   }
 
   /// Fingerprint, face or the phone's own PIN. True when unlocked.
-  Future<bool> unlockWithDevice(String reason) async {
-    final ok = await ref.read(deviceAuthenticatorProvider).authenticate(reason);
+  Future<bool> unlockWithDevice(AuthPrompt prompt) async {
+    final ok = await ref.read(deviceAuthenticatorProvider).authenticate(prompt);
     if (ok) {
       state = state.copyWith(locked: false, pinAttemptsLeft: maxPinAttempts);
     }
