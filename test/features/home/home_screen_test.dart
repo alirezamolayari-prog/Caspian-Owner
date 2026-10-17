@@ -23,6 +23,9 @@ void main() {
     addTearDown(harness.database.close);
     await tester.pumpWidget(harness.app());
     await tester.pumpAndSettle();
+    // The app opens on the hub; Home is the warehouse module's first tab.
+    await tester.tap(find.text('انبار'));
+    await tester.pumpAndSettle();
     return harness;
   }
 

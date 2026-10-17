@@ -36,6 +36,8 @@ void main() {
 
   for (final location in [
     '/',
+    '/warehouse',
+    '/m/parking',
     '/requests',
     '/requests/r-124',
     '/stock',

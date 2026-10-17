@@ -472,6 +472,78 @@ abstract class AppLocalizations {
   /// **'این بخش به‌زودی آماده می‌شود.'**
   String get comingSoon;
 
+  /// No description provided for @backToHub.
+  ///
+  /// In fa, this message translates to:
+  /// **'همه بخش‌های کاسپین'**
+  String get backToHub;
+
+  /// No description provided for @hubPendingBadge.
+  ///
+  /// In fa, this message translates to:
+  /// **'{count} منتظر'**
+  String hubPendingBadge(String count);
+
+  /// No description provided for @moduleWarehouse.
+  ///
+  /// In fa, this message translates to:
+  /// **'انبار'**
+  String get moduleWarehouse;
+
+  /// No description provided for @moduleWarehouseSubtitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست‌ها، موجودی و دستیار'**
+  String get moduleWarehouseSubtitle;
+
+  /// No description provided for @moduleParking.
+  ///
+  /// In fa, this message translates to:
+  /// **'پارکینگ'**
+  String get moduleParking;
+
+  /// No description provided for @moduleParkingSubtitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود و خروج و جای پارک'**
+  String get moduleParkingSubtitle;
+
+  /// No description provided for @moduleCrm.
+  ///
+  /// In fa, this message translates to:
+  /// **'CRM'**
+  String get moduleCrm;
+
+  /// No description provided for @moduleCrmSubtitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'مشتریان و پیگیری‌ها'**
+  String get moduleCrmSubtitle;
+
+  /// No description provided for @moduleServices.
+  ///
+  /// In fa, this message translates to:
+  /// **'خدمات کاسپین'**
+  String get moduleServices;
+
+  /// No description provided for @moduleServicesSubtitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'تعمیرات و خدمات مجتمع'**
+  String get moduleServicesSubtitle;
+
+  /// No description provided for @moduleComingSoonTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'{name} به‌زودی'**
+  String moduleComingSoonTitle(String name);
+
+  /// No description provided for @moduleComingSoonBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'این بخش هنوز ساخته نشده است. وقتی آماده شود، اینجا بخشی از آن برای شما باز می‌شود: تأییدها، گزارش کلی و گفتگو.'**
+  String get moduleComingSoonBody;
+
   /// No description provided for @homePendingTitle.
   ///
   /// In fa, this message translates to:

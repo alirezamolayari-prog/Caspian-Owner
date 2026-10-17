@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/features/auth/presentation/lock_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
 import 'package:caspian_owner/features/home/presentation/home_screen.dart';
+import 'package:caspian_owner/features/hub/presentation/hub_screen.dart';
 import 'package:caspian_owner/features/requests/presentation/request_detail_screen.dart';
 import 'package:caspian_owner/features/stock/presentation/stock_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,9 @@ void main() {
     return harness;
   }
 
-  testWidgets('login with phone and test code leads to Home', (tester) async {
+  testWidgets('login with phone and test code leads to the hub', (
+    tester,
+  ) async {
     final harness = await pumpApp(tester);
     expect(find.byType(LoginScreen), findsOneWidget);
 
@@ -42,7 +45,7 @@ void main() {
     await tester.tap(find.text('ورود'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.byType(HubScreen), findsOneWidget);
     expect(find.text('سلام علیرضا'), findsOneWidget);
     // Signing in with a code doesn't ask for the fingerprint again.
     expect(find.byType(LockScreen), findsNothing);
@@ -79,7 +82,7 @@ void main() {
   ) async {
     final harness = await pumpApp(tester, signedIn: true);
     expect(harness.authenticator.prompts, 1);
-    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.byType(HubScreen), findsOneWidget);
   });
 
   testWidgets('a deep link while locked opens after unlocking', (tester) async {
@@ -114,6 +117,9 @@ void main() {
     tester,
   ) async {
     await pumpApp(tester, signedIn: true);
+    await tester.tap(find.text('انبار'));
+    await tester.pumpAndSettle();
+    expect(find.byType(HomeScreen), findsOneWidget);
     expect(find.byType(NavigationDestination), findsNWidgets(4));
 
     await tester.tap(find.text('موجودی'));

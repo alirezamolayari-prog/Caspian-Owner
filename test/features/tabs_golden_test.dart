@@ -1,19 +1,25 @@
 import 'dart:async';
 
 import 'package:alchemist/alchemist.dart';
+import 'package:caspian_owner/core/domain/app_config.dart';
 import 'package:caspian_owner/core/domain/person.dart';
 import 'package:caspian_owner/core/domain/place.dart';
+import 'package:caspian_owner/core/modules/module_providers.dart';
+import 'package:caspian_owner/core/router/app_shell.dart';
 import 'package:caspian_owner/core/storage/cached_fetch.dart';
 import 'package:caspian_owner/features/assistant/application/assistant_controller.dart';
 import 'package:caspian_owner/features/assistant/domain/assistant_message.dart';
 import 'package:caspian_owner/features/assistant/presentation/assistant_screen.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
+import 'package:caspian_owner/features/home/application/home_controller.dart';
+import 'package:caspian_owner/features/hub/presentation/hub_screen.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/requests/presentation/requests_screen.dart';
 import 'package:caspian_owner/features/stock/application/stock_providers.dart';
 import 'package:caspian_owner/features/stock/domain/stock.dart';
 import 'package:caspian_owner/features/stock/presentation/stock_screen.dart';
+import 'package:caspian_owner/features/warehouse_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -162,14 +168,33 @@ final List<Override> _overrides = [
   queuedRequestIdsProvider.overrideWith((ref) => Stream.value(<String>{})),
   stockControllerProvider.overrideWith(_FixedStock.new),
   assistantControllerProvider.overrideWith(_FixedAssistant.new),
+  appConfigProvider.overrideWithValue(
+    const AsyncData(
+      AppConfig(
+        featureFlags: [],
+        modules: ['warehouse'],
+        upcomingModules: ['parking', 'crm', 'services'],
+        minSupportedBuild: 1,
+      ),
+    ),
+  ),
+  homeControllerProvider.overrideWith(_FixedHome.new),
 ];
+
+class _FixedHome extends HomeController {
+  @override
+  Future<HomeData> build() async => const HomeData(pendingCount: 3, latest: []);
+}
 
 Widget _screen(Widget screen, ThemeMode mode) => SizedBox(
   width: 400,
   height: 760,
   child: ProviderScope(
     overrides: _overrides,
-    child: themedApp(screen, themeMode: mode),
+    child: themedApp(
+      ModuleScope(module: const WarehouseModule(), child: screen),
+      themeMode: mode,
+    ),
   ),
 );
 
@@ -178,6 +203,7 @@ void main() {
     ('requests', const RequestsScreen()),
     ('stock', const StockScreen()),
     ('assistant', const AssistantScreen()),
+    ('hub', const HubScreen()),
   ]) {
     unawaited(
       goldenTest(

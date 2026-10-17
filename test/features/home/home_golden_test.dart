@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:alchemist/alchemist.dart';
 import 'package:caspian_owner/core/domain/person.dart';
 import 'package:caspian_owner/core/domain/place.dart';
+import 'package:caspian_owner/core/router/app_shell.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/home/presentation/home_screen.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
+import 'package:caspian_owner/features/warehouse_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -92,7 +94,10 @@ Widget _home(ThemeMode mode, {HomeData? data}) => SizedBox(
       initialSessionProvider.overrideWithValue(testSession()),
       homeControllerProvider.overrideWith(() => _FixedHome(data ?? _data())),
     ],
-    child: themedApp(const HomeScreen(), themeMode: mode),
+    child: themedApp(
+      const ModuleScope(module: WarehouseModule(), child: HomeScreen()),
+      themeMode: mode,
+    ),
   ),
 );
 

@@ -1,5 +1,6 @@
 {
   "feature_flags": ["assistant", "reports"],
   "modules": ["warehouse"],
+  "upcoming_modules": ["parking", "crm", "services"],
   "min_supported_build": 1
 }

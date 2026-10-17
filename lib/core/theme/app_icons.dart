@@ -34,6 +34,13 @@ abstract final class AppIcons {
   static const IconData check = Symbols.check_rounded;
   static const IconData count = Symbols.fact_check_rounded;
 
+  // Hub and modules
+  static const IconData hub = Symbols.apps_rounded;
+  static const IconData warehouse = Symbols.warehouse_rounded;
+  static const IconData parking = Symbols.local_parking_rounded;
+  static const IconData crm = Symbols.handshake_rounded;
+  static const IconData services = Symbols.home_repair_service_rounded;
+
   // Bottom tabs
   static const IconData home = Symbols.home_rounded;
   static const IconData requests = Symbols.assignment_rounded;

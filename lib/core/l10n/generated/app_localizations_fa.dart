@@ -246,6 +246,47 @@ class AppLocalizationsFa extends AppLocalizations {
   String get comingSoon => 'این بخش به‌زودی آماده می‌شود.';
 
   @override
+  String get backToHub => 'همه بخش‌های کاسپین';
+
+  @override
+  String hubPendingBadge(String count) {
+    return '$count منتظر';
+  }
+
+  @override
+  String get moduleWarehouse => 'انبار';
+
+  @override
+  String get moduleWarehouseSubtitle => 'درخواست‌ها، موجودی و دستیار';
+
+  @override
+  String get moduleParking => 'پارکینگ';
+
+  @override
+  String get moduleParkingSubtitle => 'ورود و خروج و جای پارک';
+
+  @override
+  String get moduleCrm => 'CRM';
+
+  @override
+  String get moduleCrmSubtitle => 'مشتریان و پیگیری‌ها';
+
+  @override
+  String get moduleServices => 'خدمات کاسپین';
+
+  @override
+  String get moduleServicesSubtitle => 'تعمیرات و خدمات مجتمع';
+
+  @override
+  String moduleComingSoonTitle(String name) {
+    return '$name به‌زودی';
+  }
+
+  @override
+  String get moduleComingSoonBody =>
+      'این بخش هنوز ساخته نشده است. وقتی آماده شود، اینجا بخشی از آن برای شما باز می‌شود: تأییدها، گزارش کلی و گفتگو.';
+
+  @override
   String get homePendingTitle => 'منتظر تأیید شما';
 
   @override
