@@ -12,11 +12,12 @@ import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/utils/relative_time.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
-import 'package:caspian_owner/features/chat/presentation/request_chat_card.dart';
+import 'package:caspian_owner/features/chat/presentation/request_chat_tile.dart';
 import 'package:caspian_owner/features/requests/application/decision_controller.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/requests/presentation/reject_sheet.dart';
+import 'package:caspian_owner/features/requests/presentation/return_for_edit_sheet.dart';
 import 'package:caspian_owner/features/requests/presentation/widgets/request_status_chip.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,8 @@ class RequestDetailScreen extends ConsumerWidget {
     final request = detail.value?.value;
     final canAct =
         request != null && request.canDecide && local == null && !queued;
+    final canReturn =
+        request != null && request.canReturnForEdit && local == null && !queued;
 
     return SecureScreenScope(
       child: Scaffold(
@@ -85,6 +88,7 @@ class RequestDetailScreen extends ConsumerWidget {
             decision: local,
           ),
           _ when canAct => _DecisionBar(request: request),
+          _ when canReturn => _ReturnBar(request: request),
           _ => null,
         },
       ),
@@ -97,16 +101,17 @@ class RequestDetailScreen extends ConsumerWidget {
     GoodsRequest winner,
   ) async {
     final l10n = AppLocalizations.of(context);
-    final name = winner.decidedBy?.nameFa ?? '';
+    final name =
+        winner.returnedForEdit?.by.nameFa ?? winner.decidedBy?.nameFa ?? '';
     await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.conflictTitle),
-        content: Text(
-          winner.status == RequestStatus.rejected
-              ? l10n.conflictRejected(name)
-              : l10n.conflictApproved(name),
-        ),
+        content: Text(switch (winner.status) {
+          RequestStatus.returned => l10n.conflictReturned(name),
+          RequestStatus.rejected => l10n.conflictRejected(name),
+          _ => l10n.conflictApproved(name),
+        }),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -234,7 +239,7 @@ class _DetailBody extends ConsumerWidget {
         const SizedBox(height: Space.md),
         _LocationHistoryCard(history: request.locationHistory ?? const []),
         const SizedBox(height: Space.md),
-        RequestChatCard(requestId: request.id),
+        RequestChatTile(requestId: request.id, summary: request.chatSummary),
       ],
     );
   }
@@ -291,6 +296,44 @@ class _DecisionBanner extends StatelessWidget {
         scheme.onErrorContainer,
         AppIcons.rejected,
       ),
+      (LocalDecision(action: DecisionAction.returnForEdit), _, _) => (
+        l10n.returnedDone,
+        null,
+        scheme.surfaceContainer,
+        scheme.onSurface,
+        AppIcons.returned,
+      ),
+      (
+        null,
+        false,
+        GoodsRequest(status: RequestStatus.returned, :final returnedForEdit?),
+      ) =>
+        (
+          l10n.returnedBy(
+            returnedForEdit.by.nameFa,
+            formatRelativeTime(
+              returnedForEdit.at,
+              now: clock.now(),
+              l10n: l10n,
+            ),
+          ),
+          [
+            for (final line in returnedForEdit.lines)
+              if (line.removed)
+                l10n.returnedLineRemoved(line.itemNameFa)
+              else if (line.newQty != line.oldQty)
+                l10n.returnedLineChange(
+                  line.itemNameFa,
+                  formatNumber(line.oldQty),
+                  formatNumber(line.newQty),
+                  line.unitFa,
+                ),
+            if (returnedForEdit.note case final note?) l10n.returnedNote(note),
+          ].join('\n'),
+          scheme.surfaceContainer,
+          scheme.onSurface,
+          AppIcons.returned,
+        ),
       (null, false, GoodsRequest(isDecided: true, :final decidedBy?)) => (
         _decidedText(l10n, request, decidedBy),
         request.decisionReason == null
@@ -605,9 +648,11 @@ class _UndoBarState extends ConsumerState<_UndoBar> {
     final l10n = AppLocalizations.of(context);
     final scheme = Theme.of(context).colorScheme;
     final seconds = toPersianDigits('$_secondsLeft');
-    final message = widget.decision.action == DecisionAction.approve
-        ? l10n.undoApprovePending(seconds)
-        : l10n.undoRejectPending(seconds);
+    final message = switch (widget.decision.action) {
+      DecisionAction.approve => l10n.undoApprovePending(seconds),
+      DecisionAction.reject => l10n.undoRejectPending(seconds),
+      DecisionAction.returnForEdit => l10n.undoReturnPending(seconds),
+    };
     return SafeArea(
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -643,6 +688,51 @@ class _UndoBarState extends ConsumerState<_UndoBar> {
                 child: Text(l10n.undo),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// On a rejected request: «ویرایش و برگرداندن» opens the edit sheet; the
+/// request then goes back to the requester (5 seconds to undo, no
+/// fingerprint: it isn't an approval).
+class _ReturnBar extends ConsumerWidget {
+  const new({required this.request});
+
+  final GoodsRequest request;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final scheme = Theme.of(context).colorScheme;
+
+    Future<void> edit() async {
+      final result = await showReturnForEditSheet(context, request: request);
+      if (result == null || !context.mounted) return;
+      await ref
+          .read(decisionControllerProvider.notifier)
+          .decide(
+            request: request,
+            action: DecisionAction.returnForEdit,
+            lines: result.lines,
+            note: result.note,
+          );
+    }
+
+    return SafeArea(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: scheme.surface,
+          border: Border(top: BorderSide(color: scheme.outlineVariant)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(Space.md),
+          child: FilledButton.tonalIcon(
+            onPressed: edit,
+            icon: const Icon(AppIcons.edit),
+            label: Text(l10n.returnForEdit),
           ),
         ),
       ),

@@ -181,7 +181,7 @@ paths:
   /v1/requests/{id}/decision:
     post:
       tags: [requests]
-      summary: Approve or reject an escalated request. The first decision wins.
+      summary: Approve or reject an escalated request, or send a rejected one back for changes. The first decision wins.
       parameters:
         - $ref: '#/components/parameters/Id'
         - $ref: '#/components/parameters/DeviceId'
@@ -208,12 +208,19 @@ paths:
   /v1/requests/{id}/messages:
     get:
       tags: [chat]
-      summary: Chat about one request, oldest first.
+      summary: Chat about one request, in pages. Each page is oldest first.
+      description: Without `before`, the newest page. With `before` (a message id), the messages just older than it. A page shorter than `limit` means there is nothing older.
       parameters:
         - $ref: '#/components/parameters/Id'
         - name: since
           in: query
           schema: { type: string, format: date-time }
+        - name: before
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 30 }
       responses:
         '200':
           description: Messages.
@@ -632,7 +639,8 @@ components:
 
     RequestStatus:
       type: string
-      enum: [pending, approved, rejected, cancelled]
+      description: returned = a rejected request an owner sent back to the requester for changes (v0.2.0).
+      enum: [pending, approved, rejected, cancelled, returned]
 
     EscalationReason:
       type: string
@@ -692,15 +700,78 @@ components:
           type: array
           items: { $ref: '#/components/schemas/LocationUsage' }
           description: Only in GET /v1/requests/{id}.
+        chat_summary:
+          description: Only in GET /v1/requests/{id}. The chat at a glance, for the «گفتگو» tile.
+          oneOf:
+            - $ref: '#/components/schemas/ChatSummary'
+            - type: 'null'
+        returned_for_edit:
+          description: Set when status is returned.
+          oneOf:
+            - $ref: '#/components/schemas/ReturnedForEdit'
+            - type: 'null'
+
+    ChatSummary:
+      type: object
+      required: [count]
+      properties:
+        count: { type: integer, minimum: 0 }
+        last:
+          oneOf:
+            - $ref: '#/components/schemas/ChatMessage'
+            - type: 'null'
+
+    ReturnedLine:
+      type: object
+      required: [item_code, item_name_fa, unit_fa, old_qty, new_qty]
+      properties:
+        item_code: { type: string }
+        item_name_fa: { type: string }
+        unit_fa: { type: string }
+        old_qty: { type: number }
+        new_qty:
+          type: number
+          minimum: 0
+          description: The owner's suggestion, at most old_qty. 0 = drop the line.
+
+    ReturnedForEdit:
+      type: object
+      required: [by, at, lines]
+      properties:
+        by: { $ref: '#/components/schemas/DecidedBy' }
+        at: { type: string, format: date-time }
+        note: { type: [string, 'null'] }
+        lines:
+          type: array
+          items: { $ref: '#/components/schemas/ReturnedLine' }
+
+    DecisionLine:
+      type: object
+      required: [item_code, qty]
+      properties:
+        item_code: { type: string }
+        qty: { type: number, minimum: 0 }
 
     Decision:
       type: object
       required: [request_id, action, idempotency_key]
       properties:
         request_id: { type: string }
-        action: { type: string, enum: [approve, reject] }
+        action:
+          type: string
+          enum: [approve, reject, return_for_edit]
+          description: return_for_edit sends a rejected request back to the requester with suggested quantities (v0.2.0). Accepted only while the request is still rejected; otherwise 409 with the request as it is now (first owner wins).
         reason: { type: [string, 'null'] }
         idempotency_key: { type: string }
+        lines:
+          description: return_for_edit only. Every line with its suggested quantity (0..requested; at least one above 0).
+          oneOf:
+            - type: array
+              items: { $ref: '#/components/schemas/DecisionLine' }
+            - type: 'null'
+        note:
+          description: return_for_edit only. A note for the requester.
+          type: [string, 'null']
 
     AlreadyDecided:
       type: object

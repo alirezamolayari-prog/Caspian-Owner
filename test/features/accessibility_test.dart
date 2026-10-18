@@ -40,6 +40,8 @@ void main() {
     '/m/parking',
     '/requests',
     '/requests/r-124',
+    '/requests/r-119',
+    '/requests/r-121/chat',
     '/stock',
     '/assistant',
     '/more',
@@ -56,6 +58,31 @@ void main() {
       semantics.dispose();
     });
   }
+
+  testWidgets('the send-back sheet meets the accessibility guidelines', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await pumpAt(tester, '/requests/r-119');
+    await tester.tap(find.text('ویرایش و برگرداندن'));
+    await tester.pumpAndSettle();
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(textContrastGuideline));
+    semantics.dispose();
+  });
+
+  testWidgets('the chat page and send-back sheet work at the largest font', (
+    tester,
+  ) async {
+    await pumpAt(tester, '/requests/r-121/chat', textScale: 2);
+    expect(tester.takeException(), isNull);
+    await pumpAt(tester, '/requests/r-119', textScale: 2);
+    await tester.tap(find.text('ویرایش و برگرداندن'));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.text('ارسال برای اصلاح'), findsOneWidget);
+  });
 
   testWidgets('request detail works at the largest font size', (tester) async {
     await pumpAt(tester, '/requests/r-124', textScale: 2);

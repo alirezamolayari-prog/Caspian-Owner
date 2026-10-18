@@ -10,12 +10,19 @@ abstract final class AppIcons {
   static const IconData rejected = Symbols.cancel_rounded;
   static const IconData cancelled = Symbols.block_rounded;
   static const IconData queued = Symbols.schedule_send_rounded;
+  static const IconData returned = Symbols.undo_rounded;
+  static const IconData edit = Symbols.edit_rounded;
+  static const IconData add = Symbols.add_rounded;
+  static const IconData remove = Symbols.remove_rounded;
+  static const IconData delete = Symbols.delete_rounded;
+  static const IconData newest = Symbols.keyboard_double_arrow_down_rounded;
 
   // Request detail
   static const IconData place = Symbols.location_on_rounded;
   static const IconData history = Symbols.history_rounded;
   static const IconData send = Symbols.send_rounded;
   static const IconData chat = Symbols.chat_rounded;
+  static const IconData forward = Symbols.chevron_right_rounded;
 
   // Stock
   static const IconData low = Symbols.warning_rounded;

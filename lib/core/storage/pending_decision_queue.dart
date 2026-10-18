@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:caspian_owner/core/network/api_exception.dart';
 import 'package:caspian_owner/core/storage/app_database.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
@@ -39,11 +41,15 @@ class PendingDecisionQueue {
     required String requestId,
     required DecisionAction action,
     String? reason,
+    List<DecisionLine>? lines,
+    String? note,
   }) async {
     final decision = Decision(
       requestId: requestId,
       action: action,
       reason: reason,
+      lines: lines,
+      note: note,
       idempotencyKey: _uuid.v4(),
     );
     await _db
@@ -53,6 +59,17 @@ class PendingDecisionQueue {
             requestId: requestId,
             action: action.name,
             reason: Value(reason),
+            payload: Value(
+              lines == null && note == null
+                  ? null
+                  : jsonEncode({
+                      'lines': [
+                        for (final l in lines ?? const <DecisionLine>[])
+                          l.toJson(),
+                      ],
+                      'note': note,
+                    }),
+            ),
             idempotencyKey: decision.idempotencyKey,
             createdAt: clock.now(),
           ),
@@ -116,10 +133,23 @@ class PendingDecisionQueue {
         updates: {_db.pendingDecisions},
       );
 
-  Decision _toDecision(PendingDecision row) => Decision(
-    requestId: row.requestId,
-    action: DecisionAction.values.byName(row.action),
-    reason: row.reason,
-    idempotencyKey: row.idempotencyKey,
-  );
+  Decision _toDecision(PendingDecision row) {
+    final payload = row.payload == null
+        ? null
+        : jsonDecode(row.payload!) as Map<String, Object?>;
+    return Decision(
+      requestId: row.requestId,
+      action: DecisionAction.values.byName(row.action),
+      reason: row.reason,
+      idempotencyKey: row.idempotencyKey,
+      lines: switch (payload?['lines']) {
+        final List<Object?> lines => [
+          for (final l in lines)
+            DecisionLine.fromJson(l! as Map<String, Object?>),
+        ],
+        _ => null,
+      },
+      note: payload?['note'] as String?,
+    );
+  }
 }

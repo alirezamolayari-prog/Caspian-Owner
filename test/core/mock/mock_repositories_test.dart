@@ -5,6 +5,7 @@ import 'package:caspian_owner/core/notifications/notification_event.dart';
 import 'package:caspian_owner/features/assistant/data/mock_assistant_repository.dart';
 import 'package:caspian_owner/features/auth/data/mock_auth_repository.dart';
 import 'package:caspian_owner/features/chat/data/mock_chat_repository.dart';
+import 'package:caspian_owner/features/chat/domain/chat_repository.dart';
 import 'package:caspian_owner/features/reports/data/mock_reports_repository.dart';
 import 'package:caspian_owner/features/reports/domain/consumption_report.dart';
 import 'package:caspian_owner/features/requests/data/mock_requests_repository.dart';
@@ -240,6 +241,16 @@ void main() {
       final messages = await repo.messages('r-123');
       expect(messages.where((m) => m.text == 'سلام'), hasLength(1));
       expect(messages.last.author.isMe, isTrue);
+    });
+
+    test('long chats come in pages, oldest first in each page', () async {
+      final repo = MockChatRepository(backend);
+      final newest = await repo.messages('r-121');
+      expect(newest, hasLength(ChatRepository.pageSize));
+      final older = await repo.messages('r-121', before: newest.first.id);
+      expect(older.last.sentAt.isBefore(newest.first.sentAt), isTrue);
+      final oldest = await repo.messages('r-121', before: older.first.id);
+      expect(oldest.length, lessThan(ChatRepository.pageSize));
     });
 
     test('assistant answers suggestion chips from canned answers', () async {

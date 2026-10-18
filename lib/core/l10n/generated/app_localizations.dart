@@ -166,6 +166,12 @@ abstract class AppLocalizations {
   /// **'لغو شد'**
   String get statusCancelled;
 
+  /// No description provided for @statusReturned.
+  ///
+  /// In fa, this message translates to:
+  /// **'برگشت برای اصلاح'**
+  String get statusReturned;
+
   /// Chip on stock rows that are running low.
   ///
   /// In fa, this message translates to:
@@ -844,17 +850,184 @@ abstract class AppLocalizations {
   /// **'{date} – حواله {document}'**
   String historyMeta(String date, String document);
 
-  /// No description provided for @chatTitle.
-  ///
-  /// In fa, this message translates to:
-  /// **'گفتگو درباره این درخواست'**
-  String get chatTitle;
-
   /// No description provided for @chatEmpty.
   ///
   /// In fa, this message translates to:
   /// **'هنوز پیامی نیست.'**
   String get chatEmpty;
+
+  /// No description provided for @chatYou.
+  ///
+  /// In fa, this message translates to:
+  /// **'شما'**
+  String get chatYou;
+
+  /// No description provided for @chatTileTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'گفتگو'**
+  String get chatTileTitle;
+
+  /// No description provided for @chatTileTitleCount.
+  ///
+  /// In fa, this message translates to:
+  /// **'گفتگو – {count} پیام'**
+  String chatTileTitleCount(String count);
+
+  /// No description provided for @chatLastMessage.
+  ///
+  /// In fa, this message translates to:
+  /// **'{name}: {text} – {time}'**
+  String chatLastMessage(String name, String text, String time);
+
+  /// No description provided for @chatUnread.
+  ///
+  /// In fa, this message translates to:
+  /// **'پیام تازه'**
+  String get chatUnread;
+
+  /// No description provided for @chatScreenTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'گفتگو – درخواست {number}'**
+  String chatScreenTitle(String number);
+
+  /// No description provided for @chatJumpToNewest.
+  ///
+  /// In fa, this message translates to:
+  /// **'جدیدترین'**
+  String get chatJumpToNewest;
+
+  /// No description provided for @chatLoadingOlder.
+  ///
+  /// In fa, this message translates to:
+  /// **'در حال آوردن پیام‌های قدیمی‌تر'**
+  String get chatLoadingOlder;
+
+  /// No description provided for @chatSending.
+  ///
+  /// In fa, this message translates to:
+  /// **'در حال فرستادن…'**
+  String get chatSending;
+
+  /// No description provided for @returnForEdit.
+  ///
+  /// In fa, this message translates to:
+  /// **'ویرایش و برگرداندن'**
+  String get returnForEdit;
+
+  /// No description provided for @returnSheetTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'ویرایش و برگرداندن درخواست {number}'**
+  String returnSheetTitle(String number);
+
+  /// No description provided for @returnSheetHelp.
+  ///
+  /// In fa, this message translates to:
+  /// **'مقدار هر قلم را کم کنید یا قلمی را حذف کنید. درخواست با پیشنهاد شما به درخواست‌کننده برمی‌گردد تا اصلاح کند و دوباره بفرستد.'**
+  String get returnSheetHelp;
+
+  /// No description provided for @returnRequested.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواستی: {qty} {unit}'**
+  String returnRequested(String qty, String unit);
+
+  /// No description provided for @returnLess.
+  ///
+  /// In fa, this message translates to:
+  /// **'کمتر – {item}'**
+  String returnLess(String item);
+
+  /// No description provided for @returnMore.
+  ///
+  /// In fa, this message translates to:
+  /// **'بیشتر – {item}'**
+  String returnMore(String item);
+
+  /// No description provided for @returnLineRemove.
+  ///
+  /// In fa, this message translates to:
+  /// **'حذف قلم'**
+  String get returnLineRemove;
+
+  /// No description provided for @returnLineRemoved.
+  ///
+  /// In fa, this message translates to:
+  /// **'این قلم حذف می‌شود.'**
+  String get returnLineRemoved;
+
+  /// No description provided for @returnLineRestore.
+  ///
+  /// In fa, this message translates to:
+  /// **'بازگرداندن قلم'**
+  String get returnLineRestore;
+
+  /// No description provided for @returnNoteLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'یادداشت برای درخواست‌کننده (اختیاری)'**
+  String get returnNoteLabel;
+
+  /// No description provided for @returnNoteHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'مثلاً: نصف این مقدار کافی است'**
+  String get returnNoteHint;
+
+  /// No description provided for @returnSend.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال برای اصلاح'**
+  String get returnSend;
+
+  /// No description provided for @undoReturnPending.
+  ///
+  /// In fa, this message translates to:
+  /// **'برگرداندن برای اصلاح – {seconds} ثانیه تا ارسال'**
+  String undoReturnPending(String seconds);
+
+  /// No description provided for @returnedDone.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای اصلاح به درخواست‌کننده برگشت داده شد'**
+  String get returnedDone;
+
+  /// No description provided for @returnedBy.
+  ///
+  /// In fa, this message translates to:
+  /// **'برگشت برای اصلاح توسط {name} – {time}'**
+  String returnedBy(String name, String time);
+
+  /// No description provided for @returnedLineChange.
+  ///
+  /// In fa, this message translates to:
+  /// **'{item}: {before} ← {after} {unit}'**
+  String returnedLineChange(
+    String item,
+    String before,
+    String after,
+    String unit,
+  );
+
+  /// No description provided for @returnedLineRemoved.
+  ///
+  /// In fa, this message translates to:
+  /// **'{item}: حذف شد'**
+  String returnedLineRemoved(String item);
+
+  /// No description provided for @returnedNote.
+  ///
+  /// In fa, this message translates to:
+  /// **'یادداشت: {note}'**
+  String returnedNote(String note);
+
+  /// No description provided for @conflictReturned.
+  ///
+  /// In fa, this message translates to:
+  /// **'{name} زودتر این درخواست را برای اصلاح برگرداند. کار شما ثبت نشد.'**
+  String conflictReturned(String name);
 
   /// No description provided for @chatInputLabel.
   ///

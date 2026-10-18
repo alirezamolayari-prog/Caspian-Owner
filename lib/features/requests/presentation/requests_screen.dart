@@ -33,7 +33,7 @@ class RequestFilterController extends Notifier<RequestFilter> {
 
 bool matchesFilter(GoodsRequest r, RequestFilter filter) => switch (filter) {
   RequestFilter.pending => r.canDecide,
-  RequestFilter.reviewed => r.isDecided,
+  RequestFilter.reviewed => r.isDecided || r.status == RequestStatus.returned,
   RequestFilter.all => true,
 };
 
