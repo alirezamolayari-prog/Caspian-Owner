@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** v0.2.0 (M14) is merged into `main` (PRs #15–#18) and installed on Alireza's phone, but **not tagged or released**. Wait for Alireza to test on his phone and say OK. Then tag `v0.2.0` on main (`git tag -a v0.2.0 -m "Caspian Owner 0.2.0"; git push origin v0.2.0`) and check that `release.yml` publishes the Release with the APK and `update.json`. Do not tag before his OK.
+**Next step:** v0.2.0 (build 3) is approved by Alireza and released with tag `v0.2.0` (universal APK `caspian-v0.2.0.apk`). Before release: the default Flutter launcher icon came back, and chat bubbles moved to mine-right / theirs-left. Release check: `docs/screenshots/v0.2.0/release-check/README.md`; API 24 and 29 emulators were not done because of limited RAM. Next work: wait for Alireza's feedback; then `docs/ROADMAP.md` (middle server / real API, a proper icon).
 
 ## Environment (M0)
 | Item | Value |
