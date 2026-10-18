@@ -54,6 +54,6 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 - `build_runner` 2.16 removed `--delete-conflicting-outputs`; plain `dart run build_runner build`.
 - `csv` 8.0.0 API: `Csv(autoDetect: false).decode(text)` (auto-detect off: the `;` in aliases could fool it).
 - A local `.vscode/settings.json` (excluded via `.git/info/exclude`) points the Dart extension at `E:\dev\flutter`; this removed the false IDE errors.
-- Release APK is ARM-only (arm64 + armv7), ~41 MB; the fat APK with x86_64 was ~62 MB.
+- Release APK is universal since v0.2.0 (arm64-v8a, armeabi-v7a, x86_64; ~62 MB), so it installs on every phone and on emulators. v0.1.0 was ARM-only (~41 MB).
 - Release builds take 15–20 minutes on this PC; run them in the background.
 - Widget tests: ListView doesn't build off-screen items; use `scrollUntilVisible` before expecting them. Goldens with relative times: add ~30 s slack so «۱۰ دقیقه پیش» doesn't round to ۹.

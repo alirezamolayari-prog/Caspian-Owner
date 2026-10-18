@@ -36,10 +36,10 @@ git push --tags
 - **اگر این کلید گم شود، اپ نصب‌شده دیگر هرگز به‌روز نمی‌شود** و همه باید برنامه را پاک و دوباره نصب کنند.
 - اثر انگشت گواهی امضا (عمومی است و رمز نیست). هر APK منتشرشده باید همین را نشان دهد:
   `SHA-256: f332c7e7cd436e224f428c2a682d217a1f56c9a4b4bf1c1d7f410147c9c468ec`
-  بررسی: `apksigner verify --print-certs caspian-owner-1.2.0.apk`
+  بررسی: `apksigner verify --print-certs caspian-v1.2.0.apk`
 
 ## برای توسعه‌دهنده
 - منبع نسخه: `version: X.Y.Z+BUILD` در `pubspec.yaml`.
 - `tool/make_update_manifest.dart` فایل `update.json` را می‌سازد (نسخه، شماره ساخت، حداقل ساخت، نشانی APK، SHA-256، حجم، تغییرات فارسی).
 - برنامه فایل را به ترتیب از این نشانی‌ها می‌خواند: نشانی سرور (وقتی سرور راه بیفتد) و سپس `https://github.com/alirezamolayari-prog/Caspian-Owner/releases/latest/download/update.json`.
-- APK منتشرشده فقط برای پردازنده‌های ARM ساخته می‌شود (گوشی‌های واقعی)، تا حجمش کمتر باشد.
+- از نسخه ۰٫۲٫۰، APK منتشرشده «همه‌کاره» است (arm64-v8a، armeabi-v7a و x86_64) تا روی هر گوشی، قدیمی یا جدید، نصب شود. نام فایل `caspian-vX.Y.Z.apk` است.
