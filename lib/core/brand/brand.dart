@@ -23,9 +23,9 @@ abstract final class Brand {
   static String get copyrightLine =>
       'Copyright (c) $copyrightYear $copyrightHolder. All rights reserved.';
 
-  /// The letter on the launcher icon, drawn in [fontFamily] (bold) on the
-  /// brand primary color. Regenerate the icon after changing it or the
-  /// colors: see `tool/brand/README.md`.
+  /// The letter for a generated launcher icon, drawn in [fontFamily] (bold)
+  /// on the brand primary color. Not applied: the app ships the default
+  /// Flutter icon until a proper one is designed (`tool/brand/README.md`).
   static const iconGlyph = 'ک';
 
   /// Font family bundled in `assets/fonts/` (declared in pubspec.yaml).
