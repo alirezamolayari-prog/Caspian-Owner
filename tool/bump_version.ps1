@@ -7,6 +7,8 @@
   -Part patch  0.1.0+1 -> 0.1.1+2
   -Part minor  0.1.0+1 -> 0.2.0+2
   -Part major  0.1.0+1 -> 1.0.0+2
+  -Part build  0.2.0+2 -> 0.2.0+3  (same version, a newer build: no new
+               CHANGELOG section; for a rebuild of a version not released yet)
   BUILD always goes up by one: Android refuses an update with a lower or
   equal build number.
 
@@ -15,7 +17,7 @@
 #>
 param(
   [Parameter(Mandatory = $true)]
-  [ValidateSet('patch', 'minor', 'major')]
+  [ValidateSet('build', 'patch', 'minor', 'major')]
   [string]$Part
 )
 
@@ -43,15 +45,17 @@ $version = "$major.$minor.$patch"
 $pubspec = [regex]::Replace($pubspec, $pattern, "version: $version+$build")
 [IO.File]::WriteAllText($pubspecPath, $pubspec, $utf8)
 
-$changelogPath = Join-Path $root 'docs/CHANGELOG.md'
-$changelog = [IO.File]::ReadAllText($changelogPath, $utf8)
-$date = Get-Date -Format 'yyyy-MM-dd'
-$section = "## $version ($date)`n- (تغییرات این نسخه را برای مالکان، ساده و کوتاه بنویسید)`n`n"
-# New sections go above the first existing "## " heading.
-$first = $changelog.IndexOf("`n## ")
-if ($first -lt 0) { $changelog = $changelog.TrimEnd() + "`n`n" + $section }
-else { $changelog = $changelog.Insert($first + 1, $section) }
-[IO.File]::WriteAllText($changelogPath, $changelog, $utf8)
+if ($Part -ne 'build') {
+  $changelogPath = Join-Path $root 'docs/CHANGELOG.md'
+  $changelog = [IO.File]::ReadAllText($changelogPath, $utf8)
+  $date = Get-Date -Format 'yyyy-MM-dd'
+  $section = "## $version ($date)`n- (تغییرات این نسخه را برای مالکان، ساده و کوتاه بنویسید)`n`n"
+  # New sections go above the first existing "## " heading.
+  $first = $changelog.IndexOf("`n## ")
+  if ($first -lt 0) { $changelog = $changelog.TrimEnd() + "`n`n" + $section }
+  else { $changelog = $changelog.Insert($first + 1, $section) }
+  [IO.File]::WriteAllText($changelogPath, $changelog, $utf8)
+}
 
 Write-Host "Version is now $version+$build."
 Write-Host "Next: write the changes in docs/CHANGELOG.md, then:"

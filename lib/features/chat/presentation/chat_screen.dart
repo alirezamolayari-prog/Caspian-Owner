@@ -15,8 +15,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// - opens at the newest message; older pages load when scrolling up;
 /// - the input stays at the bottom, above the keyboard;
 /// - «جدیدترین» jumps back down;
-/// - Jalali date separators; my messages on one side in one color, the
-///   others' on the other side with the sender's name.
+/// - Jalali date separators; my messages on the right in one color, the
+///   others' on the left with the sender's name (on RTL and LTR alike).
 /// Works for every request status.
 class ChatScreen extends ConsumerStatefulWidget {
   const new({required this.requestId, super.key});
@@ -316,11 +316,11 @@ class _Bubble extends StatelessWidget {
         color: mine ? s.primaryContainer : s.surfaceContainerLowest,
         border: mine ? null : Border.all(color: s.outlineVariant),
         // A small corner on the sender's side, like most messengers.
-        borderRadius: BorderRadiusDirectional.only(
-          topStart: corner,
-          topEnd: corner,
-          bottomStart: mine ? corner : tail,
-          bottomEnd: mine ? tail : corner,
+        borderRadius: BorderRadius.only(
+          topLeft: corner,
+          topRight: corner,
+          bottomLeft: mine ? corner : tail,
+          bottomRight: mine ? tail : corner,
         ),
       ),
       child: Column(
@@ -354,9 +354,9 @@ class _Bubble extends StatelessWidget {
     );
 
     return Align(
-      alignment: mine
-          ? AlignmentDirectional.centerEnd
-          : AlignmentDirectional.centerStart,
+      // Fixed sides, whatever the text direction: mine on the right, the
+      // others' on the left (start/end would put mine on the left in RTL).
+      alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
       child: entry.failed ? InkWell(onTap: onRetry, child: bubble) : bubble,
     );
   }

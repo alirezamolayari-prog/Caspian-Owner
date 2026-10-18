@@ -1,8 +1,8 @@
 // Writes update.json (the update manifest, contract: `UpdateManifest`).
 //
 //   dart run tool/make_update_manifest.dart \
-//     --apk build/app/outputs/flutter-apk/caspian-owner-1.2.0.apk \
-//     --url https://github.com/<owner>/<repo>/releases/download/v1.2.0/caspian-owner-1.2.0.apk \
+//     --apk build/app/outputs/flutter-apk/caspian-v1.2.0.apk \
+//     --url https://github.com/<owner>/<repo>/releases/download/v1.2.0/caspian-v1.2.0.apk \
 //     --changelog docs/CHANGELOG.md --out update.json
 //
 // Version and build come from pubspec.yaml; the minimum supported build

@@ -1,5 +1,7 @@
 # Launcher icon
 
+> **Not applied.** Since v0.2.0 the app ships the default Flutter icon again, at Alireza's request, until a proper icon is designed. Running the two commands below would bring the «ک» icon back.
+
 The icon is the letter `Brand.iconGlyph` (Vazirmatn Bold) on the brand primary color (`LightTokens.primary`). To rebrand, change `lib/core/brand/brand.dart` (and the colors in `lib/core/theme/tokens.dart`), then regenerate:
 
 ```powershell

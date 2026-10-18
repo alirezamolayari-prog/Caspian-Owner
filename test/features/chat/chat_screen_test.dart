@@ -67,6 +67,80 @@ void main() {
     expect(find.text('جدیدترین'), findsNothing);
   });
 
+  /// Mine (labelled «شما») hug the right edge, the others' (labelled with
+  /// the sender's name) the left edge. Measured on the bubble itself: the
+  /// name inside a bubble is right-aligned (Persian text).
+  void expectSides(WidgetTester tester) {
+    final width = tester.view.physicalSize.width / tester.view.devicePixelRatio;
+    Rect bubble(Element label) => tester.getRect(
+      find
+          .ancestor(
+            of: find.byWidget(label.widget),
+            matching: find.byType(Container),
+          )
+          .first,
+    );
+    final mine = find.text('شما').evaluate().toList();
+    final theirs = find.text('امیر رحیمی').evaluate().toList();
+    expect(mine, isNotEmpty);
+    expect(theirs, isNotEmpty);
+    for (final e in mine) {
+      final r = bubble(e);
+      expect(r.right, greaterThan(width - 40), reason: 'mine: right edge');
+      expect(r.left, greaterThan(40), reason: 'mine: not from the left');
+    }
+    for (final e in theirs) {
+      final r = bubble(e);
+      expect(r.left, lessThan(40), reason: 'theirs: left edge');
+      expect(r.right, lessThan(width - 40), reason: 'theirs: not to the right');
+    }
+  }
+
+  testWidgets('my messages are on the right, the others on the left', (
+    tester,
+  ) async {
+    final c = await pumpAt(tester, '/requests/r-121/chat');
+    expectSides(tester);
+
+    // Still so after loading older pages and jumping back to the newest.
+    final list = find.byType(Scrollable).first;
+    for (
+      var i = 0;
+      i < 20 && chatOf(c).entries.length <= ChatController.pageSize;
+      i++
+    ) {
+      await tester.drag(list, const Offset(0, 800));
+      await tester.pumpAndSettle();
+    }
+    expect(chatOf(c).entries.length, greaterThan(ChatController.pageSize));
+    expectSides(tester);
+    await tester.tap(find.text('جدیدترین'));
+    await tester.pumpAndSettle();
+    expectSides(tester);
+  });
+
+  testWidgets('the sides hold in a left-to-right layout too', (tester) async {
+    tester.view
+      ..physicalSize = const Size(1080, 2400)
+      ..devicePixelRatio = 2.5;
+    addTearDown(tester.view.reset);
+    final harness = TestHarness.create(fixtures, signedIn: true);
+    addTearDown(harness.database.close);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: harness.overrides,
+        child: themedApp(
+          const Directionality(
+            textDirection: TextDirection.ltr,
+            child: ChatScreen(requestId: 'r-121'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expectSides(tester);
+  });
+
   testWidgets('messages are grouped under Jalali date separators', (
     tester,
   ) async {
