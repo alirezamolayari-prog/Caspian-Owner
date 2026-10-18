@@ -44,7 +44,45 @@ class MockBackend {
        stock = [...fixtures.stock],
        movements = [...fixtures.movements],
        chats = [...fixtures.chats],
-       assistantHistory = [...fixtures.assistantHistory];
+       assistantHistory = [...fixtures.assistantHistory] {
+    chats.addAll(_longChat());
+  }
+
+  /// A months-long chat on request 121, so paging and the jump to the
+  /// newest message can be tried (fixture chats are short).
+  List<ChatMessage> _longChat() {
+    final request = requests.where((r) => r.id == 'r-121').firstOrNull;
+    if (request == null) return const [];
+    final start = request.createdAt.subtract(const Duration(days: 90));
+    return [
+      for (var i = 0; i < 60; i++)
+        ChatMessage(
+          id: 'm-long-$i',
+          requestId: request.id,
+          author: i.isEven
+              ? ChatAuthor(
+                  kind: ChatAuthorKind.staff,
+                  nameFa: request.requester.nameFa,
+                )
+              : ChatAuthor(
+                  kind: ChatAuthorKind.owner,
+                  nameFa: me.nameFa,
+                  isMe: true,
+                ),
+          text: _longChatTexts[i % _longChatTexts.length],
+          sentAt: start.add(Duration(hours: 36 * i)),
+        ),
+    ];
+  }
+
+  static const _longChatTexts = [
+    'کالا امروز به محل رسید.',
+    'ممنون. لطفاً رسیدش را در اپ انبار ثبت کنید.',
+    'برای هفته بعد هم همین مقدار لازم است.',
+    'باشه، بعد از دیدن مصرف این هفته تأیید می‌کنم.',
+    'یک قلم آسیب دیده بود؛ عکسش را برای مدیر انبار فرستادم.',
+    'خوب است. جایگزینش را از قفسه بردارید.',
+  ];
 
   final MockFixtures fixtures;
   MockScenario scenario;
@@ -105,6 +143,9 @@ class MockBackend {
   /// Applies an owner decision with the server's rules.
   GoodsRequest decide(Decision decision) {
     final current = requestById(decision.requestId);
+    if (decision.action == DecisionAction.returnForEdit) {
+      return _returnForEdit(current, decision);
+    }
 
     if (scenario == MockScenario.conflict && current.canDecide) {
       final winner = current.copyWith(
@@ -136,6 +177,68 @@ class MockBackend {
     });
   }
 
+  /// Sends a rejected request back with suggested quantities. Server rules:
+  /// only while it is still `rejected` (first owner wins, `409`); every
+  /// suggested quantity is between 0 (drop the line) and what was asked;
+  /// at least one line stays.
+  GoodsRequest _returnForEdit(GoodsRequest current, Decision decision) {
+    if (scenario == MockScenario.conflict && current.canReturnForEdit) {
+      final winner = current.copyWith(
+        status: RequestStatus.returned,
+        returnedForEdit: ReturnedForEdit(
+          by: DecidedBy(
+            kind: DeciderKind.owner,
+            nameFa: owners.firstWhere((o) => o.id != me.id).nameFa,
+          ),
+          at: clock.now().subtract(const Duration(minutes: 1)),
+          lines: [for (final l in current.lines) _returned(l, l.qty)],
+        ),
+      );
+      replaceRequest(winner);
+      throw AlreadyDecidedException(winner);
+    }
+    return idempotent(decision.idempotencyKey, () {
+      if (!current.canReturnForEdit) throw AlreadyDecidedException(current);
+      final suggested = {
+        for (final l in decision.lines ?? const <DecisionLine>[])
+          l.itemCode: l.qty,
+      };
+      final lines = [
+        for (final l in current.lines)
+          _returned(l, suggested[l.itemCode] ?? l.qty),
+      ];
+      final valid =
+          lines.every((l) => l.newQty >= 0 && l.newQty <= l.oldQty) &&
+          lines.any((l) => !l.removed);
+      if (!valid) {
+        throw const ServerException(
+          code: 'invalid_lines',
+          statusCode: 422,
+          messageFa: 'مقدارها معتبر نیستند.',
+        );
+      }
+      final returned = current.copyWith(
+        status: RequestStatus.returned,
+        returnedForEdit: ReturnedForEdit(
+          by: DecidedBy(kind: DeciderKind.owner, nameFa: me.nameFa),
+          at: clock.now(),
+          note: decision.note,
+          lines: lines,
+        ),
+      );
+      replaceRequest(returned);
+      return returned;
+    });
+  }
+
+  ReturnedLine _returned(RequestLine line, double newQty) => ReturnedLine(
+    itemCode: line.itemCode,
+    itemNameFa: line.itemNameFa,
+    unitFa: line.unitFa,
+    oldQty: line.qty,
+    newQty: newQty,
+  );
+
   /// Past issues to the same location + floor, newest first.
   List<LocationUsage> locationHistory(GoodsRequest request, {int limit = 10}) {
     final items = {for (final s in stock) s.code: s};
@@ -158,12 +261,25 @@ class MockBackend {
   // ------------------------------------------------------------ locked stock
 
   /// Items the Warehouse app is counting right now (its own stock counts):
-  /// the server hides their quantity (qty: null, locked_by_count).
+  /// the server hides their quantity (`qty: null`, `locked_by_count`).
   /// Owners can't order counts any more (removed in v0.2.0).
   Set<String> get lockedItemCodes => {
     for (final s in stock)
       if (s.lockedByCount) s.code,
   };
+  // -------------------------------------------------------------------- chat
+
+  /// The chat about [requestId], oldest first.
+  List<ChatMessage> chatFor(String requestId) => [
+    for (final m in chats)
+      if (m.requestId == requestId) m,
+  ]..sort((a, b) => a.sentAt.compareTo(b.sentAt));
+
+  ChatSummary chatSummary(String requestId) {
+    final chat = chatFor(requestId);
+    return ChatSummary(count: chat.length, last: chat.lastOrNull);
+  }
+
   // --------------------------------------------------------------- assistant
 
   AssistantMessage answer(String question) {

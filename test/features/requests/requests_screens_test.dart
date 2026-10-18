@@ -95,12 +95,13 @@ void main() {
       );
       expect(find.textContaining('حواله ح-۸۸۴'), findsOneWidget);
 
+      // The chat is a small tile now: count and the last message.
       await tester.scrollUntilVisible(
-        find.text('حتماً. ممنون.'),
+        find.text('گفتگو – ۹ پیام'),
         300,
         scrollable: find.byType(Scrollable).first,
       );
-      expect(find.text('گفتگو درباره این درخواست'), findsOneWidget);
+      expect(find.textContaining('حتماً. ممنون.'), findsOneWidget);
     });
 
     testWidgets('approve: one fingerprint, then sent after the undo window', (
@@ -239,17 +240,31 @@ void main() {
       expect(find.text('آسانسور باری اسدنژاد – طبقه دوم'), findsOneWidget);
     });
 
-    testWidgets('sending a chat message shows it at once', (tester) async {
+    testWidgets('the chat tile opens the chat; a sent message shows at once', (
+      tester,
+    ) async {
       await pumpAt(tester, '/requests/r-123');
       await tester.scrollUntilVisible(
-        find.byTooltip('فرستادن'),
+        find.text('گفتگو – ۲ پیام'),
         300,
         scrollable: find.byType(Scrollable).first,
       );
-      await tester.enterText(find.byType(TextField).last, 'کی آماده می‌شود؟');
+      await tester.tap(find.text('گفتگو – ۲ پیام'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), 'کی آماده می‌شود؟');
       await tester.tap(find.byTooltip('فرستادن'));
       await tester.pumpAndSettle();
       expect(find.text('کی آماده می‌شود؟'), findsOneWidget);
+
+      // Back on the request, the tile counts the new message.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('گفتگو – ۳ پیام'),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      expect(find.textContaining('شما: کی آماده می‌شود؟'), findsOneWidget);
     });
   });
 }

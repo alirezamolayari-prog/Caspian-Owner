@@ -9,12 +9,18 @@ class MockChatRepository implements ChatRepository {
   final MockBackend _backend;
 
   @override
-  Future<List<ChatMessage>> messages(String requestId) => _backend.call(
-    () => [
-      for (final m in _backend.chats)
-        if (m.requestId == requestId) m,
-    ]..sort((a, b) => a.sentAt.compareTo(b.sentAt)),
-  );
+  Future<List<ChatMessage>> messages(
+    String requestId, {
+    String? before,
+    int limit = ChatRepository.pageSize,
+  }) => _backend.call(() {
+    final all = _backend.chatFor(requestId);
+    final end = before == null
+        ? all.length
+        : all.indexWhere((m) => m.id == before).clamp(0, all.length);
+    final start = (end - limit).clamp(0, end);
+    return all.sublist(start, end);
+  });
 
   @override
   Future<ChatMessage> send({

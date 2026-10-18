@@ -24,7 +24,10 @@ class MockRequestsRepository implements RequestsRepository {
   @override
   Future<GoodsRequest> get(String id) => _backend.call(() {
     final request = _backend.requestById(id);
-    return request.copyWith(locationHistory: _backend.locationHistory(request));
+    return request.copyWith(
+      locationHistory: _backend.locationHistory(request),
+      chatSummary: _backend.chatSummary(id),
+    );
   });
 
   @override
