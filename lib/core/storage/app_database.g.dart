@@ -346,6 +346,17 @@ class $PendingDecisionsTable extends PendingDecisions
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _payloadMeta = const VerificationMeta(
+    'payload',
+  );
+  @override
+  late final GeneratedColumn<String> payload = GeneratedColumn<String>(
+    'payload',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     requestId,
@@ -355,6 +366,7 @@ class $PendingDecisionsTable extends PendingDecisions
     createdAt,
     attempts,
     lastError,
+    payload,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -421,6 +433,12 @@ class $PendingDecisionsTable extends PendingDecisions
         lastError.isAcceptableOrUnknown(data['last_error']!, _lastErrorMeta),
       );
     }
+    if (data.containsKey('payload')) {
+      context.handle(
+        _payloadMeta,
+        payload.isAcceptableOrUnknown(data['payload']!, _payloadMeta),
+      );
+    }
     return context;
   }
 
@@ -458,6 +476,10 @@ class $PendingDecisionsTable extends PendingDecisions
         DriftSqlType.string,
         data['${effectivePrefix}last_error'],
       ),
+      payload: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}payload'],
+      ),
     );
   }
 
@@ -475,6 +497,9 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
   final DateTime createdAt;
   final int attempts;
   final String? lastError;
+
+  /// Return-for-edit only (schema v2): `{lines: [...], note}` as JSON.
+  final String? payload;
   const PendingDecision({
     required this.requestId,
     required this.action,
@@ -483,6 +508,7 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
     required this.createdAt,
     required this.attempts,
     this.lastError,
+    this.payload,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -497,6 +523,9 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
     map['attempts'] = Variable<int>(attempts);
     if (!nullToAbsent || lastError != null) {
       map['last_error'] = Variable<String>(lastError);
+    }
+    if (!nullToAbsent || payload != null) {
+      map['payload'] = Variable<String>(payload);
     }
     return map;
   }
@@ -514,6 +543,9 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
       lastError: lastError == null && nullToAbsent
           ? const Value.absent()
           : Value(lastError),
+      payload: payload == null && nullToAbsent
+          ? const Value.absent()
+          : Value(payload),
     );
   }
 
@@ -530,6 +562,7 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       attempts: serializer.fromJson<int>(json['attempts']),
       lastError: serializer.fromJson<String?>(json['lastError']),
+      payload: serializer.fromJson<String?>(json['payload']),
     );
   }
   @override
@@ -543,6 +576,7 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'attempts': serializer.toJson<int>(attempts),
       'lastError': serializer.toJson<String?>(lastError),
+      'payload': serializer.toJson<String?>(payload),
     };
   }
 
@@ -554,6 +588,7 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
     DateTime? createdAt,
     int? attempts,
     Value<String?> lastError = const Value.absent(),
+    Value<String?> payload = const Value.absent(),
   }) => PendingDecision(
     requestId: requestId ?? this.requestId,
     action: action ?? this.action,
@@ -562,6 +597,7 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
     createdAt: createdAt ?? this.createdAt,
     attempts: attempts ?? this.attempts,
     lastError: lastError.present ? lastError.value : this.lastError,
+    payload: payload.present ? payload.value : this.payload,
   );
   PendingDecision copyWithCompanion(PendingDecisionsCompanion data) {
     return PendingDecision(
@@ -574,6 +610,7 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       attempts: data.attempts.present ? data.attempts.value : this.attempts,
       lastError: data.lastError.present ? data.lastError.value : this.lastError,
+      payload: data.payload.present ? data.payload.value : this.payload,
     );
   }
 
@@ -586,7 +623,8 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
           ..write('idempotencyKey: $idempotencyKey, ')
           ..write('createdAt: $createdAt, ')
           ..write('attempts: $attempts, ')
-          ..write('lastError: $lastError')
+          ..write('lastError: $lastError, ')
+          ..write('payload: $payload')
           ..write(')'))
         .toString();
   }
@@ -600,6 +638,7 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
     createdAt,
     attempts,
     lastError,
+    payload,
   );
   @override
   bool operator ==(Object other) =>
@@ -611,7 +650,8 @@ class PendingDecision extends DataClass implements Insertable<PendingDecision> {
           other.idempotencyKey == this.idempotencyKey &&
           other.createdAt == this.createdAt &&
           other.attempts == this.attempts &&
-          other.lastError == this.lastError);
+          other.lastError == this.lastError &&
+          other.payload == this.payload);
 }
 
 class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
@@ -622,6 +662,7 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
   final Value<DateTime> createdAt;
   final Value<int> attempts;
   final Value<String?> lastError;
+  final Value<String?> payload;
   final Value<int> rowid;
   const PendingDecisionsCompanion({
     this.requestId = const Value.absent(),
@@ -631,6 +672,7 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
     this.createdAt = const Value.absent(),
     this.attempts = const Value.absent(),
     this.lastError = const Value.absent(),
+    this.payload = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PendingDecisionsCompanion.insert({
@@ -641,6 +683,7 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
     required DateTime createdAt,
     this.attempts = const Value.absent(),
     this.lastError = const Value.absent(),
+    this.payload = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : requestId = Value(requestId),
        action = Value(action),
@@ -654,6 +697,7 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
     Expression<DateTime>? createdAt,
     Expression<int>? attempts,
     Expression<String>? lastError,
+    Expression<String>? payload,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -664,6 +708,7 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
       if (createdAt != null) 'created_at': createdAt,
       if (attempts != null) 'attempts': attempts,
       if (lastError != null) 'last_error': lastError,
+      if (payload != null) 'payload': payload,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -676,6 +721,7 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
     Value<DateTime>? createdAt,
     Value<int>? attempts,
     Value<String?>? lastError,
+    Value<String?>? payload,
     Value<int>? rowid,
   }) {
     return PendingDecisionsCompanion(
@@ -686,6 +732,7 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
       createdAt: createdAt ?? this.createdAt,
       attempts: attempts ?? this.attempts,
       lastError: lastError ?? this.lastError,
+      payload: payload ?? this.payload,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -714,6 +761,9 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
     if (lastError.present) {
       map['last_error'] = Variable<String>(lastError.value);
     }
+    if (payload.present) {
+      map['payload'] = Variable<String>(payload.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -730,6 +780,7 @@ class PendingDecisionsCompanion extends UpdateCompanion<PendingDecision> {
           ..write('createdAt: $createdAt, ')
           ..write('attempts: $attempts, ')
           ..write('lastError: $lastError, ')
+          ..write('payload: $payload, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -936,6 +987,7 @@ typedef $$PendingDecisionsTableCreateCompanionBuilder =
       required DateTime createdAt,
       Value<int> attempts,
       Value<String?> lastError,
+      Value<String?> payload,
       Value<int> rowid,
     });
 typedef $$PendingDecisionsTableUpdateCompanionBuilder =
@@ -947,6 +999,7 @@ typedef $$PendingDecisionsTableUpdateCompanionBuilder =
       Value<DateTime> createdAt,
       Value<int> attempts,
       Value<String?> lastError,
+      Value<String?> payload,
       Value<int> rowid,
     });
 
@@ -991,6 +1044,11 @@ class $$PendingDecisionsTableFilterComposer
 
   ColumnFilters<String> get lastError => $composableBuilder(
     column: $table.lastError,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get payload => $composableBuilder(
+    column: $table.payload,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1038,6 +1096,11 @@ class $$PendingDecisionsTableOrderingComposer
     column: $table.lastError,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get payload => $composableBuilder(
+    column: $table.payload,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$PendingDecisionsTableAnnotationComposer
@@ -1071,6 +1134,9 @@ class $$PendingDecisionsTableAnnotationComposer
 
   GeneratedColumn<String> get lastError =>
       $composableBuilder(column: $table.lastError, builder: (column) => column);
+
+  GeneratedColumn<String> get payload =>
+      $composableBuilder(column: $table.payload, builder: (column) => column);
 }
 
 class $$PendingDecisionsTableTableManager
@@ -1117,6 +1183,7 @@ class $$PendingDecisionsTableTableManager
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> attempts = const Value.absent(),
                 Value<String?> lastError = const Value.absent(),
+                Value<String?> payload = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PendingDecisionsCompanion(
                 requestId: requestId,
@@ -1126,6 +1193,7 @@ class $$PendingDecisionsTableTableManager
                 createdAt: createdAt,
                 attempts: attempts,
                 lastError: lastError,
+                payload: payload,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -1137,6 +1205,7 @@ class $$PendingDecisionsTableTableManager
                 required DateTime createdAt,
                 Value<int> attempts = const Value.absent(),
                 Value<String?> lastError = const Value.absent(),
+                Value<String?> payload = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PendingDecisionsCompanion.insert(
                 requestId: requestId,
@@ -1146,6 +1215,7 @@ class $$PendingDecisionsTableTableManager
                 createdAt: createdAt,
                 attempts: attempts,
                 lastError: lastError,
+                payload: payload,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

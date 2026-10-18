@@ -59,6 +59,55 @@ Map<String, dynamic> _$LocationUsageToJson(_LocationUsage instance) =>
       'document_no': instance.documentNo,
     };
 
+_ChatSummary _$ChatSummaryFromJson(Map<String, dynamic> json) => _ChatSummary(
+  count: (json['count'] as num).toInt(),
+  last: json['last'] == null
+      ? null
+      : ChatMessage.fromJson(json['last'] as Map<String, dynamic>),
+);
+
+Map<String, dynamic> _$ChatSummaryToJson(_ChatSummary instance) =>
+    <String, dynamic>{
+      'count': instance.count,
+      'last': ?instance.last?.toJson(),
+    };
+
+_ReturnedLine _$ReturnedLineFromJson(Map<String, dynamic> json) =>
+    _ReturnedLine(
+      itemCode: json['item_code'] as String,
+      itemNameFa: json['item_name_fa'] as String,
+      unitFa: json['unit_fa'] as String,
+      oldQty: (json['old_qty'] as num).toDouble(),
+      newQty: (json['new_qty'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$ReturnedLineToJson(_ReturnedLine instance) =>
+    <String, dynamic>{
+      'item_code': instance.itemCode,
+      'item_name_fa': instance.itemNameFa,
+      'unit_fa': instance.unitFa,
+      'old_qty': instance.oldQty,
+      'new_qty': instance.newQty,
+    };
+
+_ReturnedForEdit _$ReturnedForEditFromJson(Map<String, dynamic> json) =>
+    _ReturnedForEdit(
+      by: DecidedBy.fromJson(json['by'] as Map<String, dynamic>),
+      at: DateTime.parse(json['at'] as String),
+      lines: (json['lines'] as List<dynamic>)
+          .map((e) => ReturnedLine.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      note: json['note'] as String?,
+    );
+
+Map<String, dynamic> _$ReturnedForEditToJson(_ReturnedForEdit instance) =>
+    <String, dynamic>{
+      'by': instance.by.toJson(),
+      'at': instance.at.toIso8601String(),
+      'lines': instance.lines.map((e) => e.toJson()).toList(),
+      'note': ?instance.note,
+    };
+
 _GoodsRequest _$GoodsRequestFromJson(Map<String, dynamic> json) =>
     _GoodsRequest(
       id: json['id'] as String,
@@ -86,6 +135,14 @@ _GoodsRequest _$GoodsRequestFromJson(Map<String, dynamic> json) =>
       locationHistory: (json['location_history'] as List<dynamic>?)
           ?.map((e) => LocationUsage.fromJson(e as Map<String, dynamic>))
           .toList(),
+      chatSummary: json['chat_summary'] == null
+          ? null
+          : ChatSummary.fromJson(json['chat_summary'] as Map<String, dynamic>),
+      returnedForEdit: json['returned_for_edit'] == null
+          ? null
+          : ReturnedForEdit.fromJson(
+              json['returned_for_edit'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$GoodsRequestToJson(
@@ -107,6 +164,8 @@ Map<String, dynamic> _$GoodsRequestToJson(
   'location_history': ?instance.locationHistory
       ?.map((e) => e.toJson())
       .toList(),
+  'chat_summary': ?instance.chatSummary?.toJson(),
+  'returned_for_edit': ?instance.returnedForEdit?.toJson(),
 };
 
 const _$RequestStatusEnumMap = {
@@ -114,6 +173,7 @@ const _$RequestStatusEnumMap = {
   RequestStatus.approved: 'approved',
   RequestStatus.rejected: 'rejected',
   RequestStatus.cancelled: 'cancelled',
+  RequestStatus.returned: 'returned',
 };
 
 const _$EscalationReasonEnumMap = {
@@ -123,11 +183,24 @@ const _$EscalationReasonEnumMap = {
   EscalationReason.manual: 'manual',
 };
 
+_DecisionLine _$DecisionLineFromJson(Map<String, dynamic> json) =>
+    _DecisionLine(
+      itemCode: json['item_code'] as String,
+      qty: (json['qty'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$DecisionLineToJson(_DecisionLine instance) =>
+    <String, dynamic>{'item_code': instance.itemCode, 'qty': instance.qty};
+
 _Decision _$DecisionFromJson(Map<String, dynamic> json) => _Decision(
   requestId: json['request_id'] as String,
   action: $enumDecode(_$DecisionActionEnumMap, json['action']),
   idempotencyKey: json['idempotency_key'] as String,
   reason: json['reason'] as String?,
+  lines: (json['lines'] as List<dynamic>?)
+      ?.map((e) => DecisionLine.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  note: json['note'] as String?,
 );
 
 Map<String, dynamic> _$DecisionToJson(_Decision instance) => <String, dynamic>{
@@ -135,9 +208,12 @@ Map<String, dynamic> _$DecisionToJson(_Decision instance) => <String, dynamic>{
   'action': _$DecisionActionEnumMap[instance.action]!,
   'idempotency_key': instance.idempotencyKey,
   'reason': ?instance.reason,
+  'lines': ?instance.lines?.map((e) => e.toJson()).toList(),
+  'note': ?instance.note,
 };
 
 const _$DecisionActionEnumMap = {
   DecisionAction.approve: 'approve',
   DecisionAction.reject: 'reject',
+  DecisionAction.returnForEdit: 'return_for_edit',
 };

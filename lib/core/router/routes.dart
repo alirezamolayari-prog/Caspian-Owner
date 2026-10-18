@@ -27,6 +27,7 @@ abstract final class Routes {
   static const more = '/more';
   static const notifications = '/notifications';
   static String request(String id) => '/requests/$id';
+  static String requestChat(String id) => '/requests/$id/chat';
   static const reports = '/reports';
   static const purchases = '/purchases';
   static const users = '/users';

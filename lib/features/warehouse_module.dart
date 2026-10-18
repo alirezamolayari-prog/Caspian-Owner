@@ -5,6 +5,7 @@ import 'package:caspian_owner/core/router/navigator_keys.dart';
 import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/features/assistant/presentation/assistant_screen.dart';
+import 'package:caspian_owner/features/chat/presentation/chat_screen.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/home/presentation/home_screen.dart';
 import 'package:caspian_owner/features/requests/presentation/request_detail_screen.dart';
@@ -58,6 +59,14 @@ class WarehouseModule extends AppModule {
           parentNavigatorKey: rootNavigatorKey,
           builder: (context, state) =>
               RequestDetailScreen(requestId: state.pathParameters['id']!),
+          routes: [
+            GoRoute(
+              path: 'chat',
+              parentNavigatorKey: rootNavigatorKey,
+              builder: (context, state) =>
+                  ChatScreen(requestId: state.pathParameters['id']!),
+            ),
+          ],
         ),
       ],
     ),

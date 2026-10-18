@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/mock/mock_notification_source.dart';
+import 'package:caspian_owner/core/network/api_exception.dart';
 import 'package:caspian_owner/features/reports/data/mock_reports_repository.dart';
 import 'package:caspian_owner/features/reports/domain/consumption_report.dart';
+import 'package:caspian_owner/features/requests/data/mock_requests_repository.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yaml/yaml.dart';
@@ -118,6 +120,48 @@ void main() {
       reason: 'ok',
     );
     check('Decision', decision.toJson(), 'decision');
+
+    const sendBack = Decision(
+      requestId: 'r-119',
+      action: DecisionAction.returnForEdit,
+      idempotencyKey: 'k-2',
+      lines: [DecisionLine(itemCode: 'I-1011', qty: 12)],
+      note: 'نصف کافی است',
+    );
+    check('Decision', sendBack.toJson(), 'return_for_edit');
+  });
+
+  test('a request in detail: chat summary and a send-back (v0.2.0)', () async {
+    final backend = MockBackend(fixtures, latency: Duration.zero);
+    final repo = MockRequestsRepository(backend);
+    final detail = await repo.get('r-124');
+    expect(detail.chatSummary!.count, 9);
+    check('GoodsRequest', detail.toJson(), 'r-124 detail');
+
+    // One line only: dropping it is refused by the server's rules.
+    await expectLater(
+      repo.decide(
+        const Decision(
+          requestId: 'r-119',
+          action: DecisionAction.returnForEdit,
+          idempotencyKey: 'k-3',
+          lines: [DecisionLine(itemCode: 'I-1011', qty: 0)],
+          note: 'x',
+        ),
+      ),
+      throwsA(isA<ServerException>()),
+    );
+
+    final ok = await repo.decide(
+      const Decision(
+        requestId: 'r-119',
+        action: DecisionAction.returnForEdit,
+        idempotencyKey: 'k-4',
+        lines: [DecisionLine(itemCode: 'I-1011', qty: 12)],
+      ),
+    );
+    expect(ok.status, RequestStatus.returned);
+    check('GoodsRequest', ok.toJson(), 'r-119 returned');
   });
 
   test('reports and notifications produced by the mock', () async {

@@ -66,6 +66,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get statusCancelled => 'لغو شد';
 
   @override
+  String get statusReturned => 'برگشت برای اصلاح';
+
+  @override
   String get lowStock => 'کم';
 
   @override
@@ -489,10 +492,123 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get chatTitle => 'گفتگو درباره این درخواست';
+  String get chatEmpty => 'هنوز پیامی نیست.';
 
   @override
-  String get chatEmpty => 'هنوز پیامی نیست.';
+  String get chatYou => 'شما';
+
+  @override
+  String get chatTileTitle => 'گفتگو';
+
+  @override
+  String chatTileTitleCount(String count) {
+    return 'گفتگو – $count پیام';
+  }
+
+  @override
+  String chatLastMessage(String name, String text, String time) {
+    return '$name: $text – $time';
+  }
+
+  @override
+  String get chatUnread => 'پیام تازه';
+
+  @override
+  String chatScreenTitle(String number) {
+    return 'گفتگو – درخواست $number';
+  }
+
+  @override
+  String get chatJumpToNewest => 'جدیدترین';
+
+  @override
+  String get chatLoadingOlder => 'در حال آوردن پیام‌های قدیمی‌تر';
+
+  @override
+  String get chatSending => 'در حال فرستادن…';
+
+  @override
+  String get returnForEdit => 'ویرایش و برگرداندن';
+
+  @override
+  String returnSheetTitle(String number) {
+    return 'ویرایش و برگرداندن درخواست $number';
+  }
+
+  @override
+  String get returnSheetHelp =>
+      'مقدار هر قلم را کم کنید یا قلمی را حذف کنید. درخواست با پیشنهاد شما به درخواست‌کننده برمی‌گردد تا اصلاح کند و دوباره بفرستد.';
+
+  @override
+  String returnRequested(String qty, String unit) {
+    return 'درخواستی: $qty $unit';
+  }
+
+  @override
+  String returnLess(String item) {
+    return 'کمتر – $item';
+  }
+
+  @override
+  String returnMore(String item) {
+    return 'بیشتر – $item';
+  }
+
+  @override
+  String get returnLineRemove => 'حذف قلم';
+
+  @override
+  String get returnLineRemoved => 'این قلم حذف می‌شود.';
+
+  @override
+  String get returnLineRestore => 'بازگرداندن قلم';
+
+  @override
+  String get returnNoteLabel => 'یادداشت برای درخواست‌کننده (اختیاری)';
+
+  @override
+  String get returnNoteHint => 'مثلاً: نصف این مقدار کافی است';
+
+  @override
+  String get returnSend => 'ارسال برای اصلاح';
+
+  @override
+  String undoReturnPending(String seconds) {
+    return 'برگرداندن برای اصلاح – $seconds ثانیه تا ارسال';
+  }
+
+  @override
+  String get returnedDone => 'برای اصلاح به درخواست‌کننده برگشت داده شد';
+
+  @override
+  String returnedBy(String name, String time) {
+    return 'برگشت برای اصلاح توسط $name – $time';
+  }
+
+  @override
+  String returnedLineChange(
+    String item,
+    String before,
+    String after,
+    String unit,
+  ) {
+    return '$item: $before ← $after $unit';
+  }
+
+  @override
+  String returnedLineRemoved(String item) {
+    return '$item: حذف شد';
+  }
+
+  @override
+  String returnedNote(String note) {
+    return 'یادداشت: $note';
+  }
+
+  @override
+  String conflictReturned(String name) {
+    return '$name زودتر این درخواست را برای اصلاح برگرداند. کار شما ثبت نشد.';
+  }
 
   @override
   String get chatInputLabel => 'پیام';

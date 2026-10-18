@@ -31,6 +31,8 @@ class LocalDecision {
     this.reason,
     this.winner,
     this.undoUntil,
+    this.lines,
+    this.note,
   });
 
   final DecisionAction action;
@@ -43,6 +45,10 @@ class LocalDecision {
   /// When the undo window ends (undoable only).
   final DateTime? undoUntil;
 
+  /// Return for edit only: suggested quantities and a note.
+  final List<DecisionLine>? lines;
+  final String? note;
+
   LocalDecision copyWith({DecisionPhase? phase, GoodsRequest? winner}) =>
       LocalDecision(
         action: action,
@@ -50,6 +56,8 @@ class LocalDecision {
         phase: phase ?? this.phase,
         winner: winner ?? this.winner,
         undoUntil: undoUntil,
+        lines: lines,
+        note: note,
       );
 }
 
@@ -58,7 +66,7 @@ final decisionControllerProvider =
       DecisionController.new,
     );
 
-/// Approve/reject flow:
+/// Approve / reject / return-for-edit flow:
 /// 1. (approve) one fingerprint touch, if that setting is on;
 /// 2. shown as done right away, with 5 seconds to undo;
 /// 3. then queued with an idempotency key and sent. Offline it stays queued;
@@ -86,6 +94,8 @@ class DecisionController extends Notifier<Map<String, LocalDecision>> {
     required DecisionAction action,
     AuthPrompt? fingerprint,
     String? reason,
+    List<DecisionLine>? lines,
+    String? note,
   }) async {
     final settings = ref.read(settingsControllerProvider);
     if (fingerprint != null && settings.fingerprintForApproval) {
@@ -99,6 +109,8 @@ class DecisionController extends Notifier<Map<String, LocalDecision>> {
       LocalDecision(
         action: action,
         reason: reason,
+        lines: lines,
+        note: note,
         phase: DecisionPhase.undoable,
         undoUntil: clock.now().add(undoWindow),
       ),
@@ -132,6 +144,8 @@ class DecisionController extends Notifier<Map<String, LocalDecision>> {
           requestId: requestId,
           action: local.action,
           reason: local.reason,
+          lines: local.lines,
+          note: local.note,
         );
     await flush();
   }

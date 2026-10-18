@@ -25,6 +25,9 @@ class PendingDecisions extends Table {
   IntColumn get attempts => integer().withDefault(const Constant(0))();
   TextColumn get lastError => text().nullable()();
 
+  /// Return-for-edit only (schema v2): `{lines: [...], note}` as JSON.
+  TextColumn get payload => text().nullable()();
+
   @override
   Set<Column<Object>> get primaryKey => {requestId};
 }
@@ -36,7 +39,17 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'caspian_owner'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      // v2 (0.2.0): queued return-for-edit decisions carry lines and a note.
+      if (from < 2) {
+        await m.addColumn(pendingDecisions, pendingDecisions.payload);
+      }
+    },
+  );
 
   /// Deletes all local data (logout).
   Future<void> wipe() => transaction(() async {

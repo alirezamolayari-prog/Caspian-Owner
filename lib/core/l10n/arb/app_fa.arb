@@ -44,6 +44,7 @@
   "@statusRejected": { "description": "Status chip: rejected." },
 
   "statusCancelled": "لغو شد",
+  "statusReturned": "برگشت برای اصلاح",
   "@statusCancelled": { "description": "Status chip: cancelled." },
 
   "lowStock": "کم",
@@ -251,8 +252,66 @@
     "placeholders": { "date": { "type": "String" }, "document": { "type": "String" } }
   },
 
-  "chatTitle": "گفتگو درباره این درخواست",
   "chatEmpty": "هنوز پیامی نیست.",
+  "chatYou": "شما",
+  "chatTileTitle": "گفتگو",
+  "chatTileTitleCount": "گفتگو – {count} پیام",
+  "@chatTileTitleCount": { "placeholders": { "count": { "type": "String" } } },
+  "chatLastMessage": "{name}: {text} – {time}",
+  "@chatLastMessage": {
+    "placeholders": {
+      "name": { "type": "String" },
+      "text": { "type": "String" },
+      "time": { "type": "String" }
+    }
+  },
+  "chatUnread": "پیام تازه",
+  "chatScreenTitle": "گفتگو – درخواست {number}",
+  "@chatScreenTitle": { "placeholders": { "number": { "type": "String" } } },
+  "chatJumpToNewest": "جدیدترین",
+  "chatLoadingOlder": "در حال آوردن پیام‌های قدیمی‌تر",
+  "chatSending": "در حال فرستادن…",
+
+  "returnForEdit": "ویرایش و برگرداندن",
+  "returnSheetTitle": "ویرایش و برگرداندن درخواست {number}",
+  "@returnSheetTitle": { "placeholders": { "number": { "type": "String" } } },
+  "returnSheetHelp": "مقدار هر قلم را کم کنید یا قلمی را حذف کنید. درخواست با پیشنهاد شما به درخواست‌کننده برمی‌گردد تا اصلاح کند و دوباره بفرستد.",
+  "returnRequested": "درخواستی: {qty} {unit}",
+  "@returnRequested": {
+    "placeholders": { "qty": { "type": "String" }, "unit": { "type": "String" } }
+  },
+  "returnLess": "کمتر – {item}",
+  "@returnLess": { "placeholders": { "item": { "type": "String" } } },
+  "returnMore": "بیشتر – {item}",
+  "@returnMore": { "placeholders": { "item": { "type": "String" } } },
+  "returnLineRemove": "حذف قلم",
+  "returnLineRemoved": "این قلم حذف می‌شود.",
+  "returnLineRestore": "بازگرداندن قلم",
+  "returnNoteLabel": "یادداشت برای درخواست‌کننده (اختیاری)",
+  "returnNoteHint": "مثلاً: نصف این مقدار کافی است",
+  "returnSend": "ارسال برای اصلاح",
+  "undoReturnPending": "برگرداندن برای اصلاح – {seconds} ثانیه تا ارسال",
+  "@undoReturnPending": { "placeholders": { "seconds": { "type": "String" } } },
+  "returnedDone": "برای اصلاح به درخواست‌کننده برگشت داده شد",
+  "returnedBy": "برگشت برای اصلاح توسط {name} – {time}",
+  "@returnedBy": {
+    "placeholders": { "name": { "type": "String" }, "time": { "type": "String" } }
+  },
+  "returnedLineChange": "{item}: {before} ← {after} {unit}",
+  "@returnedLineChange": {
+    "placeholders": {
+      "item": { "type": "String" },
+      "before": { "type": "String" },
+      "after": { "type": "String" },
+      "unit": { "type": "String" }
+    }
+  },
+  "returnedLineRemoved": "{item}: حذف شد",
+  "@returnedLineRemoved": { "placeholders": { "item": { "type": "String" } } },
+  "returnedNote": "یادداشت: {note}",
+  "@returnedNote": { "placeholders": { "note": { "type": "String" } } },
+  "conflictReturned": "{name} زودتر این درخواست را برای اصلاح برگرداند. کار شما ثبت نشد.",
+  "@conflictReturned": { "placeholders": { "name": { "type": "String" } } },
   "chatInputLabel": "پیام",
   "chatSend": "فرستادن",
   "chatSendFailed": "فرستاده نشد. برای تلاش دوباره لمس کنید.",
