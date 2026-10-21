@@ -56,6 +56,7 @@ final backgroundReliabilityProvider = Provider<BackgroundReliability?>(
 /// The current [BackgroundStatus] (null without
 /// [backgroundReliabilityProvider]). Settings reads it again when the owner
 /// comes back from a system page.
-final backgroundStatusProvider = FutureProvider.autoDispose<BackgroundStatus?>(
-  (ref) async => ref.watch(backgroundReliabilityProvider)?.status(),
-);
+final FutureProvider<BackgroundStatus?> backgroundStatusProvider =
+    FutureProvider.autoDispose(
+      (ref) async => await ref.watch(backgroundReliabilityProvider)?.status(),
+    );

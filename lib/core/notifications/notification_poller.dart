@@ -39,7 +39,7 @@ class NotificationPoller {
         ? clock.now().subtract(firstLookBack)
         : DateTime.parse(sinceRaw);
     final batch = await source.poll(since: since);
-    return showNew(
+    return await showNew(
       store: store,
       notifier: notifier,
       events: batch.events,

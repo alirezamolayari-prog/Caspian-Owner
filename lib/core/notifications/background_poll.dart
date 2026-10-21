@@ -51,11 +51,11 @@ void notificationCallbackDispatcher() {
     // Nothing to do when logged out or turned off in Settings.
     if (await store.read(SecureKeys.session) == null) {
       log?.info('Background check skipped: signed out');
-      return _done(log);
+      return await _done(log);
     }
     if (!(await AppSettings.load(store)).notifications) {
       log?.info('Background check skipped: notifications off');
-      return _done(log);
+      return await _done(log);
     }
 
     try {
@@ -71,7 +71,7 @@ void notificationCallbackDispatcher() {
       // Offline, server error or session expired: try again next time.
       log?.error('Background check failed', e, s);
     }
-    return _done(log);
+    return await _done(log);
   });
 }
 
