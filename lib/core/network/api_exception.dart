@@ -29,12 +29,23 @@ final class ServerException extends ApiException {
   String toString() => 'ServerException($statusCode $code)';
 }
 
-/// The session expired or was revoked; the owner must log in again.
+/// `401`: wrong username/password at login, or the session expired or was
+/// revoked (the owner must log in again).
 final class UnauthorizedException extends ApiException {
   const new();
 }
 
+/// `403`: logged in, but this account may not do that.
+final class ForbiddenException extends ApiException {
+  const new();
+}
+
 final class NotFoundException extends ApiException {
+  const new();
+}
+
+/// `422`: the server refused the data (empty reason, too long text, …).
+final class ValidationException extends ApiException {
   const new();
 }
 

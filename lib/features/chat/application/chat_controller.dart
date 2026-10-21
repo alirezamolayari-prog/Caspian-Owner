@@ -108,6 +108,25 @@ class ChatController extends AsyncNotifier<ChatState> {
   /// Retries a message whose send failed.
   Future<void> retry(ChatMessage message) => _deliver(message);
 
+  /// New messages from live sync (`/changes`). Known ids are skipped, so a
+  /// message that arrives twice (or is our own just-sent one) shows once.
+  void mergeIncoming(List<ChatMessage> messages) {
+    final current = state.value;
+    if (current == null) return; // still loading: the load will include them
+    final known = {for (final e in current.entries) e.message.id};
+    final fresh = [
+      for (final m in messages)
+        if (!known.contains(m.id)) ChatEntry(m),
+    ];
+    if (fresh.isEmpty) return;
+    state = AsyncData(
+      current.copyWith(
+        entries: [...current.entries, ...fresh]
+          ..sort((a, b) => a.message.sentAt.compareTo(b.message.sentAt)),
+      ),
+    );
+  }
+
   Future<void> _deliver(ChatMessage draft) async {
     _upsert(ChatEntry(draft, sending: true));
     try {
@@ -141,7 +160,11 @@ class ChatController extends AsyncNotifier<ChatState> {
       current.copyWith(
         entries: [
           for (final e in current.entries)
-            if (e.message.id == draftId) entry else e,
+            if (e.message.id == draftId)
+              entry
+            // Live sync may have brought the sent message already.
+            else if (e.message.id != entry.message.id)
+              e,
         ],
       ),
     );

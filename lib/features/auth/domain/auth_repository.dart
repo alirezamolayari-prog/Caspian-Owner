@@ -1,14 +1,6 @@
 import 'package:caspian_owner/core/domain/person.dart';
 
-/// Result of starting login: an SMS code was sent.
-class OtpRequest {
-  const new({required this.codeLength, required this.resendAfter});
-
-  final int codeLength;
-  final Duration resendAfter;
-}
-
-/// Tokens and the owner after a successful login (contract: `AuthTokens`).
+/// The token and the owner after a successful login.
 class AuthSession {
   const new({
     required this.accessToken,
@@ -19,17 +11,19 @@ class AuthSession {
 
   factory fromJson(Map<String, Object?> json) => AuthSession(
     accessToken: json['access_token']! as String,
-    refreshToken: json['refresh_token']! as String,
+    refreshToken: json['refresh_token'] as String? ?? '',
     expiresAt: DateTime.parse(json['expires_at']! as String),
     owner: Owner.fromJson(json['owner']! as Map<String, Object?>),
   );
 
   final String accessToken;
+
+  /// Empty with Caspian Server v1 (no refresh: log in again after 7 days).
   final String refreshToken;
   final DateTime expiresAt;
   final Owner owner;
 
-  /// Contract shape (`AuthTokens`), also used to keep the session on device.
+  /// Kept on the device (secure storage) in this shape.
   Map<String, Object?> toJson() => {
     'access_token': accessToken,
     'refresh_token': refreshToken,
@@ -38,25 +32,16 @@ class AuthSession {
   };
 }
 
-/// Phone + one-time code login (contract: `/v1/auth/...`).
+/// Username + password login (Caspian Server `POST /auth/login`).
 abstract interface class AuthRepository {
-  /// Registers this device and sends an SMS code to [phone] (`09…`).
-  Future<OtpRequest> registerDevice({
-    required String phone,
-    required String deviceId,
-    required String deviceModel,
-    required String appVersion,
+  /// Throws `UnauthorizedException` for a wrong username or password, and
+  /// `ServerException(code: 'not_owner')` for accounts that aren't owners
+  /// (e.g. the warehouse account). The mock accepts any username with the
+  /// password `11111`.
+  Future<AuthSession> login({
+    required String username,
+    required String password,
   });
-
-  /// Checks the code. Throws `ServerException` with code `invalid_code`.
-  /// The mock (no server) accepts only `11111`.
-  Future<AuthSession> verify({
-    required String phone,
-    required String deviceId,
-    required String code,
-  });
-
-  Future<AuthSession> refresh(String refreshToken);
 
   /// The logged-in owner.
   Future<Owner> me();

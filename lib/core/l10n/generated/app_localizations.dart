@@ -178,10 +178,10 @@ abstract class AppLocalizations {
   /// **'کم'**
   String get lowStock;
 
-  /// No description provided for @errorNetwork.
+  /// No connection, timeout, or the server is off/unreachable.
   ///
   /// In fa, this message translates to:
-  /// **'اتصال برقرار نشد. اینترنت را بررسی کنید.'**
+  /// **'به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.'**
   String get errorNetwork;
 
   /// No description provided for @errorGeneric.
@@ -189,6 +189,66 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'مشکلی پیش آمد. دوباره تلاش کنید.'**
   String get errorGeneric;
+
+  /// 401 at login.
+  ///
+  /// In fa, this message translates to:
+  /// **'نام کاربری یا رمز عبور اشتباه است.'**
+  String get errorWrongPassword;
+
+  /// 401 after login: token expired or revoked.
+  ///
+  /// In fa, this message translates to:
+  /// **'نشست شما تمام شد. دوباره وارد شوید.'**
+  String get errorSessionExpired;
+
+  /// 403.
+  ///
+  /// In fa, this message translates to:
+  /// **'شما اجازهٔ انجام این کار را ندارید.'**
+  String get errorForbidden;
+
+  /// 409: already approved/rejected.
+  ///
+  /// In fa, this message translates to:
+  /// **'این درخواست قبلاً تأیید یا رد شده است.'**
+  String get errorConflict;
+
+  /// 422.
+  ///
+  /// In fa, this message translates to:
+  /// **'اطلاعات واردشده معتبر نیست. دوباره بررسی کنید.'**
+  String get errorInvalidData;
+
+  /// No description provided for @errorNotFound.
+  ///
+  /// In fa, this message translates to:
+  /// **'این مورد پیدا نشد.'**
+  String get errorNotFound;
+
+  /// 5xx or a broken answer.
+  ///
+  /// In fa, this message translates to:
+  /// **'خطای سرور. کمی بعد دوباره تلاش کنید.'**
+  String get errorServer;
+
+  /// Login with a warehouse account.
+  ///
+  /// In fa, this message translates to:
+  /// **'این حساب مخصوص مالکان نیست. با حساب مالک وارد شوید.'**
+  String get errorNotOwner;
+
+  /// No description provided for @errorNotConnected.
+  ///
+  /// In fa, this message translates to:
+  /// **'این بخش هنوز به سرور وصل نشده است.'**
+  String get errorNotConnected;
+
+  /// Stock, assistant, reports, notifications list while the server has no API for them.
+  ///
+  /// In fa, this message translates to:
+  /// **'این بخش هنوز به سرور کاسپین وصل نشده است و به‌زودی اضافه می‌شود.'**
+  String get notConnectedBody;
 
   /// No description provided for @tabHome.
   ///
@@ -256,47 +316,35 @@ abstract class AppLocalizations {
   /// **'ورود به مالک کاسپین'**
   String get loginTitle;
 
-  /// No description provided for @loginPhoneLabel.
+  /// No description provided for @loginUsernameLabel.
   ///
   /// In fa, this message translates to:
-  /// **'شماره موبایل'**
-  String get loginPhoneLabel;
+  /// **'نام کاربری'**
+  String get loginUsernameLabel;
 
-  /// No description provided for @loginPhoneHint.
+  /// No description provided for @loginPasswordLabel.
   ///
   /// In fa, this message translates to:
-  /// **'۰۹۱۲۳۴۵۶۷۸۹'**
-  String get loginPhoneHint;
+  /// **'رمز عبور'**
+  String get loginPasswordLabel;
 
-  /// No description provided for @loginPhoneHelp.
+  /// No description provided for @loginShowPassword.
   ///
   /// In fa, this message translates to:
-  /// **'یک کد با پیامک برایتان فرستاده می‌شود.'**
-  String get loginPhoneHelp;
+  /// **'نمایش رمز'**
+  String get loginShowPassword;
 
-  /// No description provided for @loginPhoneInvalid.
+  /// No description provided for @loginHidePassword.
   ///
   /// In fa, this message translates to:
-  /// **'شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود.'**
-  String get loginPhoneInvalid;
+  /// **'پنهان کردن رمز'**
+  String get loginHidePassword;
 
-  /// No description provided for @loginSendCode.
+  /// No description provided for @loginFieldsRequired.
   ///
   /// In fa, this message translates to:
-  /// **'دریافت کد'**
-  String get loginSendCode;
-
-  /// No description provided for @loginCodeLabel.
-  ///
-  /// In fa, this message translates to:
-  /// **'کد پیامک‌شده'**
-  String get loginCodeLabel;
-
-  /// No description provided for @loginCodeSent.
-  ///
-  /// In fa, this message translates to:
-  /// **'کد {length} رقمی به {phone} فرستاده شد.'**
-  String loginCodeSent(int length, String phone);
+  /// **'نام کاربری و رمز عبور را وارد کنید.'**
+  String get loginFieldsRequired;
 
   /// No description provided for @loginVerify.
   ///
@@ -304,29 +352,77 @@ abstract class AppLocalizations {
   /// **'ورود'**
   String get loginVerify;
 
-  /// No description provided for @loginChangePhone.
+  /// No description provided for @loginTestPasswordHint.
   ///
   /// In fa, this message translates to:
-  /// **'تغییر شماره'**
-  String get loginChangePhone;
+  /// **'نسخه آزمایشی: رمز ۱۱۱۱۱'**
+  String get loginTestPasswordHint;
 
-  /// No description provided for @loginResend.
+  /// No description provided for @loginServer.
   ///
   /// In fa, this message translates to:
-  /// **'ارسال دوباره کد'**
-  String get loginResend;
+  /// **'سرور: {url}'**
+  String loginServer(String url);
 
-  /// No description provided for @loginResendIn.
+  /// No description provided for @loginChangeServer.
   ///
   /// In fa, this message translates to:
-  /// **'ارسال دوباره تا {seconds} ثانیه'**
-  String loginResendIn(int seconds);
+  /// **'تغییر آدرس سرور'**
+  String get loginChangeServer;
 
-  /// No description provided for @loginTestCodeHint.
+  /// No description provided for @serverTitle.
   ///
   /// In fa, this message translates to:
-  /// **'نسخه آزمایشی: کد ۱۱۱۱۱'**
-  String get loginTestCodeHint;
+  /// **'آدرس سرور'**
+  String get serverTitle;
+
+  /// No description provided for @serverHelp.
+  ///
+  /// In fa, this message translates to:
+  /// **'مثال: http://192.168.10.58:8000 (روی وای‌فای پاساژ) یا یک آدرس https.'**
+  String get serverHelp;
+
+  /// No description provided for @serverChangeSignsOut.
+  ///
+  /// In fa, this message translates to:
+  /// **'با تغییر آدرس سرور، از حساب خارج می‌شوید و باید دوباره وارد شوید.'**
+  String get serverChangeSignsOut;
+
+  /// No description provided for @serverInvalid.
+  ///
+  /// In fa, this message translates to:
+  /// **'آدرس درست نیست. مثال: http://192.168.10.58:8000'**
+  String get serverInvalid;
+
+  /// No description provided for @serverNeedsHttps.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای آدرس‌های اینترنتی فقط https مجاز است.'**
+  String get serverNeedsHttps;
+
+  /// No description provided for @serverTest.
+  ///
+  /// In fa, this message translates to:
+  /// **'آزمایش اتصال'**
+  String get serverTest;
+
+  /// No description provided for @serverTestOk.
+  ///
+  /// In fa, this message translates to:
+  /// **'اتصال برقرار است.'**
+  String get serverTestOk;
+
+  /// No description provided for @serverSave.
+  ///
+  /// In fa, this message translates to:
+  /// **'ذخیره'**
+  String get serverSave;
+
+  /// No description provided for @serverSaved.
+  ///
+  /// In fa, this message translates to:
+  /// **'آدرس سرور ذخیره شد.'**
+  String get serverSaved;
 
   /// No description provided for @lockTitle.
   ///
@@ -424,6 +520,12 @@ abstract class AppLocalizations {
   /// **'به‌خاطر چند رمز اشتباه، دوباره وارد شوید.'**
   String get signedOutTooManyAttempts;
 
+  /// No description provided for @signedOutSessionExpired.
+  ///
+  /// In fa, this message translates to:
+  /// **'نشست شما تمام شد. دوباره وارد شوید.'**
+  String get signedOutSessionExpired;
+
   /// No description provided for @homeGreeting.
   ///
   /// In fa, this message translates to:
@@ -469,7 +571,7 @@ abstract class AppLocalizations {
   /// No description provided for @logoutConfirmBody.
   ///
   /// In fa, this message translates to:
-  /// **'اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، کد پیامکی لازم است.'**
+  /// **'اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، نام کاربری و رمز عبور لازم است.'**
   String get logoutConfirmBody;
 
   /// No description provided for @comingSoon.

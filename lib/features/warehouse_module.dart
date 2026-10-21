@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/modules/app_module.dart';
 import 'package:caspian_owner/core/router/navigator_keys.dart';
 import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
+import 'package:caspian_owner/core/widgets/server_feature_gate.dart';
 import 'package:caspian_owner/features/assistant/presentation/assistant_screen.dart';
 import 'package:caspian_owner/features/chat/presentation/chat_screen.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
@@ -74,13 +75,22 @@ class WarehouseModule extends AppModule {
       label: (c) => AppLocalizations.of(c).tabStock,
       icon: AppIcons.stock,
       path: Routes.stock,
-      builder: (_) => const StockScreen(),
+      // No stock API on Caspian Server v1 yet: «به‌زودی» there.
+      builder: (_) => ServerFeatureGate(
+        title: (l10n) => l10n.stockTitle,
+        inModule: true,
+        child: const StockScreen(),
+      ),
     ),
     ModuleTab(
       label: (c) => AppLocalizations.of(c).tabAssistant,
       icon: AppIcons.assistant,
       path: Routes.assistant,
-      builder: (_) => const AssistantScreen(),
+      builder: (_) => ServerFeatureGate(
+        title: (l10n) => l10n.assistantTitle,
+        inModule: true,
+        child: const AssistantScreen(),
+      ),
     ),
   ];
 

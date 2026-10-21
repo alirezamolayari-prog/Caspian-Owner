@@ -8,11 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 /// and find it under «بررسی‌شده». Shared by the headless test (CI) and the
 /// on-device integration test.
 Future<void> loginApproveAndFindReviewed(WidgetTester tester) async {
-  // Log in.
-  await tester.enterText(find.byType(TextField), '09121234567');
-  await tester.tap(find.text('دریافت کد'));
-  await tester.pumpAndSettle();
-  await tester.enterText(find.byType(TextField), '11111');
+  // Log in (the mock accepts any username with password 11111).
+  await tester.enterText(find.byType(TextField).at(0), 'owner1');
+  await tester.enterText(find.byType(TextField).at(1), '11111');
   await tester.tap(find.text('ورود'));
   await tester.pumpAndSettle();
 

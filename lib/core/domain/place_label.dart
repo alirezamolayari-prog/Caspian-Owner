@@ -22,12 +22,13 @@ class LocationDirectory {
 
   /// Display label of a place. A whole-floor place (parking, roof) shows
   /// only its name; everything else shows «name – floor». Unknown codes
-  /// fall back to the raw code so nothing is hidden.
+  /// fall back to the raw code so nothing is hidden. Without a floor (free
+  /// text from Caspian Server v1) only the name is shown.
   String label(ConsumptionPlace place) {
     final location = _locations[place.locationCode];
     final floorName = floor(place.floorCode)?.nameFa ?? place.floorCode;
     final name = location?.nameFa ?? place.locationCode;
-    if (location?.type == LocationType.floorPlace) {
+    if (location?.type == LocationType.floorPlace || floorName.isEmpty) {
       return toPersianDigits(name);
     }
     return toPersianDigits('$name – $floorName');

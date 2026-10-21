@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:caspian_owner/core/config/api_config.dart';
+import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/notifications/notification_providers.dart';
 import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
+import 'package:caspian_owner/core/sync/live_sync.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
@@ -34,14 +37,28 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
     // Relock after 5 minutes in the background, and re-send decisions that
     // were queued while offline.
     _lifecycle = AppLifecycleListener(
-      onHide: () =>
-          ref.read(appLockControllerProvider.notifier).onBackgrounded(),
+      onHide: () {
+        _visible = false;
+        ref.read(appLockControllerProvider.notifier).onBackgrounded();
+        // No live polling in the background (battery); workmanager's
+        // 15-minute check still brings notifications.
+        ref.read(liveSyncProvider.notifier).stop();
+      },
       onShow: () {
+        _visible = true;
         ref.read(appLockControllerProvider.notifier).onForegrounded();
         if (ref.read(authControllerProvider) is SignedIn) {
           unawaited(ref.read(decisionControllerProvider.notifier).flush());
         }
+        _syncLive(wanted: ref.read(_liveSyncWanted));
       },
+    );
+
+    // Live updates from the server while visible and signed in.
+    ref.listenManual(
+      _liveSyncWanted,
+      (_, wanted) => _syncLive(wanted: wanted),
+      fireImmediately: true,
     );
 
     // Notification taps open their screen (through the lock if locked).
@@ -79,6 +96,24 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
         ref.watch(authControllerProvider) is SignedIn &&
         ref.watch(settingsControllerProvider.select((s) => s.notifications)),
   );
+
+  bool _visible = true;
+
+  static final _liveSyncWanted = Provider<bool>(
+    (ref) =>
+        ref.watch(authControllerProvider) is SignedIn &&
+        ref.watch(dataSourceProvider) == DataSource.api,
+  );
+
+  void _syncLive({required bool wanted}) {
+    final live = ref.read(liveSyncProvider.notifier);
+    if (wanted && _visible) {
+      live.start();
+    } else {
+      // Signed out: forget `since`, the next login starts fresh.
+      live.stop(reset: !wanted);
+    }
+  }
 
   void _schedule({required bool wanted, required bool first}) {
     final scheduler = ref.read(notificationSchedulerProvider);

@@ -92,7 +92,7 @@ void main() {
   ) async {
     await pumpHome(tester, scenario: MockScenario.offline);
     expect(
-      find.text('اتصال برقرار نشد. اینترنت را بررسی کنید.'),
+      find.text('به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.'),
       findsOneWidget,
     );
   });

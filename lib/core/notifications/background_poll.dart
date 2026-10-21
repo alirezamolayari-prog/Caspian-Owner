@@ -2,10 +2,14 @@ import 'package:caspian_owner/core/config/api_config.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/mock/mock_notification_source.dart';
+import 'package:caspian_owner/core/network/api_client.dart';
+import 'package:caspian_owner/core/network/changes_feed.dart';
+import 'package:caspian_owner/core/notifications/api_notification_source.dart';
 import 'package:caspian_owner/core/notifications/local_notifications.dart';
 import 'package:caspian_owner/core/notifications/notification_poller.dart';
 import 'package:caspian_owner/core/notifications/notification_source.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
+import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -47,25 +51,38 @@ void notificationCallbackDispatcher() {
     await notifier.init();
     try {
       await NotificationPoller(
-        source: await _source(),
+        source: await _source(store),
         store: store,
         notifier: notifier,
       ).run();
     } on Object {
-      // Offline or server error: try again next time.
+      // Offline, server error or session expired: try again next time.
     }
     return true;
   });
 }
 
-Future<NotificationSource> _source() async => switch (ApiConfig.dataSource) {
-  DataSource.mock => MockNotificationSource(
-    MockBackend(
-      await MockFixtures.load(rootBundle, now: DateTime.now()),
-      latency: Duration.zero,
-    ),
-  ),
-  DataSource.api => throw UnimplementedError(
-    'The API notification source is added with the middle server.',
-  ),
-};
+/// Built from what's on the phone: no app state lives in this isolate.
+Future<NotificationSource> _source(SecureStore store) async =>
+    switch (ApiConfig.dataSource) {
+      DataSource.mock => MockNotificationSource(
+        MockBackend(
+          await MockFixtures.load(rootBundle, now: DateTime.now()),
+          latency: Duration.zero,
+        ),
+      ),
+      DataSource.api => await _apiSource(store),
+    };
+
+Future<NotificationSource> _apiSource(SecureStore store) async {
+  final session = await AuthController.restore(store);
+  final settings = await AppSettings.load(store);
+  final client = ApiClient(
+    baseUrl: settings.serverUrl,
+    token: () => session?.accessToken,
+  );
+  return ApiNotificationSource(
+    ChangesFeed(client),
+    myId: () => session?.owner.id,
+  );
+}

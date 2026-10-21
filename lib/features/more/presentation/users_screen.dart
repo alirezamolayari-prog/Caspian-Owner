@@ -20,9 +20,12 @@ class UsersScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final auth = ref.watch(authControllerProvider);
     final meId = auth is SignedIn ? auth.session.owner.id : '';
-    final owners = ApiConfig.dataSource == DataSource.mock
-        ? ref.watch(mockBackendProvider).owners
-        : const <Owner>[];
+    // No users API on the server yet: only the logged-in owner is known.
+    final owners = switch ((ref.watch(dataSourceProvider), auth)) {
+      (DataSource.mock, _) => ref.watch(mockBackendProvider).owners,
+      (DataSource.api, SignedIn(:final session)) => [session.owner],
+      _ => const <Owner>[],
+    };
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.moreUsers)),

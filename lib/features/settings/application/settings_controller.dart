@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:caspian_owner/core/config/api_config.dart';
+import 'package:caspian_owner/core/config/server_url.dart';
 import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:flutter/material.dart' show ThemeMode;
@@ -14,6 +16,7 @@ class AppSettings {
     this.secureScreens = true,
     this.notifications = true,
     this.themeMode = ThemeMode.system,
+    this.serverUrl = ApiConfig.defaultServerUrl,
   });
 
   factory fromJson(Map<String, Object?> json) => AppSettings(
@@ -22,7 +25,16 @@ class AppSettings {
     notifications: json['notifications'] as bool? ?? true,
     themeMode:
         ThemeMode.values.asNameMap()[json['theme_mode']] ?? ThemeMode.system,
+    // A saved address that is no longer allowed (e.g. http after LAN http
+    // is switched off) falls back to the default.
+    serverUrl:
+        ServerUrl.normalize(json['server_url'] as String? ?? '') ??
+        ApiConfig.defaultServerUrl,
   );
+
+  /// «آدرس سرور»: where Caspian Server runs, e.g. `http://192.168.10.58:8000`
+  /// now, an https address on the Iranian host later.
+  final String serverUrl;
 
   /// «تأیید با اثر انگشت برای تأیید درخواست»: one touch before approving.
   final bool fingerprintForApproval;
@@ -41,6 +53,7 @@ class AppSettings {
     'secure_screens': secureScreens,
     'notifications': notifications,
     'theme_mode': themeMode.name,
+    'server_url': serverUrl,
   };
 
   AppSettings copyWith({
@@ -48,12 +61,14 @@ class AppSettings {
     bool? secureScreens,
     bool? notifications,
     ThemeMode? themeMode,
+    String? serverUrl,
   }) => AppSettings(
     fingerprintForApproval:
         fingerprintForApproval ?? this.fingerprintForApproval,
     secureScreens: secureScreens ?? this.secureScreens,
     notifications: notifications ?? this.notifications,
     themeMode: themeMode ?? this.themeMode,
+    serverUrl: serverUrl ?? this.serverUrl,
   );
 
   /// Reads saved settings (bootstrap), or the defaults.
@@ -91,6 +106,15 @@ class SettingsController extends Notifier<AppSettings> {
 
   set themeMode(ThemeMode mode) => _save(state.copyWith(themeMode: mode));
   ThemeMode get themeMode => state.themeMode;
+
+  /// Saves a new server address. Returns false (and saves nothing) when
+  /// [ServerUrl.problem] rejects it.
+  bool setServerUrl(String url) {
+    final normalized = ServerUrl.normalize(url);
+    if (normalized == null) return false;
+    _save(state.copyWith(serverUrl: normalized));
+    return true;
+  }
 
   void _save(AppSettings settings) {
     state = settings;

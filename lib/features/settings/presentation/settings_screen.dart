@@ -1,13 +1,16 @@
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
+import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
+import 'package:caspian_owner/features/settings/presentation/server_url_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// «تنظیمات»: theme, notifications, fingerprint, screenshots, app PIN.
+/// «تنظیمات»: theme, notifications, fingerprint, screenshots, server
+/// address, app PIN.
 class SettingsScreen extends ConsumerWidget {
   const new({super.key});
 
@@ -72,6 +75,22 @@ class SettingsScreen extends ConsumerWidget {
             subtitle: Text(l10n.settingsSecureBody),
             value: settings.secureScreens,
             onChanged: (v) => controller.setSecureScreens(enabled: v),
+          ),
+          ListTile(
+            title: Text(l10n.serverTitle),
+            subtitle: Text(
+              settings.serverUrl,
+              textDirection: TextDirection.ltr,
+              textAlign: TextAlign.end,
+            ),
+            trailing: const Icon(AppIcons.server),
+            onTap: () async {
+              final saved = await showServerUrlDialog(context);
+              if (saved && context.mounted) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(l10n.serverSaved)));
+              }
+            },
           ),
           ListTile(
             title: Text(l10n.settingsPin),

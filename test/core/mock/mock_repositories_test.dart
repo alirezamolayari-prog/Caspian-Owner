@@ -205,30 +205,21 @@ void main() {
   });
 
   group('auth', () {
-    test('only 11111 (in either digit set) signs in', () async {
+    test('only password 11111 (in either digit set) signs in', () async {
       final auth = MockAuthRepository(backend);
-      final session = await auth.verify(
-        phone: '09120000000',
-        deviceId: 'd',
-        code: '۱۱۱۱۱',
-      );
+      final session = await auth.login(username: 'owner1', password: '۱۱۱۱۱');
       expect(session.owner.isAdmin, isTrue);
 
       await expectLater(
-        auth.verify(phone: '09120000000', deviceId: 'd', code: '22222'),
-        throwsA(isA<ServerException>()),
+        auth.login(username: 'owner1', password: '22222'),
+        throwsA(isA<UnauthorizedException>()),
       );
     });
 
-    test('rejects malformed phone numbers', () async {
+    test('an empty username is refused', () async {
       await expectLater(
-        MockAuthRepository(backend).registerDevice(
-          phone: '12345',
-          deviceId: 'd',
-          deviceModel: 'm',
-          appVersion: '0.1.0+1',
-        ),
-        throwsA(isA<ServerException>()),
+        MockAuthRepository(backend).login(username: ' ', password: '11111'),
+        throwsA(isA<UnauthorizedException>()),
       );
     });
   });
