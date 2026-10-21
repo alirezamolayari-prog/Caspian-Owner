@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- HTTPS only. Plain HTTP is refused everywhere in release builds. -->
+<!--
+  TEMPORARY (local testing with Caspian Server on the mall Wi-Fi):
+  plain HTTP is allowed so the app can reach http://192.168.x.x:8000.
+  The app itself only accepts http:// for local-network addresses
+  (lib/core/config/server_url.dart); public addresses must use https.
+
+  TO REMOVE once the server runs on the Iranian host with https:
+    1. set cleartextTrafficPermitted="false" below;
+    2. set ApiConfig.allowLanHttp = false (lib/core/config/api_config.dart).
+-->
 <network-security-config>
-    <base-config cleartextTrafficPermitted="false">
+    <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
     <!--
-      Certificate pinning for the middle server, prepared but NOT enabled
-      (the server doesn't exist yet). To enable, fill in the domain and the
-      SHA-256 of its public key plus a backup key, and set an expiration:
+      Certificate pinning for the middle server, prepared but NOT enabled.
+      To enable, fill in the domain and the SHA-256 of its public key plus
+      a backup key, and set an expiration:
 
     <domain-config>
         <domain includeSubdomains="true">api.example.ir</domain>

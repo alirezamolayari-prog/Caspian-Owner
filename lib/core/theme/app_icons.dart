@@ -73,4 +73,7 @@ abstract final class AppIcons {
   static const IconData lock = Symbols.lock_rounded;
   static const IconData fingerprint = Symbols.fingerprint_rounded;
   static const IconData sms = Symbols.sms_rounded;
+  static const IconData visibility = Symbols.visibility_rounded;
+  static const IconData visibilityOff = Symbols.visibility_off_rounded;
+  static const IconData server = Symbols.dns_rounded;
 }

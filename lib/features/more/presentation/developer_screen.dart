@@ -6,6 +6,7 @@ import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
+import 'package:caspian_owner/features/settings/application/settings_controller.dart';
 import 'package:caspian_owner/features/stock/application/stock_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +22,7 @@ class DeveloperScreen extends ConsumerStatefulWidget {
 }
 
 class _DeveloperScreenState extends ConsumerState<DeveloperScreen> {
-  bool get _mock => ApiConfig.dataSource == DataSource.mock;
+  bool get _mock => ref.read(dataSourceProvider) == DataSource.mock;
 
   void _refreshData() => ref
     ..invalidate(homeControllerProvider)
@@ -62,8 +63,8 @@ class _DeveloperScreenState extends ConsumerState<DeveloperScreen> {
           Text(l10n.devDataSource, style: theme.textTheme.titleSmall),
           Text(
             l10n.devDataSourceValue(
-              ApiConfig.dataSource.name,
-              ApiConfig.baseUrl.isEmpty ? '-' : ApiConfig.baseUrl,
+              ref.watch(dataSourceProvider).name,
+              ref.watch(settingsControllerProvider).serverUrl,
             ),
             textDirection: TextDirection.ltr,
           ),

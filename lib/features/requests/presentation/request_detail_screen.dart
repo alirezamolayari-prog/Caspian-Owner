@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/domain/place_label.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/security/device_authenticator.dart';
@@ -51,8 +52,13 @@ class RequestDetailScreen extends ConsumerWidget {
     final request = detail.value?.value;
     final canAct =
         request != null && request.canDecide && local == null && !queued;
+    // Caspian Server v1 has no «برگشت برای اصلاح»: the bar is hidden there.
     final canReturn =
-        request != null && request.canReturnForEdit && local == null && !queued;
+        ref.watch(serverCapabilitiesProvider).returnForEdit &&
+        request != null &&
+        request.canReturnForEdit &&
+        local == null &&
+        !queued;
 
     return SecureScreenScope(
       child: Scaffold(
@@ -142,6 +148,8 @@ class _DetailBody extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final directory = ref.watch(locationDirectoryProvider).value;
+    // The server doesn't send stock, 30-day use or same-place history yet.
+    final stockInfo = ref.watch(serverCapabilitiesProvider).stockInfo;
     final cachedAt = this.cachedAt;
     final time = formatRelativeTime(
       request.createdAt,
@@ -192,31 +200,32 @@ class _DetailBody extends ConsumerWidget {
                     style: theme.textTheme.titleMedium,
                   ),
                   const SizedBox(height: Space.sm),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _InfoTile(
-                          label: l10n.stockNow,
-                          value: line.stockNow == null
-                              ? l10n.hiddenByCount
-                              : l10n.qtyWithUnit(
-                                  formatNumber(line.stockNow!),
-                                  line.unitFa,
-                                ),
-                        ),
-                      ),
-                      const SizedBox(width: Space.sm),
-                      Expanded(
-                        child: _InfoTile(
-                          label: l10n.usedLastMonth,
-                          value: l10n.qtyWithUnit(
-                            formatNumber(line.usedLast30d),
-                            line.unitFa,
+                  if (stockInfo)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _InfoTile(
+                            label: l10n.stockNow,
+                            value: line.stockNow == null
+                                ? l10n.hiddenByCount
+                                : l10n.qtyWithUnit(
+                                    formatNumber(line.stockNow!),
+                                    line.unitFa,
+                                  ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: Space.sm),
+                        Expanded(
+                          child: _InfoTile(
+                            label: l10n.usedLastMonth,
+                            value: l10n.qtyWithUnit(
+                              formatNumber(line.usedLast30d),
+                              line.unitFa,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   const SizedBox(height: Space.md),
                 ],
                 _PlaceRow(request: request, directory: directory),
@@ -237,8 +246,10 @@ class _DetailBody extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: Space.md),
-        _LocationHistoryCard(history: request.locationHistory ?? const []),
-        const SizedBox(height: Space.md),
+        if (stockInfo) ...[
+          _LocationHistoryCard(history: request.locationHistory ?? const []),
+          const SizedBox(height: Space.md),
+        ],
         RequestChatTile(requestId: request.id, summary: request.chatSummary),
       ],
     );

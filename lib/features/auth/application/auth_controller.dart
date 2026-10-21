@@ -6,7 +6,13 @@ import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Why the owner was signed out, if it wasn't their choice.
-enum SignOutReason { tooManyPinAttempts }
+enum SignOutReason {
+  tooManyPinAttempts,
+
+  /// The server answered `401`: the token expired (7 days) or the server
+  /// changed.
+  sessionExpired,
+}
 
 sealed class AuthState {
   const new();
@@ -31,7 +37,7 @@ final authControllerProvider = NotifierProvider<AuthController, AuthState>(
   AuthController.new,
 );
 
-/// Login with phone + SMS code, and logout.
+/// Login with username + password, and logout.
 class AuthController extends Notifier<AuthState> {
   @override
   AuthState build() {
@@ -42,27 +48,34 @@ class AuthController extends Notifier<AuthState> {
   AuthRepository get _repository => ref.read(authRepositoryProvider);
   SecureStore get _store => ref.read(secureStoreProvider);
 
-  /// Sends the SMS code. Throws `ApiException` on failure.
-  Future<OtpRequest> requestCode(String phone) {
-    final info = ref.read(appInfoProvider);
-    return _repository.registerDevice(
-      phone: phone,
-      deviceId: info.deviceId,
-      deviceModel: info.deviceModel,
-      appVersion: info.fullVersion,
-    );
-  }
-
-  /// Checks the code and keeps the session. Throws `ApiException`.
-  Future<void> verify({required String phone, required String code}) async {
-    final session = await _repository.verify(
-      phone: phone,
-      deviceId: ref.read(appInfoProvider).deviceId,
-      code: code,
+  /// Logs in and keeps the session (token) in secure storage.
+  /// Throws `ApiException` (wrong password: `UnauthorizedException`).
+  Future<void> login({
+    required String username,
+    required String password,
+  }) async {
+    final session = await _repository.login(
+      username: username,
+      password: password,
     );
     await _store.write(SecureKeys.session, jsonEncode(session.toJson()));
     state = SignedIn(session);
   }
+
+  /// The server refused our token (`401`): sign out once and show the
+  /// login screen with «دوباره وارد شوید».
+  Future<void> sessionExpired() async {
+    // Several requests can fail with 401 at once; sign out only once.
+    if (state is! SignedIn || _expiring) return;
+    _expiring = true;
+    try {
+      await signOut(SignOutReason.sessionExpired);
+    } finally {
+      _expiring = false;
+    }
+  }
+
+  bool _expiring = false;
 
   /// Logs out and wipes local data. The device id is kept.
   Future<void> signOut([SignOutReason? reason]) async {

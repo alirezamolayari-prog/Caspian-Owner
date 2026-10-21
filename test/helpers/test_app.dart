@@ -1,4 +1,5 @@
 import 'package:caspian_owner/app.dart';
+import 'package:caspian_owner/core/config/api_config.dart';
 import 'package:caspian_owner/core/config/app_info.dart';
 import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/domain/person.dart';
@@ -16,6 +17,7 @@ import 'package:caspian_owner/core/update/update_checker.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:drift/drift.dart' show DatabaseConnection, driftRuntimeOptions;
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
@@ -88,6 +90,9 @@ class TestHarness {
   /// Builds the fakes from already-loaded [fixtures]. Synchronous, so it is
   /// safe inside `testWidgets` (real file I/O never completes on its fake
   /// clock; load fixtures in `setUpAll`).
+  ///
+  /// With [server] the app talks to that fake Caspian Server instead of the
+  /// mock backend, through the real `ApiClient` (token, 401 → sign out).
   factory create(
     MockFixtures fixtures, {
     bool signedIn = false,
@@ -96,6 +101,7 @@ class TestHarness {
     bool isDebug = true,
     Owner owner = testOwner,
     UpdateChecker? updateChecker,
+    HttpClientAdapter? server,
   }) {
     driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
     final backend = MockBackend(fixtures, latency: Duration.zero);
@@ -131,6 +137,13 @@ class TestHarness {
         secureScreenProvider.overrideWithValue(secureScreen),
         appDatabaseProvider.overrideWithValue(database),
         mockBackendProvider.overrideWithValue(backend),
+        dataSourceProvider.overrideWithValue(
+          server == null ? DataSource.mock : DataSource.api,
+        ),
+        if (server != null)
+          apiDioProvider.overrideWith(
+            (ref) => Dio()..httpClientAdapter = server,
+          ),
         // No network in tests: the update check finds nothing.
         updateCheckerProvider.overrideWithValue(
           updateChecker ?? UpdateChecker(urls: const []),

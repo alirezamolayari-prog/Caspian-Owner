@@ -30,51 +30,56 @@ void main() {
     return harness;
   }
 
-  testWidgets('login with phone and test code leads to the hub', (
+  Future<void> login(
+    WidgetTester tester, {
+    String username = 'owner1',
+    String password = '۱۱۱۱۱',
+  }) async {
+    await tester.enterText(find.byType(TextField).at(0), username);
+    await tester.enterText(find.byType(TextField).at(1), password);
+    await tester.tap(find.text('ورود'));
+    await tester.pumpAndSettle();
+  }
+
+  testWidgets('login with username and test password leads to the hub', (
     tester,
   ) async {
     final harness = await pumpApp(tester);
     expect(find.byType(LoginScreen), findsOneWidget);
+    expect(find.text('نسخه آزمایشی: رمز ۱۱۱۱۱'), findsOneWidget);
 
-    await tester.enterText(find.byType(TextField), '۰۹۱۲۱۲۳۴۵۶۷');
-    await tester.tap(find.text('دریافت کد'));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('کد ۵ رقمی'), findsOneWidget);
-
-    await tester.enterText(find.byType(TextField), '۱۱۱۱۱');
-    await tester.tap(find.text('ورود'));
-    await tester.pumpAndSettle();
+    await login(tester);
 
     expect(find.byType(HubScreen), findsOneWidget);
     expect(find.text('سلام علیرضا'), findsOneWidget);
-    // Signing in with a code doesn't ask for the fingerprint again.
+    // Signing in with a password doesn't ask for the fingerprint again.
     expect(find.byType(LockScreen), findsNothing);
     expect(harness.store.values[SecureKeys.session], isNotNull);
   });
 
-  testWidgets('a wrong code shows the server message', (tester) async {
+  testWidgets('a wrong password is explained in Persian', (tester) async {
     await pumpApp(tester);
-    await tester.enterText(find.byType(TextField), '09121234567');
-    await tester.tap(find.text('دریافت کد'));
-    await tester.pumpAndSettle();
+    await login(tester, password: '22222');
 
-    await tester.enterText(find.byType(TextField), '22222');
-    await tester.tap(find.text('ورود'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('کد واردشده درست نیست.'), findsOneWidget);
+    expect(find.text('نام کاربری یا رمز عبور اشتباه است.'), findsOneWidget);
     expect(find.byType(LoginScreen), findsOneWidget);
   });
 
-  testWidgets('an invalid phone number is explained', (tester) async {
+  testWidgets('empty fields are explained', (tester) async {
     await pumpApp(tester);
-    await tester.enterText(find.byType(TextField), '0912');
-    await tester.tap(find.text('دریافت کد'));
+    await tester.tap(find.text('ورود'));
     await tester.pumpAndSettle();
-    expect(
-      find.text('شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود.'),
-      findsOneWidget,
-    );
+    expect(find.text('نام کاربری و رمز عبور را وارد کنید.'), findsOneWidget);
+  });
+
+  testWidgets('the password can be shown and hidden', (tester) async {
+    await pumpApp(tester);
+    TextField password() =>
+        tester.widget<TextField>(find.byType(TextField).at(1));
+    expect(password().obscureText, isTrue);
+    await tester.tap(find.byTooltip('نمایش رمز'));
+    await tester.pump();
+    expect(password().obscureText, isFalse);
   });
 
   testWidgets('cold start: the fingerprint prompt opens by itself', (

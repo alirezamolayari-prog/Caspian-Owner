@@ -72,10 +72,44 @@ class AppLocalizationsFa extends AppLocalizations {
   String get lowStock => 'کم';
 
   @override
-  String get errorNetwork => 'اتصال برقرار نشد. اینترنت را بررسی کنید.';
+  String get errorNetwork =>
+      'به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.';
 
   @override
   String get errorGeneric => 'مشکلی پیش آمد. دوباره تلاش کنید.';
+
+  @override
+  String get errorWrongPassword => 'نام کاربری یا رمز عبور اشتباه است.';
+
+  @override
+  String get errorSessionExpired => 'نشست شما تمام شد. دوباره وارد شوید.';
+
+  @override
+  String get errorForbidden => 'شما اجازهٔ انجام این کار را ندارید.';
+
+  @override
+  String get errorConflict => 'این درخواست قبلاً تأیید یا رد شده است.';
+
+  @override
+  String get errorInvalidData =>
+      'اطلاعات واردشده معتبر نیست. دوباره بررسی کنید.';
+
+  @override
+  String get errorNotFound => 'این مورد پیدا نشد.';
+
+  @override
+  String get errorServer => 'خطای سرور. کمی بعد دوباره تلاش کنید.';
+
+  @override
+  String get errorNotOwner =>
+      'این حساب مخصوص مالکان نیست. با حساب مالک وارد شوید.';
+
+  @override
+  String get errorNotConnected => 'این بخش هنوز به سرور وصل نشده است.';
+
+  @override
+  String get notConnectedBody =>
+      'این بخش هنوز به سرور کاسپین وصل نشده است و به‌زودی اضافه می‌شود.';
 
   @override
   String get tabHome => 'خانه';
@@ -113,53 +147,62 @@ class AppLocalizationsFa extends AppLocalizations {
   String get loginTitle => 'ورود به مالک کاسپین';
 
   @override
-  String get loginPhoneLabel => 'شماره موبایل';
+  String get loginUsernameLabel => 'نام کاربری';
 
   @override
-  String get loginPhoneHint => '۰۹۱۲۳۴۵۶۷۸۹';
+  String get loginPasswordLabel => 'رمز عبور';
 
   @override
-  String get loginPhoneHelp => 'یک کد با پیامک برایتان فرستاده می‌شود.';
+  String get loginShowPassword => 'نمایش رمز';
 
   @override
-  String get loginPhoneInvalid =>
-      'شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود.';
+  String get loginHidePassword => 'پنهان کردن رمز';
 
   @override
-  String get loginSendCode => 'دریافت کد';
-
-  @override
-  String get loginCodeLabel => 'کد پیامک‌شده';
-
-  @override
-  String loginCodeSent(int length, String phone) {
-    final intl.NumberFormat lengthNumberFormat =
-        intl.NumberFormat.decimalPattern(localeName);
-    final String lengthString = lengthNumberFormat.format(length);
-
-    return 'کد $lengthString رقمی به $phone فرستاده شد.';
-  }
+  String get loginFieldsRequired => 'نام کاربری و رمز عبور را وارد کنید.';
 
   @override
   String get loginVerify => 'ورود';
 
   @override
-  String get loginChangePhone => 'تغییر شماره';
+  String get loginTestPasswordHint => 'نسخه آزمایشی: رمز ۱۱۱۱۱';
 
   @override
-  String get loginResend => 'ارسال دوباره کد';
-
-  @override
-  String loginResendIn(int seconds) {
-    final intl.NumberFormat secondsNumberFormat =
-        intl.NumberFormat.decimalPattern(localeName);
-    final String secondsString = secondsNumberFormat.format(seconds);
-
-    return 'ارسال دوباره تا $secondsString ثانیه';
+  String loginServer(String url) {
+    return 'سرور: $url';
   }
 
   @override
-  String get loginTestCodeHint => 'نسخه آزمایشی: کد ۱۱۱۱۱';
+  String get loginChangeServer => 'تغییر آدرس سرور';
+
+  @override
+  String get serverTitle => 'آدرس سرور';
+
+  @override
+  String get serverHelp =>
+      'مثال: http://192.168.10.58:8000 (روی وای‌فای پاساژ) یا یک آدرس https.';
+
+  @override
+  String get serverChangeSignsOut =>
+      'با تغییر آدرس سرور، از حساب خارج می‌شوید و باید دوباره وارد شوید.';
+
+  @override
+  String get serverInvalid => 'آدرس درست نیست. مثال: http://192.168.10.58:8000';
+
+  @override
+  String get serverNeedsHttps => 'برای آدرس‌های اینترنتی فقط https مجاز است.';
+
+  @override
+  String get serverTest => 'آزمایش اتصال';
+
+  @override
+  String get serverTestOk => 'اتصال برقرار است.';
+
+  @override
+  String get serverSave => 'ذخیره';
+
+  @override
+  String get serverSaved => 'آدرس سرور ذخیره شد.';
 
   @override
   String get lockTitle => 'برنامه قفل است';
@@ -219,6 +262,9 @@ class AppLocalizationsFa extends AppLocalizations {
       'به‌خاطر چند رمز اشتباه، دوباره وارد شوید.';
 
   @override
+  String get signedOutSessionExpired => 'نشست شما تمام شد. دوباره وارد شوید.';
+
+  @override
   String homeGreeting(String name) {
     return 'سلام $name';
   }
@@ -243,7 +289,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get logoutConfirmBody =>
-      'اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، کد پیامکی لازم است.';
+      'اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، نام کاربری و رمز عبور لازم است.';
 
   @override
   String get comingSoon => 'این بخش به‌زودی آماده می‌شود.';

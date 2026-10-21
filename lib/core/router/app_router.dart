@@ -5,6 +5,7 @@ import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/core/update/update_screen.dart';
+import 'package:caspian_owner/core/widgets/server_feature_gate.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/auth/presentation/lock_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
@@ -107,8 +108,21 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const MoreScreen(),
       ),
       for (final (path, screen) in <(String, Widget)>[
-        (Routes.notifications, const NotificationsScreen()),
-        (Routes.reports, const ReportsScreen()),
+        // No server API for these yet: «به‌زودی» on Caspian Server v1.
+        (
+          Routes.notifications,
+          ServerFeatureGate(
+            title: (l10n) => l10n.notificationsTitle,
+            child: const NotificationsScreen(),
+          ),
+        ),
+        (
+          Routes.reports,
+          ServerFeatureGate(
+            title: (l10n) => l10n.reportsTitle,
+            child: const ReportsScreen(),
+          ),
+        ),
         (Routes.purchases, const PurchaseListScreen()),
         (Routes.users, const UsersScreen()),
         (Routes.settings, const SettingsScreen()),

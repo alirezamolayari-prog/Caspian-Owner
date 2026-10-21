@@ -4,7 +4,7 @@
 
 ## Big picture
 ```
-[Caspian Warehouse (Windows, MariaDB)] --push events / poll decisions--> [Middle server (future)] <--HTTPS /v1--> [Caspian Owner app]
+[Caspian Warehouse (Windows, MariaDB)] --push events / poll decisions--> [Caspian Server (FastAPI)] <--HTTP(S), polling /changes--> [Caspian Owner app]
 ```
 - The **Warehouse app is the source of truth** for items, stock, persons, locations and documents.
 - The owner app talks **only to the middle server** through the contract `api/openapi.yaml` (OpenAPI 3.1, `/v1/...`). Until the server exists, mock repositories return contract-valid data. Switching to the real server changes one config value.
@@ -28,7 +28,26 @@
 - **Repositories:** interfaces in `features/*/domain/*_repository.dart`; failures are the sealed `ApiException` family (`core/network/api_exception.dart`).
 - **Mock backend:** `core/mock/`. One in-memory server (`MockBackend`) loads the JSON fixtures in `assets/mock/` through the contract models, shifts their dates to "now", and applies the server's rules: first decision wins (`409`), idempotency keys, items the Warehouse app is counting hide their stock, stock never auto-adjusted. Scenarios for the developer screen: normal, empty, slow network, server error, conflict.
 - **Locations:** `assets/mock/caspian_locations.csv` is the Warehouse seed file, byte-identical to commit `2f26c614` on `feature/a-consumption-locations` of `Caspian_Warehouse`. Re-sync from `main` after that branch is merged. Floors and their display names live in `core/domain/place.dart` (`Floors.all`, building order P4 → ROOF).
-- **Switch to the real server:** `core/config/api_config.dart`, one value (`ApiConfig.dataSource`).
+- **Switch to the real server:** `core/config/api_config.dart`, one value (`ApiConfig.dataSource`). Since M15 the app uses `DataSource.api`; tests use the mock through `dataSourceProvider` (overridden by `TestHarness`).
+
+## Caspian Server v1 (M15)
+The first real middle server is **Caspian Server** (FastAPI, repo `alirezamolayari-prog/Caspian-Server`, API in its `/docs` and `/openapi.json`). It is much simpler than `api/openapi.yaml`, which stays as the long-term contract (and `contract_test.dart` still guards the models against it).
+
+| Owner app | Caspian Server v1 |
+|---|---|
+| `AuthRepository.login` | `POST /auth/login` (form `username`, `password`) → JWT (7 days, no refresh), then `GET /auth/me`. Only `owner`/`admin` roles may sign in (`not_owner`). |
+| `RequestsRepository.list/get` | `GET /requests[?status=]`, `GET /requests/{id}` (+ `GET /requests/{id}/messages` for the chat summary) |
+| `decide` approve / reject | `POST /requests/{id}/approve`, `POST /requests/{id}/reject {reason}`. No idempotency keys: a retried decision answered `409` counts as applied when `decided_by_id` is us. `returnForEdit` is not on the server (hidden). |
+| `ChatRepository` | `GET`/`POST /requests/{id}/messages` (whole chat; pages cut in the app) |
+| live updates | `GET /changes?since=` every 5 s while the app is visible (`core/sync/live_sync.dart`); first `since` from `GET /health` (server clock). Upsert by id: answers overlap 2 s. |
+| background notifications | the same `/changes` from workmanager (`ApiNotificationSource`) |
+| stock, assistant, reports, `/notifications`, `/config`, `/locations` | not on the server yet: «به‌زودی» pages (`ServerFeatureGate`), `NotConnected*` repositories, `LocalConfigRepository` |
+
+- `core/network/api_client.dart`: dio wrapper; adds the token; maps failures to `ApiException` (no connection → `NetworkException`, 401/403/404/409/422 → their own types); a `401` on a signed-in request signs out (`SignOutReason.sessionExpired`).
+- `core/network/server_mappers.dart`: server JSON → app models. Server ids become string ids and request numbers; the place is free text (`consumption_location`, no floor); every request is escalated; times are UTC on the wire and local in the app.
+- `serverCapabilitiesProvider` hides what v1 doesn't send (stock row, same-place history, return for edit).
+- **Server address** is an owner setting (`AppSettings.serverUrl`, Settings and the login screen, kept on logout; changing it signs out). Default `ApiConfig.defaultServerUrl`.
+- **Plain HTTP (temporary):** `ApiConfig.allowLanHttp` lets `http://` through only for private-network hosts (`core/config/server_url.dart`), and `src/main/res/xml/network_security_config.xml` permits cleartext. Remove both when the server has https on the Iranian host.
 
 ## Offline behaviour
 - Last data cached in drift, shown with «آخرین به‌روزرسانی: …».

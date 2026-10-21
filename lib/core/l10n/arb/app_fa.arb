@@ -50,8 +50,27 @@
   "lowStock": "کم",
   "@lowStock": { "description": "Chip on stock rows that are running low." },
 
-  "errorNetwork": "اتصال برقرار نشد. اینترنت را بررسی کنید.",
+  "errorNetwork": "به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.",
+  "@errorNetwork": { "description": "No connection, timeout, or the server is off/unreachable." },
   "errorGeneric": "مشکلی پیش آمد. دوباره تلاش کنید.",
+  "errorWrongPassword": "نام کاربری یا رمز عبور اشتباه است.",
+  "@errorWrongPassword": { "description": "401 at login." },
+  "errorSessionExpired": "نشست شما تمام شد. دوباره وارد شوید.",
+  "@errorSessionExpired": { "description": "401 after login: token expired or revoked." },
+  "errorForbidden": "شما اجازهٔ انجام این کار را ندارید.",
+  "@errorForbidden": { "description": "403." },
+  "errorConflict": "این درخواست قبلاً تأیید یا رد شده است.",
+  "@errorConflict": { "description": "409: already approved/rejected." },
+  "errorInvalidData": "اطلاعات واردشده معتبر نیست. دوباره بررسی کنید.",
+  "@errorInvalidData": { "description": "422." },
+  "errorNotFound": "این مورد پیدا نشد.",
+  "errorServer": "خطای سرور. کمی بعد دوباره تلاش کنید.",
+  "@errorServer": { "description": "5xx or a broken answer." },
+  "errorNotOwner": "این حساب مخصوص مالکان نیست. با حساب مالک وارد شوید.",
+  "@errorNotOwner": { "description": "Login with a warehouse account." },
+  "errorNotConnected": "این بخش هنوز به سرور وصل نشده است.",
+  "notConnectedBody": "این بخش هنوز به سرور کاسپین وصل نشده است و به‌زودی اضافه می‌شود.",
+  "@notConnectedBody": { "description": "Stock, assistant, reports, notifications list while the server has no API for them." },
 
   "tabHome": "خانه",
   "tabRequests": "درخواست‌ها",
@@ -69,27 +88,26 @@
   "logout": "خروج",
 
   "loginTitle": "ورود به مالک کاسپین",
-  "loginPhoneLabel": "شماره موبایل",
-  "loginPhoneHint": "۰۹۱۲۳۴۵۶۷۸۹",
-  "loginPhoneHelp": "یک کد با پیامک برایتان فرستاده می‌شود.",
-  "loginPhoneInvalid": "شماره موبایل باید ۱۱ رقم باشد و با ۰۹ شروع شود.",
-  "loginSendCode": "دریافت کد",
-  "loginCodeLabel": "کد پیامک‌شده",
-  "loginCodeSent": "کد {length} رقمی به {phone} فرستاده شد.",
-  "@loginCodeSent": {
-    "placeholders": {
-      "length": { "type": "int", "format": "decimalPattern" },
-      "phone": { "type": "String" }
-    }
-  },
+  "loginUsernameLabel": "نام کاربری",
+  "loginPasswordLabel": "رمز عبور",
+  "loginShowPassword": "نمایش رمز",
+  "loginHidePassword": "پنهان کردن رمز",
+  "loginFieldsRequired": "نام کاربری و رمز عبور را وارد کنید.",
   "loginVerify": "ورود",
-  "loginChangePhone": "تغییر شماره",
-  "loginResend": "ارسال دوباره کد",
-  "loginResendIn": "ارسال دوباره تا {seconds} ثانیه",
-  "@loginResendIn": {
-    "placeholders": { "seconds": { "type": "int", "format": "decimalPattern" } }
-  },
-  "loginTestCodeHint": "نسخه آزمایشی: کد ۱۱۱۱۱",
+  "loginTestPasswordHint": "نسخه آزمایشی: رمز ۱۱۱۱۱",
+  "loginServer": "سرور: {url}",
+  "@loginServer": { "placeholders": { "url": { "type": "String" } } },
+  "loginChangeServer": "تغییر آدرس سرور",
+
+  "serverTitle": "آدرس سرور",
+  "serverHelp": "مثال: http://192.168.10.58:8000 (روی وای‌فای پاساژ) یا یک آدرس https.",
+  "serverChangeSignsOut": "با تغییر آدرس سرور، از حساب خارج می‌شوید و باید دوباره وارد شوید.",
+  "serverInvalid": "آدرس درست نیست. مثال: http://192.168.10.58:8000",
+  "serverNeedsHttps": "برای آدرس‌های اینترنتی فقط https مجاز است.",
+  "serverTest": "آزمایش اتصال",
+  "serverTestOk": "اتصال برقرار است.",
+  "serverSave": "ذخیره",
+  "serverSaved": "آدرس سرور ذخیره شد.",
 
   "lockTitle": "برنامه قفل است",
   "lockBody": "برای دیدن اطلاعات، هویت خود را تأیید کنید.",
@@ -110,6 +128,7 @@
   "pinMismatch": "دو رمز یکی نیستند.",
   "pinSave": "ذخیره رمز",
   "signedOutTooManyAttempts": "به‌خاطر چند رمز اشتباه، دوباره وارد شوید.",
+  "signedOutSessionExpired": "نشست شما تمام شد. دوباره وارد شوید.",
 
   "homeGreeting": "سلام {name}",
   "@homeGreeting": { "placeholders": { "name": { "type": "String" } } },
@@ -120,7 +139,7 @@
 
   "cancel": "انصراف",
   "logoutConfirmTitle": "از حساب خارج می‌شوید؟",
-  "logoutConfirmBody": "اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، کد پیامکی لازم است.",
+  "logoutConfirmBody": "اطلاعات ذخیره‌شده روی این گوشی پاک می‌شود. برای ورود دوباره، نام کاربری و رمز عبور لازم است.",
 
   "comingSoon": "این بخش به‌زودی آماده می‌شود.",
 
