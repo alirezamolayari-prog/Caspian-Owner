@@ -1,4 +1,5 @@
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
+import 'package:caspian_owner/core/notifications/background_reliability.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
@@ -9,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// «تنظیمات»: theme, notifications, fingerprint, screenshots, server
-/// address, app PIN.
+/// «تنظیمات»: theme, notifications (and what stops them while the app is
+/// closed), fingerprint, screenshots, server address, app PIN.
 class SettingsScreen extends ConsumerWidget {
   const new({super.key});
 
@@ -64,6 +65,9 @@ class SettingsScreen extends ConsumerWidget {
             value: settings.notifications,
             onChanged: (v) => controller.setNotifications(enabled: v),
           ),
+          if (settings.notifications &&
+              ref.watch(backgroundReliabilityProvider) != null)
+            const _BackgroundSection(),
           SwitchListTile(
             title: Text(l10n.settingsFingerprint),
             subtitle: Text(l10n.settingsFingerprintBody),
@@ -117,6 +121,97 @@ class SettingsScreen extends ConsumerWidget {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(l10n.settingsPinSaved)));
     }
+  }
+}
+
+/// «اعلان وقتی برنامه بسته است»: each thing that can stop the background
+/// check, its state as text, and a button to the system page that fixes it.
+/// Read again when the owner comes back to the app.
+class _BackgroundSection extends ConsumerStatefulWidget {
+  const new();
+
+  @override
+  ConsumerState<_BackgroundSection> createState() => _BackgroundSectionState();
+}
+
+class _BackgroundSectionState extends ConsumerState<_BackgroundSection> {
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycle = AppLifecycleListener(
+      onResume: () => ref.invalidate(backgroundStatusProvider),
+    );
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final status = ref.watch(backgroundStatusProvider).value;
+    final reliability = ref.watch(backgroundReliabilityProvider);
+    if (status == null || reliability == null) return const SizedBox.shrink();
+
+    Widget row({
+      required String title,
+      required String subtitle,
+      required Future<void> Function() open,
+      bool showButton = true,
+    }) => ListTile(
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: showButton
+          ? TextButton(onPressed: open, child: Text(l10n.backgroundFix))
+          : null,
+    );
+
+    String state({required bool on}) =>
+        on ? l10n.backgroundOn : l10n.backgroundOff;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            Space.page,
+            Space.md,
+            Space.page,
+            Space.xs,
+          ),
+          child: Text(l10n.backgroundTitle, style: theme.textTheme.titleSmall),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: Space.page),
+          child: Text(l10n.backgroundBody, style: theme.textTheme.bodySmall),
+        ),
+        row(
+          title: l10n.backgroundNotifications,
+          subtitle: state(on: status.notificationsAllowed),
+          open: reliability.openNotificationSettings,
+          showButton: !status.notificationsAllowed,
+        ),
+        row(
+          title: l10n.backgroundBattery,
+          subtitle: state(on: status.batteryUnrestricted),
+          open: reliability.openBatterySettings,
+          showButton: !status.batteryUnrestricted,
+        ),
+        if (status.hasAutostart)
+          row(
+            title: l10n.backgroundAutostart,
+            subtitle: l10n.backgroundAutostartBody,
+            open: reliability.openAutostartSettings,
+          ),
+        const SizedBox(height: Space.sm),
+      ],
+    );
   }
 }
 

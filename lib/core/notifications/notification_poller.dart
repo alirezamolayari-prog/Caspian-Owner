@@ -38,14 +38,32 @@ class NotificationPoller {
     final since = sinceRaw == null
         ? clock.now().subtract(firstLookBack)
         : DateTime.parse(sinceRaw);
+    final batch = await source.poll(since: since);
+    return showNew(
+      store: store,
+      notifier: notifier,
+      events: batch.events,
+      serverTime: batch.serverTime,
+    );
+  }
+
+  /// Shows each of [events] not shown before (by id), remembers it, and
+  /// keeps [serverTime] as the next `since`. Shared by the background check
+  /// and the open app (`LiveSyncController`), so an event is shown once.
+  /// Returns how many notifications were shown.
+  static Future<int> showNew({
+    required SecureStore store,
+    required LocalNotifier notifier,
+    required List<NotificationEvent> events,
+    required DateTime serverTime,
+  }) async {
     final shownRaw = await store.read(shownKey);
     final shown = <String>[
       if (shownRaw != null) ...(jsonDecode(shownRaw) as List<Object?>).cast(),
     ];
 
-    final batch = await source.poll(since: since);
     final fresh = [
-      for (final e in batch.events)
+      for (final e in events)
         if (isShown(e) && !shown.contains(e.id)) e,
     ];
     for (final event in fresh) {
@@ -57,7 +75,7 @@ class NotificationPoller {
         ? shown.sublist(shown.length - keepIds)
         : shown;
     await store.write(shownKey, jsonEncode(kept));
-    await store.write(sinceKey, batch.serverTime.toUtc().toIso8601String());
+    await store.write(sinceKey, serverTime.toUtc().toIso8601String());
     return fresh.length;
   }
 }

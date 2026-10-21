@@ -101,4 +101,30 @@ void main() {
     expect(notifier.shown, isEmpty);
     expect(store.values[NotificationPoller.sinceKey], isNull);
   });
+
+  test('an event the open app already showed is not shown again', () async {
+    final event = NotificationEvent(
+      id: 'n-m9',
+      kind: NotificationEventKind.chatMessage,
+      at: testNow,
+      titleFa: 'پیام از انبار پاساژ',
+      bodyFa: 'سلام',
+      target: '/requests/5',
+    );
+    final first = await NotificationPoller.showNew(
+      store: store,
+      notifier: notifier,
+      events: [event],
+      serverTime: testNow,
+    );
+    final second = await NotificationPoller(
+      source: _Fixed([event]),
+      store: store,
+      notifier: notifier,
+    ).run();
+
+    expect(first, 1);
+    expect(second, 0);
+    expect(notifier.shown, [event]);
+  });
 }

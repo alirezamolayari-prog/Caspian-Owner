@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:caspian_owner/core/domain/person.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
+import 'package:caspian_owner/core/notifications/background_reliability.dart';
 import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/core/update/update_checker.dart';
@@ -12,7 +13,9 @@ import 'package:caspian_owner/features/more/presentation/developer_screen.dart';
 import 'package:caspian_owner/features/reports/presentation/reports_screen.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/mock_setup.dart';
@@ -27,6 +30,7 @@ void main() {
     String location, {
     Owner owner = testOwner,
     UpdateChecker? updateChecker,
+    List<Override> extra = const [],
   }) async {
     tester.view
       ..physicalSize = const Size(1080, 2600)
@@ -39,7 +43,7 @@ void main() {
       updateChecker: updateChecker,
     );
     addTearDown(harness.database.close);
-    await tester.pumpWidget(harness.app());
+    await tester.pumpWidget(harness.app(extra: extra));
     await tester.pumpAndSettle();
     ProviderScope.containerOf(tester.element(find.byType(MaterialApp)))
         .read(routerProvider)
@@ -140,6 +144,48 @@ void main() {
         h.store.values[SecureKeys.settings]!,
       ) as Map<String, Object?>;
       expect(saved['theme_mode'], 'dark');
+    });
+
+    testWidgets('«اعلان وقتی برنامه بسته است» shows each state as text and '
+        'opens the system page that fixes it', (tester) async {
+      const channel = MethodChannel('caspian/background');
+      final messenger = tester.binding.defaultBinaryMessenger;
+      final calls = <String>[];
+      messenger.setMockMethodCallHandler(channel, (call) async {
+        calls.add(call.method);
+        return call.method == 'status'
+            ? <String, Object?>{
+                'notificationsAllowed': true,
+                'batteryUnrestricted': false,
+                'hasAutostart': true,
+              }
+            : null;
+      });
+      addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
+
+      await pumpAt(
+        tester,
+        '/settings',
+        extra: [
+          backgroundReliabilityProvider.overrideWithValue(
+            const BackgroundReliability(),
+          ),
+        ],
+      );
+      await tester.scrollUntilVisible(
+        find.text('اجرای خودکار (Autostart)'),
+        200,
+      );
+
+      expect(find.text('اعلان وقتی برنامه بسته است'), findsOneWidget);
+      expect(find.text('روشن است'), findsOneWidget); // notifications
+      expect(find.text('خاموش است'), findsOneWidget); // battery
+      // Battery and Autostart need a fix; notifications are already on.
+      expect(find.text('تنظیم'), findsNWidgets(2));
+
+      await tester.tap(find.text('تنظیم').last);
+      await tester.pumpAndSettle();
+      expect(calls, contains('openAutostartSettings'));
     });
 
     testWidgets('app PIN can be set from settings', (tester) async {
