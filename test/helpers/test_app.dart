@@ -184,8 +184,9 @@ class TestHarness {
     child: const CaspianOwnerApp(themeMode: ThemeMode.light),
   );
 
-  ProviderContainer container() => ProviderContainer(
-    overrides: overrides,
-    retry: (retryCount, error) => null,
-  );
+  ProviderContainer container({List<Override> extra = const []}) =>
+      ProviderContainer(
+        overrides: [...overrides, ...extra],
+        retry: (retryCount, error) => null,
+      );
 }

@@ -1,10 +1,15 @@
 package com.alirezamolayari.caspianowner
 
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import android.view.WindowManager
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.FileProvider
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -70,6 +75,86 @@ class MainActivity : FlutterFragmentActivity() {
                     }
                 }
                 else -> result.notImplemented()
+            }
+        }
+
+        // Background notifications: what can stop the 15-minute check on
+        // this phone, and the system pages that fix it
+        // (Settings › «اعلان وقتی برنامه بسته است»).
+        MethodChannel(messenger, "caspian/background").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "status" -> {
+                    val power = getSystemService(Context.POWER_SERVICE) as PowerManager
+                    result.success(
+                        mapOf(
+                            "notificationsAllowed" to
+                                NotificationManagerCompat.from(this).areNotificationsEnabled(),
+                            "batteryUnrestricted" to
+                                power.isIgnoringBatteryOptimizations(packageName),
+                            "hasAutostart" to hasAutostartSwitch(),
+                        )
+                    )
+                }
+                "openNotificationSettings" -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        openFirst(
+                            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName),
+                            appDetails(),
+                        )
+                    } else {
+                        openFirst(appDetails())
+                    }
+                    result.success(null)
+                }
+                "openBatterySettings" -> {
+                    // Asks directly; if the phone blocks that, the full list.
+                    openFirst(
+                        Intent(
+                            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                            Uri.parse("package:$packageName"),
+                        ),
+                        Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),
+                        appDetails(),
+                    )
+                    result.success(null)
+                }
+                "openAutostartSettings" -> {
+                    // MIUI / HyperOS «Autostart» list; else the app's info page.
+                    openFirst(
+                        Intent().setComponent(
+                            ComponentName(
+                                "com.miui.securitycenter",
+                                "com.miui.permcenter.autostart.AutoStartManagementActivity",
+                            )
+                        ),
+                        appDetails(),
+                    )
+                    result.success(null)
+                }
+                else -> result.notImplemented()
+            }
+        }
+    }
+
+    /// Xiaomi, Redmi and POCO phones never start the background check while
+    /// the app's «Autostart» switch is off, and apps can't read that switch.
+    private fun hasAutostartSwitch(): Boolean =
+        Build.MANUFACTURER.lowercase() in setOf("xiaomi", "redmi", "poco")
+
+    private fun appDetails(): Intent =
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
+
+    /// Opens the first of [intents] this phone has.
+    private fun openFirst(vararg intents: Intent) {
+        for (intent in intents) {
+            try {
+                startActivity(intent)
+                return
+            } catch (e: ActivityNotFoundException) {
+                // Not on this phone: try the next one.
+            } catch (e: SecurityException) {
+                // Not allowed for this app: try the next one.
             }
         }
     }

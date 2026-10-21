@@ -5,11 +5,15 @@ import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/network/api_exception.dart';
 import 'package:caspian_owner/core/network/changes_feed.dart';
 import 'package:caspian_owner/core/network/server_mappers.dart';
+import 'package:caspian_owner/core/notifications/api_notification_source.dart';
+import 'package:caspian_owner/core/notifications/notification_poller.dart';
+import 'package:caspian_owner/core/notifications/notification_providers.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/chat/application/chat_controller.dart';
 import 'package:caspian_owner/features/chat/domain/chat_message.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
+import 'package:caspian_owner/features/settings/application/settings_controller.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final liveSyncProvider = NotifierProvider<LiveSyncController, DateTime?>(
@@ -19,7 +23,10 @@ final liveSyncProvider = NotifierProvider<LiveSyncController, DateTime?>(
 /// While the app is open and signed in, asks Caspian Server «what changed
 /// since …?» (`GET /changes`) every [ApiConfig.liveSyncInterval]:
 /// - changed requests → lists, Home and that request's detail reload;
-/// - new messages → an open chat shows them, the «گفتگو» tile updates.
+/// - new messages → an open chat shows them, the «گفتگو» tile updates;
+/// - a new pending request, someone else's decision or message → a phone
+///   notification (same texts and «shown once» list as the background
+///   check, which Android may delay or skip, e.g. Xiaomi without Autostart).
 ///
 /// The first `since` is the server's own clock, so a wrong phone clock
 /// can't hide anything. Offline, it just tries again on the next tick.
@@ -74,12 +81,44 @@ class LiveSyncController extends Notifier<DateTime?> {
       final since = _since ??= await feed.serverNow();
       final changes = await feed.since(since);
       _since = changes.nextSince;
-      if (!changes.isEmpty) _apply(changes);
+      if (!changes.isEmpty) {
+        _apply(changes);
+        await _notify(changes, since: since);
+      }
       state = changes.nextSince;
     } on ApiException {
       // Offline or a server error: next tick. (401 already signed out.)
     } finally {
       _busy = false;
+    }
+  }
+
+  String? get _myId => switch (ref.read(authControllerProvider)) {
+    SignedIn(:final session) => session.owner.id,
+    SignedOut() => null,
+  };
+
+  /// Phone notifications for [changes] (asked with [since]), unless turned
+  /// off in Settings. Never breaks the sync: a failure is only logged.
+  Future<void> _notify(ServerChanges changes, {required DateTime since}) async {
+    final notifier = ref.read(foregroundNotifierProvider);
+    if (notifier == null ||
+        !ref.read(settingsControllerProvider).notifications) {
+      return;
+    }
+    try {
+      await NotificationPoller.showNew(
+        store: ref.read(secureStoreProvider),
+        notifier: notifier,
+        events: ApiNotificationSource.eventsFrom(
+          changes,
+          since: since,
+          me: _myId,
+        ),
+        serverTime: changes.nextSince,
+      );
+    } on Object catch (e, s) {
+      ref.read(appLogProvider)?.error('Foreground notification failed', e, s);
     }
   }
 
@@ -89,10 +128,7 @@ class LiveSyncController extends Notifier<DateTime?> {
         ..invalidate(requestsControllerProvider)
         ..invalidate(homeControllerProvider);
     }
-    final myId = switch (ref.read(authControllerProvider)) {
-      SignedIn(:final session) => session.owner.id,
-      SignedOut() => null,
-    };
+    final myId = _myId;
     final byRequest = <String, List<ChatMessage>>{};
     for (final json in changes.messages) {
       final message = ServerMappers.message(json, myId: myId);

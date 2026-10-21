@@ -1455,6 +1455,60 @@ abstract class AppLocalizations {
   /// **'خبر درخواست‌های تازه و پیام‌ها'**
   String get settingsNotificationsBody;
 
+  /// No description provided for @backgroundTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'اعلان وقتی برنامه بسته است'**
+  String get backgroundTitle;
+
+  /// No description provided for @backgroundBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'گوشی ممکن است برای صرفه‌جویی در باتری، بررسی درخواست‌های تازه را متوقف کند. موارد زیر را روشن کنید تا اعلان‌ها به‌موقع برسند.'**
+  String get backgroundBody;
+
+  /// No description provided for @backgroundNotifications.
+  ///
+  /// In fa, this message translates to:
+  /// **'اجازهٔ نمایش اعلان'**
+  String get backgroundNotifications;
+
+  /// No description provided for @backgroundBattery.
+  ///
+  /// In fa, this message translates to:
+  /// **'بدون محدودیت باتری'**
+  String get backgroundBattery;
+
+  /// No description provided for @backgroundAutostart.
+  ///
+  /// In fa, this message translates to:
+  /// **'اجرای خودکار (Autostart)'**
+  String get backgroundAutostart;
+
+  /// No description provided for @backgroundAutostartBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'در گوشی‌های شیائومی باید دستی روشن شود؛ برنامه وضعیتش را نمی‌بیند.'**
+  String get backgroundAutostartBody;
+
+  /// No description provided for @backgroundOn.
+  ///
+  /// In fa, this message translates to:
+  /// **'روشن است'**
+  String get backgroundOn;
+
+  /// No description provided for @backgroundOff.
+  ///
+  /// In fa, this message translates to:
+  /// **'خاموش است'**
+  String get backgroundOff;
+
+  /// No description provided for @backgroundFix.
+  ///
+  /// In fa, this message translates to:
+  /// **'تنظیم'**
+  String get backgroundFix;
+
   /// No description provided for @settingsFingerprint.
   ///
   /// In fa, this message translates to:

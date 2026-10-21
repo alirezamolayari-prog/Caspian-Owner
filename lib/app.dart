@@ -84,7 +84,7 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
     // Background check runs only while signed in with notifications on.
     ref.listenManual(
       _notificationsWanted,
-      (previous, wanted) => _schedule(wanted: wanted, first: previous == null),
+      (_, wanted) => _schedule(wanted: wanted),
       fireImmediately: true,
     );
   }
@@ -115,11 +115,14 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
     }
   }
 
-  void _schedule({required bool wanted, required bool first}) {
+  void _schedule({required bool wanted}) {
     final scheduler = ref.read(notificationSchedulerProvider);
     if (wanted) {
       unawaited(scheduler.start());
-      if (!first) unawaited(scheduler.askPermission());
+      // On every launch, not only at login: the owner may have dismissed
+      // it, or signed in with an older version that never asked. Android
+      // shows nothing when it is already allowed.
+      unawaited(scheduler.askPermission());
     } else {
       unawaited(scheduler.stop());
     }
