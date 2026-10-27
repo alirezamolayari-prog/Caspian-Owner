@@ -104,9 +104,17 @@ jobs:
           github.event.pull_request.head.repo.full_name == github.repository)
         run: |
           apksigner=$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          echo "apksigner: $apksigner"
           certs=$("$apksigner" verify --print-certs build/app/outputs/flutter-apk/app-release.apk)
-          echo "$certs" | grep -E 'Signer #1 certificate (DN|SHA-256)'
-          if echo "$certs" | grep -q 'CN=Android Debug'; then
+          # "Signer #1 certificate DN" or "Signer (minSdkVersion=…) certificate DN".
+          dn=$(echo "$certs" | grep -E '^Signer .*certificate DN:' || true)
+          if [ -z "$dn" ]; then
+            echo "$certs"
+            echo "::error::apksigner printed no signer certificate."
+            exit 1
+          fi
+          echo "$dn"
+          if echo "$dn" | grep -q 'CN=Android Debug'; then
             echo "::error::The release APK is signed with the debug key."
             exit 1
           fi
