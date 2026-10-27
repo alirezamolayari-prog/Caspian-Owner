@@ -1073,6 +1073,35 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsNotificationsBody => 'خبر درخواست‌های تازه و پیام‌ها';
 
   @override
+  String get backgroundTitle => 'اعلان وقتی برنامه بسته است';
+
+  @override
+  String get backgroundBody =>
+      'گوشی ممکن است برای صرفه‌جویی در باتری، بررسی درخواست‌های تازه را متوقف کند. موارد زیر را روشن کنید تا اعلان‌ها به‌موقع برسند.';
+
+  @override
+  String get backgroundNotifications => 'اجازهٔ نمایش اعلان';
+
+  @override
+  String get backgroundBattery => 'بدون محدودیت باتری';
+
+  @override
+  String get backgroundAutostart => 'اجرای خودکار (Autostart)';
+
+  @override
+  String get backgroundAutostartBody =>
+      'در گوشی‌های شیائومی باید دستی روشن شود؛ برنامه وضعیتش را نمی‌بیند.';
+
+  @override
+  String get backgroundOn => 'روشن است';
+
+  @override
+  String get backgroundOff => 'خاموش است';
+
+  @override
+  String get backgroundFix => 'تنظیم';
+
+  @override
   String get settingsFingerprint => 'تأیید با اثر انگشت برای تأیید درخواست';
 
   @override

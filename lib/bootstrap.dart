@@ -8,6 +8,7 @@ import 'package:caspian_owner/core/logging/app_log.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/notifications/background_poll.dart';
+import 'package:caspian_owner/core/notifications/background_reliability.dart';
 import 'package:caspian_owner/core/notifications/local_notifications.dart';
 import 'package:caspian_owner/core/notifications/notification_providers.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
@@ -82,6 +83,9 @@ Future<List<Override>> bootstrap() async {
         stop: NotificationSchedule.stop,
         askPermission: notifications.requestPermission,
       ),
+    ),
+    backgroundReliabilityProvider.overrideWithValue(
+      const BackgroundReliability(),
     ),
     appLogProvider.overrideWithValue(log),
     initialSettingsProvider.overrideWithValue(await AppSettings.load(store)),

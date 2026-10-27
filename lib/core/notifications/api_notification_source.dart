@@ -22,14 +22,24 @@ class ApiNotificationSource implements NotificationSource {
   @override
   Future<NotificationBatch> poll({required DateTime since}) async {
     final changes = await _feed.since(since);
-    final me = myId();
-    final events = <NotificationEvent>[
-      for (final json in changes.requests) ?_requestEvent(json, since, me),
-      for (final json in changes.messages)
-        if ('${json['sender_id']}' != me) _messageEvent(json),
-    ]..sort((a, b) => a.at.compareTo(b.at));
-    return NotificationBatch(events: events, serverTime: changes.nextSince);
+    return NotificationBatch(
+      events: eventsFrom(changes, since: since, me: myId()),
+      serverTime: changes.nextSince,
+    );
   }
+
+  /// The notifications in one `/changes` answer asked with [since], for
+  /// the owner [me], oldest first. Also used by the open app
+  /// (`LiveSyncController`) on the answers it already has.
+  static List<NotificationEvent> eventsFrom(
+    ServerChanges changes, {
+    required DateTime since,
+    required String? me,
+  }) => <NotificationEvent>[
+    for (final json in changes.requests) ?_requestEvent(json, since, me),
+    for (final json in changes.messages)
+      if ('${json['sender_id']}' != me) _messageEvent(json),
+  ]..sort((a, b) => a.at.compareTo(b.at));
 
   /// The bell's list needs `/notifications`, which the server doesn't have
   /// yet (the screen shows «به‌زودی»).
