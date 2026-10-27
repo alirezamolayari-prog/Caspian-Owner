@@ -73,13 +73,21 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get errorNetwork =>
-      'به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.';
+      'سرور کاسپین جواب نداد. کمی بعد دوباره امتحان کنید.';
+
+  @override
+  String get errorOffline =>
+      'اینترنت گوشی وصل نیست. وای‌فای یا اینترنت همراه را روشن کنید.';
+
+  @override
+  String get errorTooManyRequests =>
+      'تعداد تلاش‌ها زیاد شد. کمی بعد دوباره امتحان کنید.';
 
   @override
   String get errorGeneric => 'مشکلی پیش آمد. دوباره تلاش کنید.';
 
   @override
-  String get errorWrongPassword => 'نام کاربری یا رمز عبور اشتباه است.';
+  String get errorWrongPassword => 'شماره موبایل یا رمز عبور اشتباه است.';
 
   @override
   String get errorSessionExpired => 'نشست شما تمام شد. دوباره وارد شوید.';
@@ -101,8 +109,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get errorServer => 'خطای سرور. کمی بعد دوباره تلاش کنید.';
 
   @override
-  String get errorNotOwner =>
-      'این حساب مخصوص مالکان نیست. با حساب مالک وارد شوید.';
+  String get errorNotOwner => 'این حساب برای اپ مالکان نیست.';
 
   @override
   String get errorNotConnected => 'این بخش هنوز به سرور وصل نشده است.';
@@ -159,7 +166,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get loginHidePassword => 'پنهان کردن رمز';
 
   @override
-  String get loginFieldsRequired => 'نام کاربری و رمز عبور را وارد کنید.';
+  String get loginFieldsRequired => 'شماره موبایل و رمز عبور را وارد کنید.';
 
   @override
   String get loginVerify => 'ورود';
@@ -174,6 +181,236 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get loginChangeServer => 'تغییر آدرس سرور';
+
+  @override
+  String get loginMobileLabel => 'شماره موبایل';
+
+  @override
+  String get loginMobileHint => 'مثل ۰۹۱۲۳۴۵۶۷۸۹';
+
+  @override
+  String get loginUseUsername => 'ورود با نام کاربری';
+
+  @override
+  String get loginUseMobile => 'ورود با شماره موبایل';
+
+  @override
+  String loginWaitButton(String time) {
+    return 'ورود ($time)';
+  }
+
+  @override
+  String get loginForgot => 'رمز را فراموش کرده‌ام';
+
+  @override
+  String get loginNoAccount => 'حساب ندارید؟';
+
+  @override
+  String get loginRegister => 'ثبت‌نام مالک جدید';
+
+  @override
+  String get loginRegisteredNotice =>
+      'درخواست ثبت‌نام شما ثبت شد. بعد از تأیید مدیر، با همین شماره و رمز وارد شوید.';
+
+  @override
+  String get loginPasswordResetNotice =>
+      'رمز تازه ذخیره شد. با رمز تازه وارد شوید.';
+
+  @override
+  String get mobileInvalid =>
+      'شماره موبایل درست نیست. ۱۱ رقم است و با ۰۹ شروع می‌شود.';
+
+  @override
+  String stepOf(String step, String total) {
+    return 'مرحله $step از $total';
+  }
+
+  @override
+  String get sendCode => 'ارسال کد';
+
+  @override
+  String get backToLogin => 'بازگشت به صفحه ورود';
+
+  @override
+  String get registerTitle => 'ثبت‌نام مالک جدید';
+
+  @override
+  String get registerBody =>
+      'نام و شماره موبایل خود را بنویسید. یک کد ۶ رقمی برایتان پیامک می‌شود.';
+
+  @override
+  String get registerFirstName => 'نام';
+
+  @override
+  String get registerLastName => 'نام خانوادگی';
+
+  @override
+  String get nameInvalid => 'با حروف فارسی بنویسید (۲ تا ۵۰ حرف).';
+
+  @override
+  String get registerHaveAccount => 'قبلاً ثبت‌نام کرده‌اید؟ ورود';
+
+  @override
+  String get registerSubmit => 'ثبت‌نام';
+
+  @override
+  String get forgotTitle => 'فراموشی رمز عبور';
+
+  @override
+  String get forgotBody =>
+      'شماره موبایلی را که با آن ثبت‌نام کرده‌اید بنویسید. یک کد ۶ رقمی برایتان پیامک می‌شود.';
+
+  @override
+  String get otpTitle => 'کد پیامک‌شده را بنویسید';
+
+  @override
+  String otpSentTo(String mobile) {
+    return 'کد ۶ رقمی به شماره $mobile پیامک شد.';
+  }
+
+  @override
+  String get otpLabel => 'کد ۶ رقمی';
+
+  @override
+  String get otpAutoFillNote =>
+      'اگر گوشی اجازه خواست، «اجازه دادن» را بزنید تا کد خودش نوشته شود.';
+
+  @override
+  String get otpChangeMobile => 'تغییر شماره';
+
+  @override
+  String get otpVerify => 'تأیید کد';
+
+  @override
+  String otpResendIn(String time) {
+    return 'ارسال دوباره کد تا $time دیگر';
+  }
+
+  @override
+  String get otpResend => 'ارسال دوباره کد';
+
+  @override
+  String get otpResent => 'کد تازه فرستاده شد.';
+
+  @override
+  String get otpTooShort => 'کد ۶ رقم است.';
+
+  @override
+  String get otpNoCodeRegister =>
+      'کدی نرسید؟ اگر قبلاً با این شماره ثبت‌نام کرده‌اید، از «رمز را فراموش کرده‌ام» رمز تازه بگیرید.';
+
+  @override
+  String get passwordCreateTitle => 'رمز عبور بسازید';
+
+  @override
+  String get passwordResetTitle => 'رمز عبور تازه بسازید';
+
+  @override
+  String get passwordChangeTitle => 'رمز عبور خودتان را بسازید';
+
+  @override
+  String get passwordBody =>
+      'رمزی بسازید که یادتان بماند و دیگران نتوانند حدس بزنند.';
+
+  @override
+  String get passwordChangeBody =>
+      'رمزی که مدیر به شما داده موقت است. یک رمز تازه بسازید که فقط خودتان بدانید.';
+
+  @override
+  String get passwordNewLabel => 'رمز عبور تازه';
+
+  @override
+  String get passwordRepeatLabel => 'تکرار رمز عبور';
+
+  @override
+  String get passwordRuleLength => 'دست‌کم ۱۰ حرف یا عدد';
+
+  @override
+  String get passwordRuleDistinct => 'دست‌کم ۴ حرف یا عدد متفاوت';
+
+  @override
+  String get passwordRuleOk => 'انجام شد';
+
+  @override
+  String get passwordRuleNotYet => 'هنوز نه';
+
+  @override
+  String get passwordTooLong => 'رمز خیلی بلند است. کوتاه‌ترش کنید.';
+
+  @override
+  String get passwordTooCommon =>
+      'این رمز خیلی ساده و رایج است. رمز دیگری بسازید.';
+
+  @override
+  String get passwordMismatch => 'دو رمز یکی نیستند.';
+
+  @override
+  String get resetSubmit => 'ذخیره رمز تازه';
+
+  @override
+  String get changeSubmit => 'ذخیره و ورود';
+
+  @override
+  String get flowRestart => 'از اول شروع کنید';
+
+  @override
+  String get flowExpiredTitle => 'مهلت تمام شد';
+
+  @override
+  String get flowExpired =>
+      'مهلت این مرحله تمام شده است. لطفاً از اول شروع کنید.';
+
+  @override
+  String get accountRegisteredTitle => 'درخواست شما ثبت شد';
+
+  @override
+  String get accountRegisteredBody =>
+      'مدیر کاسپین باید حساب شما را تأیید کند. بعد از تأیید، با همین شماره موبایل و رمز وارد شوید.';
+
+  @override
+  String get accountPendingTitle => 'حساب شما منتظر تأیید است';
+
+  @override
+  String get accountPendingBody =>
+      'مدیر کاسپین هنوز حساب شما را تأیید نکرده است. بعد از تأیید دوباره وارد شوید.';
+
+  @override
+  String get accountRejectedTitle => 'درخواست ثبت‌نام تأیید نشد';
+
+  @override
+  String get accountRejectedBody =>
+      'مدیر کاسپین این حساب را تأیید نکرد. برای اطلاعات بیشتر با مدیر تماس بگیرید.';
+
+  @override
+  String get accountDisabledTitle => 'حساب شما غیرفعال است';
+
+  @override
+  String get accountDisabledBody =>
+      'مدیر کاسپین این حساب را غیرفعال کرده است. با مدیر تماس بگیرید.';
+
+  @override
+  String get unlockOfferTitle => 'ورود سریع با اثر انگشت؟';
+
+  @override
+  String get unlockOfferBody =>
+      'از این به بعد برنامه با اثر انگشت (یا قفل گوشی) باز می‌شود و لازم نیست هر بار رمز بزنید. رمز عبور شما عوض نمی‌شود.';
+
+  @override
+  String get unlockOfferYes => 'بله، فعال شود';
+
+  @override
+  String get unlockOfferNo => 'فعلاً نه';
+
+  @override
+  String get unlockOfferNoNote =>
+      'اگر نخواهید، یک رمز ۴ رقمی برای باز کردن برنامه می‌سازید.';
+
+  @override
+  String get unlockOfferReason =>
+      'برای فعال کردن ورود با اثر انگشت، انگشت خود را روی حسگر بگذارید';
+
+  @override
+  String get unlockOfferFailed => 'اثر انگشت تأیید نشد. دوباره امتحان کنید.';
 
   @override
   String get serverTitle => 'آدرس سرور';
@@ -218,6 +455,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get lockUsePin => 'ورود با رمز برنامه';
+
+  @override
+  String get lockUsePassword => 'ورود با رمز عبور';
 
   @override
   String get authPromptTitle => 'تأیید هویت';
@@ -845,6 +1085,12 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get settingsSecureBody =>
       'در صفحه‌های موجودی و درخواست‌ها، عکس گرفتن از صفحه ممکن نیست.';
+
+  @override
+  String get settingsDeviceUnlock => 'باز کردن با اثر انگشت';
+
+  @override
+  String get settingsDeviceUnlockBody => 'به‌جای رمز ۴ رقمی برنامه';
 
   @override
   String get settingsPin => 'رمز برنامه';

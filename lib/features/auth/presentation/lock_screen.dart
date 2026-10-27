@@ -6,6 +6,7 @@ import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted && ref.read(appLockControllerProvider).deviceAuthAvailable) {
+      if (mounted && ref.read(appLockControllerProvider).deviceUnlock) {
         unawaited(_unlockWithDevice());
       }
     });
@@ -88,7 +89,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: Space.xl),
-            if (lock.deviceAuthAvailable)
+            if (lock.deviceUnlock)
               FilledButton.icon(
                 onPressed: _unlockWithDevice,
                 icon: const Icon(AppIcons.fingerprint),
@@ -115,6 +116,15 @@ class _LockScreenState extends ConsumerState<LockScreen> {
                 child: Text(l10n.lockUsePin),
               ),
             ],
+            const SizedBox(height: Space.lg),
+            // Fingerprint not working: log in again with the password.
+            Center(
+              child: TextButton(
+                onPressed: () =>
+                    ref.read(authControllerProvider.notifier).signOut(),
+                child: Text(l10n.lockUsePassword),
+              ),
+            ),
           ],
         ),
       ),

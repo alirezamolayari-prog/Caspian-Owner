@@ -178,11 +178,23 @@ abstract class AppLocalizations {
   /// **'کم'**
   String get lowStock;
 
-  /// No connection, timeout, or the server is off/unreachable.
+  /// Timeout, refused connection or TLS failure: the phone is online but the server did not answer.
   ///
   /// In fa, this message translates to:
-  /// **'به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.'**
+  /// **'سرور کاسپین جواب نداد. کمی بعد دوباره امتحان کنید.'**
   String get errorNetwork;
+
+  /// The server's name could not be looked up: the phone has no internet.
+  ///
+  /// In fa, this message translates to:
+  /// **'اینترنت گوشی وصل نیست. وای‌فای یا اینترنت همراه را روشن کنید.'**
+  String get errorOffline;
+
+  /// 429 without a server message.
+  ///
+  /// In fa, this message translates to:
+  /// **'تعداد تلاش‌ها زیاد شد. کمی بعد دوباره امتحان کنید.'**
+  String get errorTooManyRequests;
 
   /// No description provided for @errorGeneric.
   ///
@@ -193,7 +205,7 @@ abstract class AppLocalizations {
   /// 401 at login.
   ///
   /// In fa, this message translates to:
-  /// **'نام کاربری یا رمز عبور اشتباه است.'**
+  /// **'شماره موبایل یا رمز عبور اشتباه است.'**
   String get errorWrongPassword;
 
   /// 401 after login: token expired or revoked.
@@ -235,7 +247,7 @@ abstract class AppLocalizations {
   /// Login with a warehouse account.
   ///
   /// In fa, this message translates to:
-  /// **'این حساب مخصوص مالکان نیست. با حساب مالک وارد شوید.'**
+  /// **'این حساب برای اپ مالکان نیست.'**
   String get errorNotOwner;
 
   /// No description provided for @errorNotConnected.
@@ -343,7 +355,7 @@ abstract class AppLocalizations {
   /// No description provided for @loginFieldsRequired.
   ///
   /// In fa, this message translates to:
-  /// **'نام کاربری و رمز عبور را وارد کنید.'**
+  /// **'شماره موبایل و رمز عبور را وارد کنید.'**
   String get loginFieldsRequired;
 
   /// No description provided for @loginVerify.
@@ -369,6 +381,414 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'تغییر آدرس سرور'**
   String get loginChangeServer;
+
+  /// No description provided for @loginMobileLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'شماره موبایل'**
+  String get loginMobileLabel;
+
+  /// No description provided for @loginMobileHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'مثل ۰۹۱۲۳۴۵۶۷۸۹'**
+  String get loginMobileHint;
+
+  /// For admin accounts that have a username instead of a mobile.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود با نام کاربری'**
+  String get loginUseUsername;
+
+  /// No description provided for @loginUseMobile.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود با شماره موبایل'**
+  String get loginUseMobile;
+
+  /// After too many wrong passwords: the button waits, showing the time left.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود ({time})'**
+  String loginWaitButton(String time);
+
+  /// No description provided for @loginForgot.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز را فراموش کرده‌ام'**
+  String get loginForgot;
+
+  /// No description provided for @loginNoAccount.
+  ///
+  /// In fa, this message translates to:
+  /// **'حساب ندارید؟'**
+  String get loginNoAccount;
+
+  /// No description provided for @loginRegister.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت‌نام مالک جدید'**
+  String get loginRegister;
+
+  /// No description provided for @loginRegisteredNotice.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست ثبت‌نام شما ثبت شد. بعد از تأیید مدیر، با همین شماره و رمز وارد شوید.'**
+  String get loginRegisteredNotice;
+
+  /// No description provided for @loginPasswordResetNotice.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز تازه ذخیره شد. با رمز تازه وارد شوید.'**
+  String get loginPasswordResetNotice;
+
+  /// No description provided for @mobileInvalid.
+  ///
+  /// In fa, this message translates to:
+  /// **'شماره موبایل درست نیست. ۱۱ رقم است و با ۰۹ شروع می‌شود.'**
+  String get mobileInvalid;
+
+  /// Persian digits are passed in.
+  ///
+  /// In fa, this message translates to:
+  /// **'مرحله {step} از {total}'**
+  String stepOf(String step, String total);
+
+  /// No description provided for @sendCode.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال کد'**
+  String get sendCode;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In fa, this message translates to:
+  /// **'بازگشت به صفحه ورود'**
+  String get backToLogin;
+
+  /// No description provided for @registerTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت‌نام مالک جدید'**
+  String get registerTitle;
+
+  /// No description provided for @registerBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'نام و شماره موبایل خود را بنویسید. یک کد ۶ رقمی برایتان پیامک می‌شود.'**
+  String get registerBody;
+
+  /// No description provided for @registerFirstName.
+  ///
+  /// In fa, this message translates to:
+  /// **'نام'**
+  String get registerFirstName;
+
+  /// No description provided for @registerLastName.
+  ///
+  /// In fa, this message translates to:
+  /// **'نام خانوادگی'**
+  String get registerLastName;
+
+  /// No description provided for @nameInvalid.
+  ///
+  /// In fa, this message translates to:
+  /// **'با حروف فارسی بنویسید (۲ تا ۵۰ حرف).'**
+  String get nameInvalid;
+
+  /// No description provided for @registerHaveAccount.
+  ///
+  /// In fa, this message translates to:
+  /// **'قبلاً ثبت‌نام کرده‌اید؟ ورود'**
+  String get registerHaveAccount;
+
+  /// No description provided for @registerSubmit.
+  ///
+  /// In fa, this message translates to:
+  /// **'ثبت‌نام'**
+  String get registerSubmit;
+
+  /// No description provided for @forgotTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'فراموشی رمز عبور'**
+  String get forgotTitle;
+
+  /// No description provided for @forgotBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'شماره موبایلی را که با آن ثبت‌نام کرده‌اید بنویسید. یک کد ۶ رقمی برایتان پیامک می‌شود.'**
+  String get forgotBody;
+
+  /// No description provided for @otpTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'کد پیامک‌شده را بنویسید'**
+  String get otpTitle;
+
+  /// No description provided for @otpSentTo.
+  ///
+  /// In fa, this message translates to:
+  /// **'کد ۶ رقمی به شماره {mobile} پیامک شد.'**
+  String otpSentTo(String mobile);
+
+  /// No description provided for @otpLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'کد ۶ رقمی'**
+  String get otpLabel;
+
+  /// Android's SMS User Consent dialog asks once to read that one SMS.
+  ///
+  /// In fa, this message translates to:
+  /// **'اگر گوشی اجازه خواست، «اجازه دادن» را بزنید تا کد خودش نوشته شود.'**
+  String get otpAutoFillNote;
+
+  /// No description provided for @otpChangeMobile.
+  ///
+  /// In fa, this message translates to:
+  /// **'تغییر شماره'**
+  String get otpChangeMobile;
+
+  /// No description provided for @otpVerify.
+  ///
+  /// In fa, this message translates to:
+  /// **'تأیید کد'**
+  String get otpVerify;
+
+  /// No description provided for @otpResendIn.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال دوباره کد تا {time} دیگر'**
+  String otpResendIn(String time);
+
+  /// No description provided for @otpResend.
+  ///
+  /// In fa, this message translates to:
+  /// **'ارسال دوباره کد'**
+  String get otpResend;
+
+  /// No description provided for @otpResent.
+  ///
+  /// In fa, this message translates to:
+  /// **'کد تازه فرستاده شد.'**
+  String get otpResent;
+
+  /// No description provided for @otpTooShort.
+  ///
+  /// In fa, this message translates to:
+  /// **'کد ۶ رقم است.'**
+  String get otpTooShort;
+
+  /// The server sends no SMS to numbers that already have an account, and doesn't say so.
+  ///
+  /// In fa, this message translates to:
+  /// **'کدی نرسید؟ اگر قبلاً با این شماره ثبت‌نام کرده‌اید، از «رمز را فراموش کرده‌ام» رمز تازه بگیرید.'**
+  String get otpNoCodeRegister;
+
+  /// No description provided for @passwordCreateTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز عبور بسازید'**
+  String get passwordCreateTitle;
+
+  /// No description provided for @passwordResetTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز عبور تازه بسازید'**
+  String get passwordResetTitle;
+
+  /// No description provided for @passwordChangeTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز عبور خودتان را بسازید'**
+  String get passwordChangeTitle;
+
+  /// No description provided for @passwordBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمزی بسازید که یادتان بماند و دیگران نتوانند حدس بزنند.'**
+  String get passwordBody;
+
+  /// No description provided for @passwordChangeBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمزی که مدیر به شما داده موقت است. یک رمز تازه بسازید که فقط خودتان بدانید.'**
+  String get passwordChangeBody;
+
+  /// No description provided for @passwordNewLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز عبور تازه'**
+  String get passwordNewLabel;
+
+  /// No description provided for @passwordRepeatLabel.
+  ///
+  /// In fa, this message translates to:
+  /// **'تکرار رمز عبور'**
+  String get passwordRepeatLabel;
+
+  /// No description provided for @passwordRuleLength.
+  ///
+  /// In fa, this message translates to:
+  /// **'دست‌کم ۱۰ حرف یا عدد'**
+  String get passwordRuleLength;
+
+  /// No description provided for @passwordRuleDistinct.
+  ///
+  /// In fa, this message translates to:
+  /// **'دست‌کم ۴ حرف یا عدد متفاوت'**
+  String get passwordRuleDistinct;
+
+  /// No description provided for @passwordRuleOk.
+  ///
+  /// In fa, this message translates to:
+  /// **'انجام شد'**
+  String get passwordRuleOk;
+
+  /// No description provided for @passwordRuleNotYet.
+  ///
+  /// In fa, this message translates to:
+  /// **'هنوز نه'**
+  String get passwordRuleNotYet;
+
+  /// No description provided for @passwordTooLong.
+  ///
+  /// In fa, this message translates to:
+  /// **'رمز خیلی بلند است. کوتاه‌ترش کنید.'**
+  String get passwordTooLong;
+
+  /// No description provided for @passwordTooCommon.
+  ///
+  /// In fa, this message translates to:
+  /// **'این رمز خیلی ساده و رایج است. رمز دیگری بسازید.'**
+  String get passwordTooCommon;
+
+  /// No description provided for @passwordMismatch.
+  ///
+  /// In fa, this message translates to:
+  /// **'دو رمز یکی نیستند.'**
+  String get passwordMismatch;
+
+  /// No description provided for @resetSubmit.
+  ///
+  /// In fa, this message translates to:
+  /// **'ذخیره رمز تازه'**
+  String get resetSubmit;
+
+  /// No description provided for @changeSubmit.
+  ///
+  /// In fa, this message translates to:
+  /// **'ذخیره و ورود'**
+  String get changeSubmit;
+
+  /// No description provided for @flowRestart.
+  ///
+  /// In fa, this message translates to:
+  /// **'از اول شروع کنید'**
+  String get flowRestart;
+
+  /// No description provided for @flowExpiredTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'مهلت تمام شد'**
+  String get flowExpiredTitle;
+
+  /// No description provided for @flowExpired.
+  ///
+  /// In fa, this message translates to:
+  /// **'مهلت این مرحله تمام شده است. لطفاً از اول شروع کنید.'**
+  String get flowExpired;
+
+  /// No description provided for @accountRegisteredTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست شما ثبت شد'**
+  String get accountRegisteredTitle;
+
+  /// No description provided for @accountRegisteredBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'مدیر کاسپین باید حساب شما را تأیید کند. بعد از تأیید، با همین شماره موبایل و رمز وارد شوید.'**
+  String get accountRegisteredBody;
+
+  /// No description provided for @accountPendingTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'حساب شما منتظر تأیید است'**
+  String get accountPendingTitle;
+
+  /// No description provided for @accountPendingBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'مدیر کاسپین هنوز حساب شما را تأیید نکرده است. بعد از تأیید دوباره وارد شوید.'**
+  String get accountPendingBody;
+
+  /// No description provided for @accountRejectedTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'درخواست ثبت‌نام تأیید نشد'**
+  String get accountRejectedTitle;
+
+  /// No description provided for @accountRejectedBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'مدیر کاسپین این حساب را تأیید نکرد. برای اطلاعات بیشتر با مدیر تماس بگیرید.'**
+  String get accountRejectedBody;
+
+  /// No description provided for @accountDisabledTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'حساب شما غیرفعال است'**
+  String get accountDisabledTitle;
+
+  /// No description provided for @accountDisabledBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'مدیر کاسپین این حساب را غیرفعال کرده است. با مدیر تماس بگیرید.'**
+  String get accountDisabledBody;
+
+  /// No description provided for @unlockOfferTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود سریع با اثر انگشت؟'**
+  String get unlockOfferTitle;
+
+  /// No description provided for @unlockOfferBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'از این به بعد برنامه با اثر انگشت (یا قفل گوشی) باز می‌شود و لازم نیست هر بار رمز بزنید. رمز عبور شما عوض نمی‌شود.'**
+  String get unlockOfferBody;
+
+  /// No description provided for @unlockOfferYes.
+  ///
+  /// In fa, this message translates to:
+  /// **'بله، فعال شود'**
+  String get unlockOfferYes;
+
+  /// No description provided for @unlockOfferNo.
+  ///
+  /// In fa, this message translates to:
+  /// **'فعلاً نه'**
+  String get unlockOfferNo;
+
+  /// No description provided for @unlockOfferNoNote.
+  ///
+  /// In fa, this message translates to:
+  /// **'اگر نخواهید، یک رمز ۴ رقمی برای باز کردن برنامه می‌سازید.'**
+  String get unlockOfferNoNote;
+
+  /// No description provided for @unlockOfferReason.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای فعال کردن ورود با اثر انگشت، انگشت خود را روی حسگر بگذارید'**
+  String get unlockOfferReason;
+
+  /// No description provided for @unlockOfferFailed.
+  ///
+  /// In fa, this message translates to:
+  /// **'اثر انگشت تأیید نشد. دوباره امتحان کنید.'**
+  String get unlockOfferFailed;
 
   /// No description provided for @serverTitle.
   ///
@@ -453,6 +873,12 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'ورود با رمز برنامه'**
   String get lockUsePin;
+
+  /// On the lock screen: log out and log in again with the server password.
+  ///
+  /// In fa, this message translates to:
+  /// **'ورود با رمز عبور'**
+  String get lockUsePassword;
 
   /// No description provided for @authPromptTitle.
   ///
@@ -1478,6 +1904,18 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'در صفحه‌های موجودی و درخواست‌ها، عکس گرفتن از صفحه ممکن نیست.'**
   String get settingsSecureBody;
+
+  /// No description provided for @settingsDeviceUnlock.
+  ///
+  /// In fa, this message translates to:
+  /// **'باز کردن با اثر انگشت'**
+  String get settingsDeviceUnlock;
+
+  /// No description provided for @settingsDeviceUnlockBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'به‌جای رمز ۴ رقمی برنامه'**
+  String get settingsDeviceUnlockBody;
 
   /// No description provided for @settingsPin.
   ///

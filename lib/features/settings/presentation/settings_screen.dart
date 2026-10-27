@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:caspian_owner/core/config/api_config.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
+import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
@@ -20,6 +24,7 @@ class SettingsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final settings = ref.watch(settingsControllerProvider);
     final controller = ref.read(settingsControllerProvider.notifier);
+    final lock = ref.watch(appLockControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.moreSettings)),
@@ -76,22 +81,42 @@ class SettingsScreen extends ConsumerWidget {
             value: settings.secureScreens,
             onChanged: (v) => controller.setSecureScreens(enabled: v),
           ),
-          ListTile(
-            title: Text(l10n.serverTitle),
-            subtitle: Text(
-              settings.serverUrl,
-              textDirection: TextDirection.ltr,
-              textAlign: TextAlign.end,
+          if (lock.deviceAuthAvailable)
+            SwitchListTile(
+              title: Text(l10n.settingsDeviceUnlock),
+              subtitle: Text(l10n.settingsDeviceUnlockBody),
+              value: lock.useDevice,
+              onChanged: (enabled) {
+                final controller = ref.read(appLockControllerProvider.notifier);
+                if (enabled) {
+                  unawaited(
+                    controller.enableDeviceUnlock(
+                      AuthPrompt.of(l10n, l10n.unlockOfferReason),
+                    ),
+                  );
+                } else {
+                  // Without a PIN, the app asks for one next.
+                  unawaited(controller.declineDeviceUnlock());
+                }
+              },
             ),
-            trailing: const Icon(AppIcons.server),
-            onTap: () async {
-              final saved = await showServerUrlDialog(context);
-              if (saved && context.mounted) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(l10n.serverSaved)));
-              }
-            },
-          ),
+          if (ApiConfig.serverUrlEditable)
+            ListTile(
+              title: Text(l10n.serverTitle),
+              subtitle: Text(
+                settings.serverUrl,
+                textDirection: TextDirection.ltr,
+                textAlign: TextAlign.end,
+              ),
+              trailing: const Icon(AppIcons.server),
+              onTap: () async {
+                final saved = await showServerUrlDialog(context);
+                if (saved && context.mounted) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(l10n.serverSaved)));
+                }
+              },
+            ),
           ListTile(
             title: Text(l10n.settingsPin),
             subtitle: Text(l10n.settingsPinBody),

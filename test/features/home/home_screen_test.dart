@@ -92,7 +92,7 @@ void main() {
   ) async {
     await pumpHome(tester, scenario: MockScenario.offline);
     expect(
-      find.text('به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.'),
+      find.text('سرور کاسپین جواب نداد. کمی بعد دوباره امتحان کنید.'),
       findsOneWidget,
     );
   });

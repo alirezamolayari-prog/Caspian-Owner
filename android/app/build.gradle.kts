@@ -80,6 +80,9 @@ flutter {
 dependencies {
     // AppCompat launch theme, required by local_auth on Android 8 and below.
     implementation("androidx.appcompat:appcompat:1.7.1")
+    // SMS User Consent API (fills in the SMS code once the owner allows it).
+    // The ONLY Google Play services library allowed in this app.
+    implementation("com.google.android.gms:play-services-auth-api-phone:18.3.1")
     // Java 8+ APIs on older Android (flutter_local_notifications).
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

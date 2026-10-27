@@ -3,6 +3,8 @@ import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/features/auth/presentation/lock_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
+import 'package:caspian_owner/features/auth/presentation/pin_setup_screen.dart';
+import 'package:caspian_owner/features/auth/presentation/unlock_offer_screen.dart';
 import 'package:caspian_owner/features/home/presentation/home_screen.dart';
 import 'package:caspian_owner/features/hub/presentation/hub_screen.dart';
 import 'package:caspian_owner/features/requests/presentation/request_detail_screen.dart';
@@ -50,18 +52,114 @@ void main() {
 
     await login(tester);
 
+    // First the fingerprint offer; one touch turns it on.
+    expect(find.byType(UnlockOfferScreen), findsOneWidget);
+    await tester.tap(find.text('بله، فعال شود'));
+    await tester.pumpAndSettle();
+    expect(harness.authenticator.prompts, 1);
+    expect(harness.store.values[SecureKeys.deviceUnlock], 'on');
+
     expect(find.byType(HubScreen), findsOneWidget);
     expect(find.text('سلام علیرضا'), findsOneWidget);
-    // Signing in with a password doesn't ask for the fingerprint again.
+    // Signing in with a password doesn't lock the app again.
     expect(find.byType(LockScreen), findsNothing);
     expect(harness.store.values[SecureKeys.session], isNotNull);
+  });
+
+  testWidgets('«not now» to the fingerprint leads to an app PIN', (
+    tester,
+  ) async {
+    final harness = await pumpApp(tester);
+    await login(tester);
+    await tester.tap(find.text('فعلاً نه'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(PinSetupScreen), findsOneWidget);
+    expect(harness.store.values[SecureKeys.deviceUnlock], 'off');
+    expect(harness.authenticator.prompts, 0);
+  });
+
+  testWidgets('a failed touch keeps the offer open', (tester) async {
+    final harness = await pumpApp(tester);
+    await login(tester);
+    harness.authenticator.succeeds = false;
+    await tester.tap(find.text('بله، فعال شود'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(UnlockOfferScreen), findsOneWidget);
+    expect(find.text('اثر انگشت تأیید نشد. دوباره امتحان کنید.'), findsOne);
+  });
+
+  testWidgets('phones without a fingerprint skip the offer', (tester) async {
+    final harness = TestHarness.create(fixtures, deviceAuthAvailable: false);
+    addTearDown(harness.database.close);
+    await tester.pumpWidget(harness.app());
+    await tester.pumpAndSettle();
+    await login(tester);
+
+    expect(find.byType(UnlockOfferScreen), findsNothing);
+    expect(find.byType(PinSetupScreen), findsOneWidget);
+  });
+
+  testWidgets('the lock screen offers the password instead', (tester) async {
+    final harness = TestHarness.create(fixtures, signedIn: true);
+    addTearDown(harness.database.close);
+    harness.authenticator.succeeds = false;
+    await tester.pumpWidget(harness.app());
+    await tester.pumpAndSettle();
+    expect(find.byType(LockScreen), findsOneWidget);
+
+    await tester.tap(find.text('ورود با رمز عبور'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LoginScreen), findsOneWidget);
+    expect(harness.store.values[SecureKeys.session], isNull);
+  });
+
+  testWidgets('«not now» without a PIN yet: the fingerprint still guards '
+      'the next start', (tester) async {
+    // Closed after «فعلاً نه» but before making the PIN: nobody may make a
+    // PIN of their own and walk in.
+    final harness = TestHarness.create(
+      fixtures,
+      signedIn: true,
+      useDevice: false,
+    );
+    addTearDown(harness.database.close);
+    harness.authenticator.succeeds = false;
+    await tester.pumpWidget(harness.app());
+    await tester.pumpAndSettle();
+
+    expect(find.byType(LockScreen), findsOneWidget);
+    expect(find.byType(PinSetupScreen), findsNothing);
+    expect(harness.authenticator.prompts, 1);
+  });
+
+  testWidgets('a stored «no fingerprint» answer is kept at the next start', (
+    tester,
+  ) async {
+    final harness = TestHarness.create(
+      fixtures,
+      signedIn: true,
+      hasPin: true,
+      useDevice: false,
+    );
+    addTearDown(harness.database.close);
+    await tester.pumpWidget(harness.app());
+    await tester.pumpAndSettle();
+
+    // Locked, but no automatic fingerprint prompt: the app PIN is asked.
+    expect(find.byType(LockScreen), findsOneWidget);
+    expect(harness.authenticator.prompts, 0);
+    expect(find.text('باز کردن با اثر انگشت'), findsNothing);
+    expect(find.text('ورود با رمز برنامه'), findsOneWidget);
   });
 
   testWidgets('a wrong password is explained in Persian', (tester) async {
     await pumpApp(tester);
     await login(tester, password: '22222');
 
-    expect(find.text('نام کاربری یا رمز عبور اشتباه است.'), findsOneWidget);
+    expect(find.text('شماره موبایل یا رمز عبور اشتباه است.'), findsOneWidget);
     expect(find.byType(LoginScreen), findsOneWidget);
   });
 
@@ -69,7 +167,16 @@ void main() {
     await pumpApp(tester);
     await tester.tap(find.text('ورود'));
     await tester.pumpAndSettle();
-    expect(find.text('نام کاربری و رمز عبور را وارد کنید.'), findsOneWidget);
+    expect(find.text('شماره موبایل و رمز عبور را وارد کنید.'), findsOneWidget);
+  });
+
+  testWidgets('a mistyped mobile number is explained', (tester) async {
+    await pumpApp(tester);
+    await login(tester, username: '۰۹۱۲۳');
+    expect(
+      find.text('شماره موبایل درست نیست. ۱۱ رقم است و با ۰۹ شروع می‌شود.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('the password can be shown and hidden', (tester) async {

@@ -1,5 +1,6 @@
 import 'package:caspian_owner/core/network/api_exception.dart';
 import 'package:caspian_owner/features/auth/data/api_auth_repository.dart';
+import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/fake_server.dart';
@@ -85,6 +86,45 @@ void main() {
       throwsA(isA<UnauthorizedException>()),
     );
   });
+
+  test('a first password must be changed before /auth/me', () async {
+    server.on(
+      'POST',
+      '/auth/login',
+      FakeServer.json({
+        'access_token': 'first',
+        'token_type': 'bearer',
+        'role': 'owner',
+        'full_name': 'مالک ۱',
+        'must_change_password': true,
+      }),
+    );
+    await expectLater(
+      repository.login(username: '09123456789', password: 'x'),
+      throwsA(
+        isA<MustChangePasswordException>().having(
+          (e) => e.accessToken,
+          'token',
+          'first',
+        ),
+      ),
+    );
+    expect(server.calls('GET', '/auth/me'), isEmpty);
+  });
+
+  for (final code in [
+    'account_pending',
+    'account_rejected',
+    'account_disabled',
+  ]) {
+    test('$code is reported by its code', () async {
+      server.on('POST', '/auth/login', FakeServer.fail(403, code));
+      await expectLater(
+        repository.login(username: '09123456789', password: 'x'),
+        throwsA(isA<ServerException>().having((e) => e.code, 'code', code)),
+      );
+    });
+  }
 
   test('token expiry: read from the JWT, null when unreadable', () {
     expect(ApiAuthRepository.tokenExpiry(fakeJwt(expiry)), expiry);

@@ -10,11 +10,41 @@ void main() {
   test('each server answer has its own clear Persian message', () {
     expect(
       errorMessage(const NetworkException(), l10n),
-      'به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.',
+      'سرور کاسپین جواب نداد. کمی بعد دوباره امتحان کنید.',
+    );
+    expect(
+      errorMessage(const NetworkException.noInternet(), l10n),
+      'اینترنت گوشی وصل نیست. وای‌فای یا اینترنت همراه را روشن کنید.',
     );
     expect(
       errorMessage(const UnauthorizedException(), l10n, atLogin: true),
-      'نام کاربری یا رمز عبور اشتباه است.',
+      'شماره موبایل یا رمز عبور اشتباه است.',
+    );
+    expect(
+      errorMessage(
+        const ServerException(
+          code: 'invalid_credentials',
+          messageFa: 'نام کاربری یا رمز عبور اشتباه است',
+          statusCode: 401,
+        ),
+        l10n,
+        atLogin: true,
+      ),
+      'شماره موبایل یا رمز عبور اشتباه است.',
+    );
+    expect(
+      errorMessage(
+        const ServerException(code: 'http_429', statusCode: 429),
+        l10n,
+      ),
+      'تعداد تلاش‌ها زیاد شد. کمی بعد دوباره امتحان کنید.',
+    );
+    expect(
+      errorMessage(
+        const ValidationException(fieldErrors: {'password': 'رمز ضعیف است'}),
+        l10n,
+      ),
+      'رمز ضعیف است',
     );
     expect(
       errorMessage(const UnauthorizedException(), l10n),
@@ -38,7 +68,7 @@ void main() {
     );
     expect(
       errorMessage(const ServerException(code: 'not_owner'), l10n),
-      'این حساب مخصوص مالکان نیست. با حساب مالک وارد شوید.',
+      'این حساب برای اپ مالکان نیست.',
     );
     expect(
       errorMessage(notConnected, l10n),

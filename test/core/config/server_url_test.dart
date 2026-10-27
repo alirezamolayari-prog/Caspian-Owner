@@ -49,8 +49,8 @@ void main() {
   });
 
   group('AppSettings.serverUrl', () {
-    test('defaults to the PC on the mall Wi-Fi', () {
-      expect(const AppSettings().serverUrl, 'http://192.168.10.58:8000');
+    test('defaults to Caspian Server on the Iranian host (https)', () {
+      expect(const AppSettings().serverUrl, 'https://api.caspianmoblserver.ir');
     });
 
     test('is saved and read back; a bad saved value falls back', () {
@@ -64,7 +64,7 @@ void main() {
       expect(
         AppSettings.fromJson({'server_url': 'http://evil.example.com'})
             .serverUrl,
-        'http://192.168.10.58:8000',
+        'https://api.caspianmoblserver.ir',
       );
     });
   });

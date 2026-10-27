@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart' show kReleaseMode;
+
 /// Where the app gets its data.
 enum DataSource {
   /// In-app mock backend (`lib/core/mock/`), following `api/openapi.yaml`.
@@ -8,21 +10,22 @@ enum DataSource {
   api,
 }
 
-/// Network configuration. The server address itself is an owner setting
-/// (Settings › «آدرس سرور», kept on the phone); this is only its default.
+/// Network configuration.
 abstract final class ApiConfig {
   static const DataSource dataSource = DataSource.api;
 
-  /// First-run server address: Alireza's PC on the mall Wi-Fi. Changes to
-  /// an https address on the Iranian host later (Settings or this value).
-  static const String defaultServerUrl = 'http://192.168.10.58:8000';
+  /// Caspian Server on the Iranian host. Release builds always use it.
+  static const String defaultServerUrl = 'https://api.caspianmoblserver.ir';
 
-  /// TEMPORARY for local testing: allow plain `http://` to addresses on the
-  /// local network (192.168.x.x, 10.x.x.x, 172.16–31.x.x, localhost).
-  /// Public addresses always need https. To remove: set this to false and
-  /// set `cleartextTrafficPermitted="false"` in
-  /// `android/app/src/main/res/xml/network_security_config.xml`.
-  static const bool allowLanHttp = true;
+  /// Debug builds only: the server address can be changed (Settings ›
+  /// «آدرس سرور», developer testing against a PC on the mall Wi-Fi).
+  /// Release builds ignore any saved address.
+  static const bool serverUrlEditable = !kReleaseMode;
+
+  /// Debug builds only: plain `http://` to local-network addresses
+  /// (192.168.x.x, 10.x.x.x, 172.16–31.x.x, localhost). Release builds
+  /// are https only, here and in Android's network security config.
+  static const bool allowLanHttp = !kReleaseMode;
 
   /// How often the open app asks the server «what changed?» (`/changes`).
   static const Duration liveSyncInterval = Duration(seconds: 5);

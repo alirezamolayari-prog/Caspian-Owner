@@ -56,6 +56,7 @@ Future<List<Override>> bootstrap() async {
   final lockSetup = LockSetup(
     deviceAuthAvailable: await authenticator.isAvailable(),
     hasPin: await store.read(SecureKeys.pinHash) != null,
+    useDevice: await store.read(SecureKeys.deviceUnlock) != 'off',
   );
 
   // Notifications: taps while running go through a stream; a tap that

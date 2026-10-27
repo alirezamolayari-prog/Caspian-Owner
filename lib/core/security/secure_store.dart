@@ -14,6 +14,9 @@ abstract final class SecureKeys {
   static const pinHash = 'pin_hash';
   static const pinSalt = 'pin_salt';
 
+  /// `on`/`off`: the owner's answer to «اثر انگشت فعال شود؟».
+  static const deviceUnlock = 'device_unlock';
+
   /// Owner preferences (kept on logout).
   static const settings = 'settings';
 }
