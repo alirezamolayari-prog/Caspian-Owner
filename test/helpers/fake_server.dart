@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io' show SocketException;
 import 'dart:typed_data';
 
 import 'package:caspian_owner/core/network/api_client.dart';
@@ -57,6 +58,50 @@ class FakeServer implements HttpClientAdapter {
   /// An error answer like FastAPI's.
   static FakeHandler error(int status) =>
       json({'detail': 'error $status'}, status: status);
+
+  /// An account error as owner-auth-api.md describes it: the stable [code]
+  /// in `X-Error-Code`, the Persian [detail], and `Retry-After` on 429.
+  static FakeHandler fail(
+    int status,
+    String code, {
+    String detail = 'پیام سرور',
+    int? retryAfter,
+  }) =>
+      (_) => ResponseBody.fromString(
+        jsonEncode({'detail': detail}),
+        status,
+        headers: {
+          Headers.contentTypeHeader: ['application/json'],
+          'x-error-code': [code],
+          if (retryAfter != null) 'retry-after': ['$retryAfter'],
+        },
+      );
+
+  /// The phone has no internet: the server's name can't be looked up.
+  static FakeHandler noInternet() =>
+      (options) => throw DioException.connectionError(
+        requestOptions: options,
+        reason: 'lookup',
+        error: const SocketException('Failed host lookup: api.example.ir'),
+      );
+
+  /// Answers [first] once, then [then] (e.g. a login before and after a
+  /// password change).
+  static FakeHandler sequence(FakeHandler first, FakeHandler then) {
+    var calls = 0;
+    return (options) => calls++ == 0 ? first(options) : then(options);
+  }
+
+  /// FastAPI's 422 for a bad body: `detail` is a list naming the field.
+  static FakeHandler invalidField(String field, String message) => json({
+    'detail': [
+      {
+        'loc': ['body', field],
+        'msg': 'Value error, $message',
+        'type': 'value_error',
+      },
+    ],
+  }, status: 422);
 
   ApiClient client({String? token, void Function()? onUnauthorized}) =>
       ApiClient(

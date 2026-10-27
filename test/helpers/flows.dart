@@ -14,6 +14,10 @@ Future<void> loginApproveAndFindReviewed(WidgetTester tester) async {
   await tester.tap(find.text('ورود'));
   await tester.pumpAndSettle();
 
+  // «ورود سریع با اثر انگشت؟» → yes (the fingerprint is faked).
+  await tester.tap(find.text('بله، فعال شود'));
+  await tester.pumpAndSettle();
+
   // Hub → «انبار» (the pending count is on its tile).
   expect(find.text('۴ منتظر'), findsOneWidget);
   await tester.tap(find.text('انبار'));

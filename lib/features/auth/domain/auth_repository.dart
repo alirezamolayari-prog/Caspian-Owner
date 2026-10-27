@@ -32,12 +32,27 @@ class AuthSession {
   };
 }
 
-/// Username + password login (Caspian Server `POST /auth/login`).
+/// The password was right, but it is a first password from the admin that
+/// must be replaced before anything else works (`must_change_password`).
+/// [accessToken] may only call `/auth/change-password`.
+final class MustChangePasswordException implements Exception {
+  const new(this.accessToken);
+
+  final String accessToken;
+
+  @override
+  String toString() => 'MustChangePasswordException()';
+}
+
+/// Mobile-or-username + password login (Caspian Server `POST /auth/login`).
 abstract interface class AuthRepository {
-  /// Throws `UnauthorizedException` for a wrong username or password, and
-  /// `ServerException(code: 'not_owner')` for accounts that aren't owners
-  /// (e.g. the warehouse account). The mock accepts any username with the
-  /// password `11111`.
+  /// Throws `ServerException` with the server's code for a wrong password
+  /// (`invalid_credentials`), too many tries (`login_rate_limited`) or an
+  /// account that is `account_pending`, `account_rejected` or
+  /// `account_disabled`; `ServerException(code: 'not_owner')` for accounts
+  /// that aren't owners (e.g. the warehouse account); and
+  /// [MustChangePasswordException]. The mock accepts any username with the
+  /// password `11111` (`UnauthorizedException` otherwise).
   Future<AuthSession> login({
     required String username,
     required String password,

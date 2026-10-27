@@ -18,8 +18,11 @@ import 'package:caspian_owner/core/storage/pending_decision_queue.dart';
 import 'package:caspian_owner/features/assistant/data/mock_assistant_repository.dart';
 import 'package:caspian_owner/features/assistant/domain/assistant_repository.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
+import 'package:caspian_owner/features/auth/data/api_account_repository.dart';
 import 'package:caspian_owner/features/auth/data/api_auth_repository.dart';
+import 'package:caspian_owner/features/auth/data/mock_account_repository.dart';
 import 'package:caspian_owner/features/auth/data/mock_auth_repository.dart';
+import 'package:caspian_owner/features/auth/domain/account_repository.dart';
 import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
 import 'package:caspian_owner/features/chat/data/api_chat_repository.dart';
 import 'package:caspian_owner/features/chat/data/mock_chat_repository.dart';
@@ -148,6 +151,14 @@ T _source<T>(
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) =>
       _source(ref, mock: MockAuthRepository.new, api: ApiAuthRepository.new),
+);
+
+final accountRepositoryProvider = Provider<AccountRepository>(
+  (ref) => _source(
+    ref,
+    mock: MockAccountRepository.new,
+    api: ApiAccountRepository.new,
+  ),
 );
 
 final configRepositoryProvider = Provider<ConfigRepository>(

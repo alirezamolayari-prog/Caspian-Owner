@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  TEMPORARY (local testing with Caspian Server on the mall Wi-Fi):
-  plain HTTP is allowed so the app can reach http://192.168.x.x:8000.
-  The app itself only accepts http:// for local-network addresses
-  (lib/core/config/server_url.dart); public addresses must use https.
-
-  TO REMOVE once the server runs on the Iranian host with https:
-    1. set cleartextTrafficPermitted="false" below;
-    2. set ApiConfig.allowLanHttp = false (lib/core/config/api_config.dart).
+  Release builds: HTTPS only (Caspian Server at api.caspianmoblserver.ir).
+  Debug builds use src/debug/res/xml instead, which also allows plain HTTP
+  to a test server on the local network.
 -->
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true">
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>

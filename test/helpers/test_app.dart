@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:caspian_owner/app.dart';
 import 'package:caspian_owner/core/config/api_config.dart';
 import 'package:caspian_owner/core/config/app_info.dart';
@@ -11,6 +13,7 @@ import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/security/secure_screen.dart';
 import 'package:caspian_owner/core/security/secure_screen_scope.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
+import 'package:caspian_owner/core/sms/sms_code_listener.dart';
 import 'package:caspian_owner/core/storage/app_database.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
 import 'package:caspian_owner/core/update/update_checker.dart';
@@ -58,6 +61,40 @@ class FakeAuthenticator implements DeviceAuthenticator {
   }
 }
 
+/// Android's SMS consent, faked: [deliver] hands a message's code to the
+/// waiting screen, [decline] is the owner saying no.
+class FakeSmsListener implements SmsCodeListener {
+  Completer<String?>? _waiting;
+  int starts = 0;
+  int cancels = 0;
+
+  bool get waiting => _waiting != null;
+
+  @override
+  Future<String?> nextCode() {
+    starts++;
+    _waiting?.complete(null);
+    return (_waiting = Completer<String?>()).future;
+  }
+
+  @override
+  Future<void> cancel() async {
+    cancels++;
+    _finish(null);
+  }
+
+  void deliver(String smsText) =>
+      _finish(AndroidSmsCodeListener.codeIn(smsText));
+
+  void decline() => _finish(null);
+
+  void _finish(String? code) {
+    final waiting = _waiting;
+    _waiting = null;
+    waiting?.complete(code);
+  }
+}
+
 /// Records what the app asked Android for (FLAG_SECURE).
 class FakeSecureScreen extends SecureScreen {
   /// The last value sent; null before the first change.
@@ -84,6 +121,7 @@ class TestHarness {
     required this.authenticator,
     required this.database,
     required this.secureScreen,
+    required this.sms,
     required this.overrides,
   });
 
@@ -98,6 +136,7 @@ class TestHarness {
     bool signedIn = false,
     bool deviceAuthAvailable = true,
     bool hasPin = false,
+    bool useDevice = true,
     bool isDebug = true,
     Owner owner = testOwner,
     UpdateChecker? updateChecker,
@@ -108,6 +147,7 @@ class TestHarness {
     final store = MemorySecureStore();
     final authenticator = FakeAuthenticator(available: deviceAuthAvailable);
     final secureScreen = FakeSecureScreen();
+    final sms = FakeSmsListener();
     // Synchronous stream closing: drift otherwise closes unused query
     // streams on a timer, which widget tests report as a pending Timer.
     final database = AppDatabase(
@@ -122,7 +162,9 @@ class TestHarness {
       authenticator: authenticator,
       database: database,
       secureScreen: secureScreen,
+      sms: sms,
       overrides: [
+        smsCodeListenerProvider.overrideWithValue(sms),
         appInfoProvider.overrideWithValue(
           AppInfo(
             version: '0.1.0',
@@ -152,7 +194,11 @@ class TestHarness {
           signedIn ? testSession(owner) : null,
         ),
         lockSetupProvider.overrideWithValue(
-          LockSetup(deviceAuthAvailable: deviceAuthAvailable, hasPin: hasPin),
+          LockSetup(
+            deviceAuthAvailable: deviceAuthAvailable,
+            hasPin: hasPin,
+            useDevice: useDevice,
+          ),
         ),
       ],
     );
@@ -163,6 +209,7 @@ class TestHarness {
   final FakeAuthenticator authenticator;
   final AppDatabase database;
   final FakeSecureScreen secureScreen;
+  final FakeSmsListener sms;
   final List<Override> overrides;
 
   /// Loads the fixtures, then creates. For plain (non-widget) tests.

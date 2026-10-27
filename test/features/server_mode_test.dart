@@ -99,20 +99,30 @@ void main() {
   ) async {
     await pumpApp(tester);
     expect(find.byType(LoginScreen), findsOneWidget);
-    expect(find.text('سرور: http://192.168.10.58:8000'), findsOneWidget);
+    // Debug builds show the server under the form.
+    await tester.scrollUntilVisible(
+      find.text('تغییر آدرس سرور'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('سرور: https://api.caspianmoblserver.ir'), findsOneWidget);
     expect(find.text('نسخه آزمایشی: رمز ۱۱۱۱۱'), findsNothing);
 
     // Server off.
     await login(tester, 'owner123');
     expect(
-      find.text('به سرور وصل نشد. وای‌فای و آدرس سرور را بررسی کنید.'),
+      find.text('سرور کاسپین جواب نداد. کمی بعد دوباره امتحان کنید.'),
       findsOneWidget,
     );
 
     // Wrong password.
-    server.on('POST', '/auth/login', FakeServer.error(401));
+    server.on(
+      'POST',
+      '/auth/login',
+      FakeServer.fail(401, 'invalid_credentials'),
+    );
     await login(tester, 'bad');
-    expect(find.text('نام کاربری یا رمز عبور اشتباه است.'), findsOneWidget);
+    expect(find.text('شماره موبایل یا رمز عبور اشتباه است.'), findsOneWidget);
 
     // The warehouse account.
     server.on(
@@ -121,10 +131,7 @@ void main() {
       FakeServer.json({'access_token': 'w', 'role': 'warehouse'}),
     );
     await login(tester, 'warehouse123');
-    expect(
-      find.text('این حساب مخصوص مالکان نیست. با حساب مالک وارد شوید.'),
-      findsOneWidget,
-    );
+    expect(find.text('این حساب برای اپ مالکان نیست.'), findsOneWidget);
   });
 
   testWidgets('an owner logs in, the token is kept securely', (tester) async {
@@ -150,6 +157,8 @@ void main() {
       );
 
     await login(tester, 'owner123');
+    await tester.tap(find.text('بله، فعال شود'));
+    await tester.pumpAndSettle();
 
     expect(find.byType(HubScreen), findsOneWidget);
     expect(find.text('سلام مالک ۱'), findsOneWidget);
@@ -219,6 +228,11 @@ void main() {
     tester,
   ) async {
     final harness = await pumpApp(tester);
+    await tester.scrollUntilVisible(
+      find.text('تغییر آدرس سرور'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.text('تغییر آدرس سرور'));
     await tester.pumpAndSettle();
 
@@ -241,6 +255,11 @@ void main() {
 
     await tester.tap(find.text('ذخیره'));
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('سرور: http://192.168.1.20:8000'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('سرور: http://192.168.1.20:8000'), findsOneWidget);
     expect(
       harness.store.values[SecureKeys.settings],

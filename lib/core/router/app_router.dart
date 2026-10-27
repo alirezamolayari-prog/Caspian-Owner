@@ -6,10 +6,18 @@ import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/core/update/update_screen.dart';
 import 'package:caspian_owner/core/widgets/server_feature_gate.dart';
+import 'package:caspian_owner/features/auth/application/account_flow.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
+import 'package:caspian_owner/features/auth/domain/account_repository.dart';
+import 'package:caspian_owner/features/auth/presentation/account_status_screen.dart';
+import 'package:caspian_owner/features/auth/presentation/forgot_password_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/lock_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
+import 'package:caspian_owner/features/auth/presentation/new_password_screen.dart';
+import 'package:caspian_owner/features/auth/presentation/otp_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/pin_setup_screen.dart';
+import 'package:caspian_owner/features/auth/presentation/register_screen.dart';
+import 'package:caspian_owner/features/auth/presentation/unlock_offer_screen.dart';
 import 'package:caspian_owner/features/hub/presentation/hub_screen.dart';
 import 'package:caspian_owner/features/hub/presentation/module_placeholder_screen.dart';
 import 'package:caspian_owner/features/more/presentation/about_screen.dart';
@@ -63,6 +71,47 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.login,
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: Routes.register,
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: Routes.forgotPassword,
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(path: Routes.otp, builder: (context, state) => const OtpScreen()),
+      GoRoute(
+        path: Routes.newPassword,
+        builder: (context, state) => Consumer(
+          builder: (context, ref, _) => NewPasswordScreen(
+            mode:
+                ref.read(accountFlowProvider)?.purpose ==
+                    OtpPurpose.resetPassword
+                ? NewPasswordMode.reset
+                : NewPasswordMode.register,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: Routes.changePassword,
+        builder: (context, state) =>
+            const NewPasswordScreen(mode: NewPasswordMode.changeFirst),
+      ),
+      GoRoute(
+        path: Routes.registered,
+        builder: (context, state) =>
+            const AccountStatusScreen(status: AccountStatus.registered),
+      ),
+      GoRoute(
+        path: '/account/:status',
+        builder: (context, state) => AccountStatusScreen(
+          status: AccountStatus.parse(state.pathParameters['status']),
+        ),
+      ),
+      GoRoute(
+        path: Routes.unlockOffer,
+        builder: (context, state) => const UnlockOfferScreen(),
       ),
       GoRoute(
         path: Routes.lock,

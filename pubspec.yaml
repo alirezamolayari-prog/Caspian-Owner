@@ -4,7 +4,7 @@ publish_to: 'none'
 
 # X.Y.Z+BUILD. BUILD must always increase (Android refuses a lower versionCode).
 # Bump with tool/bump_version.ps1, never by hand.
-version: 0.3.1+5
+version: 0.4.0+6
 environment:
   sdk: ^3.13.5
   flutter: 3.47.7

@@ -9,7 +9,9 @@ import 'package:clock/clock.dart';
 /// Login against Caspian Server:
 /// 1. `POST /auth/login` (form fields) → token and role;
 /// 2. only `owner` and `admin` accounts may use this app;
-/// 3. `GET /auth/me` with the new token → id and name.
+/// 3. a first password from the admin must be changed before anything
+///    else (the server refuses every other call until then);
+/// 4. `GET /auth/me` with the new token → id and name.
 class ApiAuthRepository implements AuthRepository {
   const new(this._client);
 
@@ -34,6 +36,9 @@ class ApiAuthRepository implements AuthRepository {
       throw const ServerException(code: 'not_owner', statusCode: 403);
     }
     final accessToken = token['access_token']! as String;
+    if (token['must_change_password'] == true) {
+      throw MustChangePasswordException(accessToken);
+    }
     final me = ApiClient.asMap(
       await _client.get('/auth/me', bearer: accessToken),
     );

@@ -36,6 +36,55 @@ void main() {
     test('login itself stays', () {
       expect(go(signedOut, unlocked, '/login'), isNull);
     });
+
+    test('register, forgot password and account pages are open', () {
+      for (final path in [
+        '/register',
+        '/forgot-password',
+        '/otp',
+        '/new-password',
+        '/registered',
+        '/account/pending',
+        '/account/rejected',
+        '/change-password',
+      ]) {
+        expect(go(signedOut, unlocked, path), isNull, reason: path);
+      }
+    });
+
+    test('the fingerprint offer needs a login', () {
+      expect(go(signedOut, unlocked, '/unlock-offer'), '/login');
+    });
+  });
+
+  group('just logged in with the password', () {
+    const offer = LockState(
+      locked: false,
+      deviceAuthAvailable: true,
+      hasPin: false,
+      offerPending: true,
+    );
+    const declined = LockState(
+      locked: false,
+      deviceAuthAvailable: true,
+      hasPin: false,
+      useDevice: false,
+    );
+
+    test('the fingerprint is offered first', () {
+      expect(go(signedIn, offer, '/'), '/unlock-offer');
+      expect(go(signedIn, offer, '/unlock-offer'), isNull);
+    });
+
+    test('«not now» leads to creating an app PIN', () {
+      expect(go(signedIn, declined, '/'), '/pin-setup');
+      expect(go(signedIn, declined.copyWith(hasPin: true), '/'), isNull);
+    });
+
+    test('the offer page leads home once answered', () {
+      expect(go(signedIn, unlocked, '/unlock-offer'), '/');
+      expect(go(signedIn, unlocked, '/register'), '/');
+    });
   });
 
   group('phone without a screen lock', () {

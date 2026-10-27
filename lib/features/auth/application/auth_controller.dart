@@ -37,7 +37,7 @@ final authControllerProvider = NotifierProvider<AuthController, AuthState>(
   AuthController.new,
 );
 
-/// Login with username + password, and logout.
+/// Login with mobile (or username) + password, and logout.
 class AuthController extends Notifier<AuthState> {
   @override
   AuthState build() {
@@ -84,6 +84,7 @@ class AuthController extends Notifier<AuthState> {
       SecureKeys.session,
       SecureKeys.pinHash,
       SecureKeys.pinSalt,
+      SecureKeys.deviceUnlock,
     ]) {
       await _store.delete(key);
     }

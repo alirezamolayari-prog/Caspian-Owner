@@ -18,9 +18,23 @@ import java.io.File
 
 // FlutterFragmentActivity (not FlutterActivity) is required by local_auth.
 class MainActivity : FlutterFragmentActivity() {
+    private val smsConsent = SmsConsent(this)
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val messenger = flutterEngine.dartExecutor.binaryMessenger
+
+        // Fills in the SMS code after the owner allows reading that message.
+        MethodChannel(messenger, "caspian/sms_consent").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "start" -> smsConsent.start(result)
+                "stop" -> {
+                    smsConsent.stop()
+                    result.success(null)
+                }
+                else -> result.notImplemented()
+            }
+        }
 
         // Blocks screenshots and the recent-apps preview on sensitive screens.
         MethodChannel(messenger, "caspian/secure_screen").setMethodCallHandler { call, result ->
@@ -157,5 +171,18 @@ class MainActivity : FlutterFragmentActivity() {
                 // Not allowed for this app: try the next one.
             }
         }
+    }
+
+    @Deprecated("Needed for the SMS consent screen's result")
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (!smsConsent.onActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    override fun onDestroy() {
+        smsConsent.stop()
+        super.onDestroy()
     }
 }

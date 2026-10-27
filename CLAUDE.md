@@ -5,7 +5,7 @@
 ## What this is
 Private Android app (Flutter) for the ~5 owners of Caspian furniture mall (building **Phase 2** only). Owners approve **escalated** goods requests from the Caspian Warehouse desktop app, see stock, send rejected requests back for changes, chat per request, and use a mock AI assistant «دستیار کاسپین». Surprise counts were removed in v0.2.0 (see docs/ROADMAP.md). Owner and developer: **Alireza Molayari** (not a programmer; he tests by using the app). Report to him in short, plain language.
 
-- The **Warehouse app** (`alirezamolayari-prog/Caspian_Warehouse`: Python, PySide6, MariaDB) is the source of truth. This app talks **only to a future middle server**, never to the warehouse DB. Until the server exists, everything runs on **mock repositories** that follow `api/openapi.yaml` exactly. Switching to the real server = one config value.
+- The **Warehouse app** (`alirezamolayari-prog/Caspian_Warehouse`: Python, PySide6, MariaDB) is the source of truth. This app talks **only to Caspian Server** (`alirezamolayari-prog/Caspian-Server`, live at `https://api.caspianmoblserver.ir`), never to the warehouse DB. Accounts follow that repo's `docs/owner-auth-api.md` exactly; ask instead of guessing endpoints. Tests use mock repositories / `FakeServer`.
 - Request rules: routine requests are approved in the Warehouse app; important ones (amount/qty threshold, important item, manual) are escalated to owners. **The first decision wins**; the others see «تأیید شد توسط <name>» (server answers `409`).
 - Items the Warehouse app is counting come with `qty: null` and `locked_by_count`; show «در حال شمارش در انبار». **Stock is never auto-adjusted.**
 - Places are always `location_code` + `floor_code`, never internal ids. Floors in building order: P4, P3, P2, P1, B (زیرهمکف), G (همکف), F1, F2, F3, ROOF (بام).
@@ -17,6 +17,7 @@ Private Android app (Flutter) for the ~5 owners of Caspian furniture mall (build
 - applicationId **`com.alirezamolayari.caspianowner`**: permanent, never change it. minSdk 24, targetSdk 36.
 - Riverpod, go_router (`StatefulShellRoute`, 4 tabs), dio, freezed/json_serializable, drift, shamsi_date, intl. Package pins and reasons are in `docs/ARCHITECTURE.md`.
 - **Forbidden:** Google Play Services, Firebase, google_fonts, Crashlytics/analytics, anything fetching assets at runtime. Bundle everything.
+- **The only exception:** `com.google.android.gms:play-services-auth-api-phone` (SMS User Consent, to fill in the SMS code), approved by Alireza in M16. Phones without Google Play services type the code. Add no other GMS library.
 
 ## Commands
 ```powershell

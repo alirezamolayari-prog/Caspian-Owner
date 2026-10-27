@@ -25,15 +25,16 @@ class AppSettings {
     notifications: json['notifications'] as bool? ?? true,
     themeMode:
         ThemeMode.values.asNameMap()[json['theme_mode']] ?? ThemeMode.system,
-    // A saved address that is no longer allowed (e.g. http after LAN http
-    // is switched off) falls back to the default.
-    serverUrl:
-        ServerUrl.normalize(json['server_url'] as String? ?? '') ??
-        ApiConfig.defaultServerUrl,
+    // Release builds always use the default; a saved address that is no
+    // longer allowed (e.g. the old LAN http one) falls back to it too.
+    serverUrl: ApiConfig.serverUrlEditable
+        ? ServerUrl.normalize(json['server_url'] as String? ?? '') ??
+              ApiConfig.defaultServerUrl
+        : ApiConfig.defaultServerUrl,
   );
 
-  /// «آدرس سرور»: where Caspian Server runs, e.g. `http://192.168.10.58:8000`
-  /// now, an https address on the Iranian host later.
+  /// «آدرس سرور»: where Caspian Server runs. Only changeable in debug
+  /// builds ([ApiConfig.serverUrlEditable]).
   final String serverUrl;
 
   /// «تأیید با اثر انگشت برای تأیید درخواست»: one touch before approving.
@@ -111,7 +112,7 @@ class SettingsController extends Notifier<AppSettings> {
   /// [ServerUrl.problem] rejects it.
   bool setServerUrl(String url) {
     final normalized = ServerUrl.normalize(url);
-    if (normalized == null) return false;
+    if (normalized == null || !ApiConfig.serverUrlEditable) return false;
     _save(state.copyWith(serverUrl: normalized));
     return true;
   }
