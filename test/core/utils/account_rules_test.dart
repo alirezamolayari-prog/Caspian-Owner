@@ -35,8 +35,11 @@ void main() {
       }
     });
 
-    test('is shown grouped with Persian digits', () {
-      expect(IranMobile.display('09123456789'), '۰۹۱۲ ۳۴۵ ۶۷۸۹');
+    test('is shown grouped with Persian digits, left to right', () {
+      expect(
+        IranMobile.display('09123456789'),
+        '${IranMobile.ltrIsolate}۰۹۱۲ ۳۴۵ ۶۷۸۹${IranMobile.popIsolate}',
+      );
     });
   });
 
@@ -61,6 +64,11 @@ void main() {
     test('a good password breaks no rule', () {
       expect(PasswordRules.problems('my-own-strong-pass'), isEmpty);
       expect(PasswordRules.problems('رمز خوب من ۱۲'), isEmpty);
+    });
+
+    test('8 characters are enough, 7 are not', () {
+      expect(PasswordRules.problems('abcd1234'), isEmpty);
+      expect(PasswordRules.problems('abc1234'), {PasswordProblem.tooShort});
     });
 
     test('each rule is reported', () {

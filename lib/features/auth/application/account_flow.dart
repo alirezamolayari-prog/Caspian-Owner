@@ -139,7 +139,7 @@ class AccountFlowController extends Notifier<AccountFlow?> {
   AccountFlow get _flow => state ?? (throw StateError('No account flow'));
 }
 
-enum LoginHintReason { registered, passwordReset }
+enum LoginHintReason { registered, passwordReset, mobileTaken }
 
 /// What the login screen should say and fill in after a flow ended.
 class LoginHint {

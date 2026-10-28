@@ -1,6 +1,8 @@
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
+import 'package:caspian_owner/core/utils/iran_mobile.dart';
 import 'package:caspian_owner/features/auth/presentation/account_status_screen.dart';
+import 'package:caspian_owner/features/auth/presentation/forgot_password_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/new_password_screen.dart';
 import 'package:caspian_owner/features/auth/presentation/otp_screen.dart';
@@ -96,7 +98,10 @@ void main() {
       await sendRegisterCode(tester);
 
       expect(find.byType(OtpScreen), findsOneWidget);
-      expect(find.text('کد ۶ رقمی به شماره ۰۹۱۲ ۳۴۵ ۶۷۸۹ پیامک شد.'), findsOne);
+      // The number is a left-to-right run inside the Persian sentence.
+      const number =
+          '${IranMobile.ltrIsolate}۰۹۱۲ ۳۴۵ ۶۷۸۹${IranMobile.popIsolate}';
+      expect(find.text('کد ۶ رقمی به شماره $number پیامک شد.'), findsOne);
       expect(find.text('ارسال دوباره کد تا ۱:۳۰ دیگر'), findsOneWidget);
       expect(server.calls('POST', '/auth/otp/request').single.data, {
         'mobile': '09123456789',
@@ -131,6 +136,46 @@ void main() {
       expect(find.text('09123456789'), findsOneWidget);
     });
 
+    testWidgets('a number that is already registered says so and offers '
+        'forgot password', (tester) async {
+      server.on(
+        'POST',
+        '/auth/otp/request',
+        FakeServer.fail(409, 'mobile_taken'),
+      );
+      await pumpApp(tester);
+      await sendRegisterCode(tester);
+
+      expect(find.byType(OtpScreen), findsNothing);
+      expect(
+        find.text(
+          'این شماره قبلاً ثبت شده؛ وارد شوید یا از فراموشی رمز استفاده کنید.',
+        ),
+        findsOneWidget,
+      );
+      await tapText(tester, 'رمز را فراموش کرده‌ام');
+      expect(find.byType(ForgotPasswordScreen), findsOneWidget);
+      expect(find.text('09123456789'), findsOneWidget);
+    });
+
+    testWidgets('an SMS the server could not send is not «sent»', (
+      tester,
+    ) async {
+      server.on(
+        'POST',
+        '/auth/otp/request',
+        FakeServer.fail(503, 'sms_not_sent', retryAfter: 90),
+      );
+      await pumpApp(tester);
+      await sendRegisterCode(tester);
+
+      expect(find.byType(OtpScreen), findsNothing);
+      expect(
+        find.text('پیامک فرستاده نشد. چند دقیقه دیگر دوباره امتحان کنید.'),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('names in Latin letters and a wrong mobile are explained '
         'before anything is sent', (tester) async {
       await pumpApp(tester);
@@ -156,7 +201,7 @@ void main() {
 
       await tester.enterText(field('رمز عبور تازه'), '12345');
       await tapText(tester, 'ثبت‌نام');
-      expect(find.text('دست‌کم ۱۰ حرف یا عدد'), findsNWidgets(2));
+      expect(find.text('دست‌کم ۸ حرف یا عدد'), findsNWidgets(2));
 
       await tester.enterText(field('رمز عبور تازه'), 'password123');
       await tapText(tester, 'ثبت‌نام');
@@ -273,12 +318,6 @@ void main() {
       await tester.pump(const Duration(seconds: 91));
       await tester.pump();
       expect(find.text('ارسال دوباره کد'), findsOneWidget);
-      // No SMS for a number that already has an account: suggest a reset.
-      await tester.scrollUntilVisible(
-        find.textContaining('اگر قبلاً با این شماره'),
-        200,
-        scrollable: find.byType(Scrollable).first,
-      );
 
       server.on(
         'POST',
@@ -303,6 +342,28 @@ void main() {
   });
 
   group('forgotten password', () {
+    testWidgets('a number without an account says so and offers '
+        'registration', (tester) async {
+      server.on(
+        'POST',
+        '/auth/otp/request',
+        FakeServer.fail(404, 'account_not_found'),
+      );
+      await pumpApp(tester);
+      await tapText(tester, 'رمز را فراموش کرده‌ام');
+      await tester.enterText(field('شماره موبایل'), '09123456789');
+      await tester.tap(find.text('ارسال کد'));
+      await settle(tester);
+
+      expect(find.byType(OtpScreen), findsNothing);
+      expect(
+        find.text('حسابی با این شماره پیدا نشد. اول ثبت‌نام کنید.'),
+        findsOneWidget,
+      );
+      await tapText(tester, 'ثبت‌نام مالک جدید');
+      expect(find.byType(RegisterScreen), findsOneWidget);
+    });
+
     testWidgets('mobile → code → new password → back to login', (tester) async {
       await pumpApp(tester);
       await tapText(tester, 'رمز را فراموش کرده‌ام');

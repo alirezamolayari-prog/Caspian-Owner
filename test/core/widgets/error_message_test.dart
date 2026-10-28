@@ -70,6 +70,22 @@ void main() {
       errorMessage(const ServerException(code: 'not_owner'), l10n),
       'این حساب برای اپ مالکان نیست.',
     );
+    // Our own wording, whatever detail the server sent.
+    expect(
+      errorMessage(
+        const ServerException(code: 'mobile_taken', messageFa: 'متن سرور'),
+        l10n,
+      ),
+      'این شماره قبلاً ثبت شده؛ وارد شوید یا از فراموشی رمز استفاده کنید.',
+    );
+    expect(
+      errorMessage(const ServerException(code: 'account_not_found'), l10n),
+      'حسابی با این شماره پیدا نشد. اول ثبت‌نام کنید.',
+    );
+    expect(
+      errorMessage(const ServerException(code: 'sms_not_sent'), l10n),
+      'پیامک فرستاده نشد. چند دقیقه دیگر دوباره امتحان کنید.',
+    );
     expect(
       errorMessage(notConnected, l10n),
       'این بخش هنوز به سرور وصل نشده است.',

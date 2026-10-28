@@ -150,7 +150,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final hint = switch (ref.watch(loginHintProvider)?.reason) {
       LoginHintReason.registered => l10n.loginRegisteredNotice,
       LoginHintReason.passwordReset => l10n.loginPasswordResetNotice,
-      null => null,
+      LoginHintReason.mobileTaken || null => null,
     };
     final blocked = _wait > Duration.zero;
 

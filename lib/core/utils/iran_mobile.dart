@@ -19,11 +19,18 @@ abstract final class IranMobile {
     return _canonical.hasMatch(digits) ? digits : null;
   }
 
-  /// Shown as «۰۹۱۲ ۳۴۵ ۶۷۸۹» (Persian digits, grouped).
-  static String display(String mobile) => toPersianDigits(
-    mobile.length == 11
+  /// Shown as «۰۹۱۲ ۳۴۵ ۶۷۸۹» (Persian digits, grouped), inside a
+  /// left-to-right isolate (LRI … PDI): in Persian text the groups would
+  /// otherwise run right to left («۶۷۸۹ ۳۴۵ ۰۹۱۲»).
+  static String display(String mobile) {
+    final grouped = mobile.length == 11
         ? '${mobile.substring(0, 4)} ${mobile.substring(4, 7)} '
               '${mobile.substring(7)}'
-        : mobile,
-  );
+        : mobile;
+    return '$ltrIsolate${toPersianDigits(grouped)}$popIsolate';
+  }
+
+  /// Unicode LEFT-TO-RIGHT ISOLATE and POP DIRECTIONAL ISOLATE.
+  static const ltrIsolate = '\u2066';
+  static const popIsolate = '\u2069';
 }

@@ -32,6 +32,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   String? _mobileError;
   String? _error;
 
+  /// The number already has an account: offer login and forgot password.
+  String? _takenMobile;
+
   @override
   void dispose() {
     _firstName.dispose();
@@ -50,6 +53,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       _lastNameError = lastName == null ? l10n.nameInvalid : null;
       _mobileError = mobile == null ? l10n.mobileInvalid : null;
       _error = null;
+      _takenMobile = null;
     });
     if (firstName == null || lastName == null || mobile == null) return;
 
@@ -69,6 +73,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       setState(() {
         if (e case ServerException(code: 'invalid_mobile', :final messageFa)) {
           _mobileError = messageFa ?? l10n.mobileInvalid;
+        } else if (e case ServerException(code: 'mobile_taken')) {
+          _takenMobile = mobile;
+          _error = l10n.errorMobileTaken;
         } else {
           _error = errorMessage(e, l10n);
         }
@@ -76,6 +83,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// Opens login or forgot password with [mobile] already filled in.
+  void _leaveFor(String route, String mobile) {
+    ref.read(loginHintProvider.notifier).hint = LoginHint(
+      mobile: mobile,
+      reason: LoginHintReason.mobileTaken,
+    );
+    context.go(route);
   }
 
   @override
@@ -120,6 +136,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         if (_error case final error?) ...[
           const SizedBox(height: Space.md),
           FormMessage(error),
+        ],
+        if (_takenMobile case final mobile?) ...[
+          const SizedBox(height: Space.md),
+          SecondButton(
+            label: l10n.loginVerify,
+            onPressed: () => _leaveFor(Routes.login, mobile),
+          ),
+          const SizedBox(height: Space.sm),
+          SecondButton(
+            label: l10n.loginForgot,
+            onPressed: () => _leaveFor(Routes.forgotPassword, mobile),
+          ),
         ],
         const SizedBox(height: Space.lg),
         BigButton(

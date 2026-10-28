@@ -244,6 +244,24 @@ abstract class AppLocalizations {
   /// **'خطای سرور. کمی بعد دوباره تلاش کنید.'**
   String get errorServer;
 
+  /// No description provided for @errorMobileTaken.
+  ///
+  /// In fa, this message translates to:
+  /// **'این شماره قبلاً ثبت شده؛ وارد شوید یا از فراموشی رمز استفاده کنید.'**
+  String get errorMobileTaken;
+
+  /// No description provided for @errorAccountNotFound.
+  ///
+  /// In fa, this message translates to:
+  /// **'حسابی با این شماره پیدا نشد. اول ثبت‌نام کنید.'**
+  String get errorAccountNotFound;
+
+  /// No description provided for @errorSmsNotSent.
+  ///
+  /// In fa, this message translates to:
+  /// **'پیامک فرستاده نشد. چند دقیقه دیگر دوباره امتحان کنید.'**
+  String get errorSmsNotSent;
+
   /// Login with a warehouse account.
   ///
   /// In fa, this message translates to:
@@ -580,12 +598,6 @@ abstract class AppLocalizations {
   /// **'کد ۶ رقم است.'**
   String get otpTooShort;
 
-  /// The server sends no SMS to numbers that already have an account, and doesn't say so.
-  ///
-  /// In fa, this message translates to:
-  /// **'کدی نرسید؟ اگر قبلاً با این شماره ثبت‌نام کرده‌اید، از «رمز را فراموش کرده‌ام» رمز تازه بگیرید.'**
-  String get otpNoCodeRegister;
-
   /// No description provided for @passwordCreateTitle.
   ///
   /// In fa, this message translates to:
@@ -631,7 +643,7 @@ abstract class AppLocalizations {
   /// No description provided for @passwordRuleLength.
   ///
   /// In fa, this message translates to:
-  /// **'دست‌کم ۱۰ حرف یا عدد'**
+  /// **'دست‌کم ۸ حرف یا عدد'**
   String get passwordRuleLength;
 
   /// No description provided for @passwordRuleDistinct.
