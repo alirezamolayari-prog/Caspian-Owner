@@ -109,6 +109,18 @@ class AppLocalizationsFa extends AppLocalizations {
   String get errorServer => 'خطای سرور. کمی بعد دوباره تلاش کنید.';
 
   @override
+  String get errorMobileTaken =>
+      'این شماره قبلاً ثبت شده؛ وارد شوید یا از فراموشی رمز استفاده کنید.';
+
+  @override
+  String get errorAccountNotFound =>
+      'حسابی با این شماره پیدا نشد. اول ثبت‌نام کنید.';
+
+  @override
+  String get errorSmsNotSent =>
+      'پیامک فرستاده نشد. چند دقیقه دیگر دوباره امتحان کنید.';
+
+  @override
   String get errorNotOwner => 'این حساب برای اپ مالکان نیست.';
 
   @override
@@ -296,10 +308,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get otpTooShort => 'کد ۶ رقم است.';
 
   @override
-  String get otpNoCodeRegister =>
-      'کدی نرسید؟ اگر قبلاً با این شماره ثبت‌نام کرده‌اید، از «رمز را فراموش کرده‌ام» رمز تازه بگیرید.';
-
-  @override
   String get passwordCreateTitle => 'رمز عبور بسازید';
 
   @override
@@ -323,7 +331,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get passwordRepeatLabel => 'تکرار رمز عبور';
 
   @override
-  String get passwordRuleLength => 'دست‌کم ۱۰ حرف یا عدد';
+  String get passwordRuleLength => 'دست‌کم ۸ حرف یا عدد';
 
   @override
   String get passwordRuleDistinct => 'دست‌کم ۴ حرف یا عدد متفاوت';

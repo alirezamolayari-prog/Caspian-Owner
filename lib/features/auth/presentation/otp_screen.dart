@@ -10,7 +10,6 @@ import 'package:caspian_owner/core/utils/iran_mobile.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/widgets/error_message.dart';
 import 'package:caspian_owner/features/auth/application/account_flow.dart';
-import 'package:caspian_owner/features/auth/domain/account_repository.dart';
 import 'package:caspian_owner/features/auth/presentation/flow_expired.dart';
 import 'package:caspian_owner/features/auth/presentation/widgets/auth_page.dart';
 import 'package:clock/clock.dart';
@@ -41,8 +40,6 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
   String? _error;
   String? _notice;
 
-  /// The resend wait ran out at least once: the code may never come.
-  bool _waitedInVain = false;
   bool _counting = true;
 
   @override
@@ -70,10 +67,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
     if (!mounted || flow == null) return;
     final counting = _untilResend(flow) > Duration.zero;
     if (!counting && !_counting) return;
-    setState(() {
-      _counting = counting;
-      if (!counting) _waitedInVain = true;
-    });
+    setState(() => _counting = counting);
   }
 
   Future<void> _listenForSms() async {
@@ -210,21 +204,6 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
             style: theme.textTheme.bodyLarge,
             textAlign: TextAlign.center,
           ),
-        // The server doesn't say whether a number already has an account
-        // (no SMS is sent then); after waiting in vain, suggest the reset.
-        if (flow.purpose == OtpPurpose.register && _waitedInVain) ...[
-          const SizedBox(height: Space.lg),
-          FormMessage(l10n.otpNoCodeRegister, kind: MessageKind.info),
-          Center(
-            child: TextButton(
-              onPressed: () {
-                ref.read(accountFlowProvider.notifier).cancel();
-                context.go(Routes.forgotPassword);
-              },
-              child: Text(l10n.loginForgot),
-            ),
-          ),
-        ],
       ],
     );
   }

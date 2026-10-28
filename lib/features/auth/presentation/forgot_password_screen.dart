@@ -14,8 +14,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// Forgotten password, step 1 of 3: the mobile number, then «ارسال کد».
-/// The server sends an SMS only to active accounts, but answers the same
-/// either way.
+/// The server sends an SMS only to active accounts and says why otherwise
+/// (no account, deactivated, rejected).
 class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const new({super.key});
 
@@ -29,6 +29,9 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   bool _busy = false;
   String? _mobileError;
   String? _error;
+
+  /// No account has this number: offer registration.
+  bool _noAccount = false;
 
   @override
   void initState() {
@@ -50,6 +53,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
     setState(() {
       _mobileError = mobile == null ? l10n.mobileInvalid : null;
       _error = null;
+      _noAccount = false;
     });
     if (mobile == null) return;
 
@@ -65,6 +69,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         if (e case ServerException(code: 'invalid_mobile', :final messageFa)) {
           _mobileError = messageFa ?? l10n.mobileInvalid;
         } else {
+          _noAccount = e is ServerException && e.code == 'account_not_found';
           _error = errorMessage(e, l10n);
         }
       });
@@ -91,6 +96,13 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         if (_error case final error?) ...[
           const SizedBox(height: Space.md),
           FormMessage(error),
+        ],
+        if (_noAccount) ...[
+          const SizedBox(height: Space.md),
+          SecondButton(
+            label: l10n.loginRegister,
+            onPressed: () => context.go(Routes.register),
+          ),
         ],
         const SizedBox(height: Space.lg),
         BigButton(

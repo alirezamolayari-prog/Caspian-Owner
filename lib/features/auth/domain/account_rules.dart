@@ -42,7 +42,7 @@ enum PasswordProblem {
 }
 
 abstract final class PasswordRules {
-  static const minLength = 10;
+  static const minLength = 8;
   static const maxBytes = 72;
   static const minDistinct = 4;
 
