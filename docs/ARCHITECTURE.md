@@ -61,6 +61,14 @@ Register, login, forgotten password and first-password change, for owners aged 5
 - **Lock:** after a password login (`SignedOut → SignedIn`), `LockState.offerPending` routes to `/unlock-offer`. Yes → one device prompt, `SecureKeys.deviceUnlock = on`. «فعلاً نه» → `off` → app PIN setup. The choice is wiped on logout; Settings has a switch. Device unlock only opens the stored session; a `401` still means password login. The lock screen has «ورود با رمز عبور» (signs out).
 - Routes open while signed out: `isSignedOutPath` in `core/router/routes.dart`.
 
+## Requests on Caspian Server (v0.4.2)
+- Statuses: `pending`, `approved`, `rejected`, `issued` («حواله صادر شد», with `issue_number`). Anything else → `RequestStatus.unknown` («نامشخص»), logged through `ServerMappers.warn`, never decidable. Waiting counts (home, hub badge, «منتظر» tab) use `canDecide` = escalated and pending.
+- Who decided is never sent (privacy): `decided_by_me` → `DeciderKind.me` («شما») or `anotherOwner` («یکی از مالکان»); see `widgets/decider_name.dart`. Chat: the warehouse keeps its name, owners are «شما» / «مالک».
+- Item codes come from `item_code` (empty → hidden), not the row id.
+- Reject needs a reason (server `RejectIn.reason`, ≥3 letters in the sheet).
+- Decision queue: refusals for good (400/403/404/422) are dropped and reported (`FlushResult.failed` → `decisionFailureProvider` → SnackBar); network, 401, 408, 429 and 5xx stay queued. `reconcile()` at sign-in drops decisions whose request is no longer pending.
+- Release builds replace Flutter's grey error box with `FriendlyErrorWidget`; the error goes to the on-device log.
+
 ## Offline behaviour
 - Last data cached in drift, shown with «آخرین به‌روزرسانی: …».
 - Offline decisions go to a pending queue («در صف ارسال»), each with an idempotency key, so the server applies it only once.
