@@ -15,8 +15,17 @@ import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 ///
 /// Times arrive in UTC and are shown in the phone's time zone.
 abstract final class ServerMappers {
+  /// Reports what the server sent that this app version doesn't know (an
+  /// unknown request status). Set by bootstrap to write the app log.
+  static void Function(String message)? warn;
+
   static GoodsRequest request(Map<String, Object?> json) {
-    final decidedById = json['decided_by_id'] as int?;
+    final status = _status(json['status'], json['id']);
+    final decidedAt = time(json['decided_at']);
+    final decided =
+        status == RequestStatus.approved ||
+        status == RequestStatus.issued ||
+        status == RequestStatus.rejected;
     return GoodsRequest(
       id: '${json['id']}',
       number: json['id']! as int,
@@ -33,46 +42,77 @@ abstract final class ServerMappers {
         for (final item in json['items']! as List<Object?>)
           _line(item! as Map<String, Object?>),
       ],
-      status: switch (json['status']) {
-        'approved' => RequestStatus.approved,
-        'rejected' => RequestStatus.rejected,
-        _ => RequestStatus.pending,
-      },
+      status: status,
       escalated: true,
       note: _nonEmpty(json['note'] as String?),
-      decidedBy: decidedById == null
-          ? null
-          : DecidedBy(
-              kind: DeciderKind.owner,
-              nameFa: json['decided_by_name'] as String? ?? '',
-            ),
-      decidedAt: time(json['decided_at']),
-      decisionReason: json['rejection_reason'] as String?,
+      // Privacy: the server never says which owner decided, only whether
+      // it was the viewer.
+      decidedBy: decided && decidedAt != null
+          ? DecidedBy(
+              kind: json['decided_by_me'] == true
+                  ? DeciderKind.me
+                  : DeciderKind.anotherOwner,
+              nameFa: '',
+            )
+          : null,
+      decidedAt: decidedAt,
+      decisionReason: _nonEmpty(json['rejection_reason'] as String?),
+      issueNumber: _nonEmpty(json['issue_number'] as String?),
+      issuedAt: time(json['issued_at']),
     );
   }
 
-  /// [myId] is the logged-in user's id, so their own messages show as mine.
-  static ChatMessage message(Map<String, Object?> json, {String? myId}) =>
-      ChatMessage(
-        id: '${json['id']}',
-        requestId: '${json['request_id']}',
-        author: ChatAuthor(
-          kind: json['sender_role'] == 'warehouse'
-              ? ChatAuthorKind.staff
-              : ChatAuthorKind.owner,
-          nameFa: json['sender_name']! as String,
-          isMe: myId != null && '${json['sender_id']}' == myId,
-        ),
-        text: json['text']! as String,
-        sentAt: time(json['created_at'])!,
-      );
+  /// Never a silent default: an unknown status is [RequestStatus.unknown]
+  /// (not decidable, not counted) and is logged.
+  static RequestStatus _status(Object? value, Object? id) {
+    switch (value) {
+      case 'pending':
+        return RequestStatus.pending;
+      case 'approved':
+        return RequestStatus.approved;
+      case 'rejected':
+        return RequestStatus.rejected;
+      case 'issued':
+        return RequestStatus.issued;
+    }
+    warn?.call('Request $id: unknown status "$value"');
+    return RequestStatus.unknown;
+  }
+
+  /// [myId] is the logged-in user's id. Warehouse messages keep the
+  /// server's name (e.g. «انبار کاسپین»); owners are never named: «شما» for
+  /// my own messages, «مالک» for other owners'.
+  static ChatMessage message(Map<String, Object?> json, {String? myId}) {
+    final staff = json['sender_role'] == 'warehouse';
+    final isMe =
+        myId != null &&
+        json['sender_id'] != null &&
+        '${json['sender_id']}' == myId;
+    return ChatMessage(
+      id: '${json['id']}',
+      requestId: '${json['request_id']}',
+      author: ChatAuthor(
+        kind: staff ? ChatAuthorKind.staff : ChatAuthorKind.owner,
+        nameFa: switch ((staff, isMe)) {
+          (true, _) => json['sender_name']! as String,
+          (false, true) => 'شما',
+          (false, false) => 'مالک',
+        },
+        isMe: isMe,
+      ),
+      text: json['text']! as String,
+      sentAt: time(json['created_at'])!,
+    );
+  }
 
   /// An ISO time from the server (UTC), in the phone's time zone.
   static DateTime? time(Object? value) =>
       value is String ? DateTime.parse(value).toLocal() : null;
 
+  /// [RequestLine.itemCode] is the warehouse's item code (`item_code`), not
+  /// the row id; empty when the server has none (the UI hides it then).
   static RequestLine _line(Map<String, Object?> json) => RequestLine(
-    itemCode: '${json['id']}',
+    itemCode: (json['item_code'] as String?)?.trim() ?? '',
     itemNameFa: json['name']! as String,
     qty: (json['quantity']! as num).toDouble(),
     unitFa: json['unit']! as String,

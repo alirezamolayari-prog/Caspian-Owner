@@ -1,8 +1,10 @@
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
 import 'package:caspian_owner/core/router/app_router.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
+import 'package:caspian_owner/core/storage/pending_decision_queue.dart';
 import 'package:caspian_owner/features/auth/presentation/login_screen.dart';
 import 'package:caspian_owner/features/hub/presentation/hub_screen.dart';
+import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/requests/presentation/request_detail_screen.dart';
 import 'package:caspian_owner/features/settings/presentation/server_url_dialog.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +47,7 @@ void main() {
         FakeServer.json([
           serverRequest(
             status: 'rejected',
-            decidedById: 4,
-            decidedByName: 'مالک ۲',
+            decidedByMe: false,
             rejectionReason: 'زیاد است',
           ),
         ]),
@@ -57,8 +58,7 @@ void main() {
         FakeServer.json(
           serverRequest(
             status: 'rejected',
-            decidedById: 4,
-            decidedByName: 'مالک ۲',
+            decidedByMe: false,
             rejectionReason: 'زیاد است',
           ),
         ),
@@ -191,10 +191,75 @@ void main() {
     expect(find.byType(RequestDetailScreen), findsOneWidget);
     expect(find.textContaining('کیسه زباله'), findsWidgets);
     expect(find.text('سرویس بهداشتی طبقه ۲'), findsOneWidget);
-    expect(find.textContaining('مالک ۲'), findsWidgets);
+    expect(find.textContaining('یکی از مالکان'), findsWidgets);
     expect(find.text('موجودی فعلی'), findsNothing);
     expect(find.text('مصرف قبلی همین محل'), findsNothing);
     expect(find.text('ویرایش و برگرداندن'), findsNothing);
+  });
+
+  testWidgets('an issued request with a stuck queued reject opens fine, the '
+      'stuck decision is dropped, and nothing can be decided', (tester) async {
+    // Request #1 on Alireza's phone: issued by the warehouse, with a reject
+    // (no reason) stuck in the queue since v0.4.1.
+    final issued = serverRequest(
+      id: 1,
+      status: 'issued',
+      decidedByMe: true,
+      issueNumber: 'H-1405-0012',
+    );
+    server
+      ..on('GET', '/requests', FakeServer.json([issued]))
+      ..on('GET', '/requests/1', FakeServer.json(issued))
+      ..on(
+        'GET',
+        '/requests/1/messages',
+        FakeServer.json([
+          serverMessage(requestId: 1, text: 'حواله زدم'),
+          serverMessage(
+            id: 2,
+            requestId: 1,
+            senderId: 4,
+            senderName: 'رضا احمدی',
+            senderRole: 'owner',
+            text: 'باشه',
+          ),
+        ]),
+      )
+      ..on('POST', '/requests/1/reject', FakeServer.error(422));
+    final harness = TestHarness.create(
+      fixtures,
+      signedIn: true,
+      server: server,
+    );
+    addTearDown(harness.database.close);
+    await PendingDecisionQueue(harness.database)
+        .enqueue(requestId: '1', action: DecisionAction.reject, reason: '');
+    await tester.pumpWidget(
+      harness.app(
+        extra: [serverProbeProvider.overrideWithValue((url) async {})],
+      ),
+    );
+    await tester.pumpAndSettle();
+    addTearDown(() => tester.pumpWidget(const SizedBox()));
+
+    ProviderScope.containerOf(tester.element(find.byType(HubScreen)))
+        .read(routerProvider)
+        .go('/requests/1');
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byType(ErrorWidget), findsNothing);
+    expect(find.byType(RequestDetailScreen), findsOneWidget);
+    expect(find.text('حواله صادر شد – شماره H-۱۴۰۵-۰۰۱۲'), findsOneWidget);
+    expect(find.textContaining('تأیید شد توسط شما'), findsOneWidget);
+    // Other owners are never named in the chat.
+    expect(find.textContaining('رضا احمدی'), findsNothing);
+    expect(find.text('تأیید'), findsNothing);
+    expect(find.text('رد کردن'), findsNothing);
+    expect(find.text('در صف ارسال'), findsNothing);
+    expect(await PendingDecisionQueue(harness.database).pending(), isEmpty);
+    // Nothing was sent: the request was already issued.
+    expect(server.calls('POST', '/requests/1/reject'), isEmpty);
   });
 
   testWidgets('stock and assistant tabs say «not connected yet»', (

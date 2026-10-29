@@ -79,13 +79,7 @@ void main() {
       ..on(
         'POST',
         '/requests/5/approve',
-        FakeServer.json(
-          serverRequest(
-            status: 'approved',
-            decidedById: 3,
-            decidedByName: 'مالک ۱',
-          ),
-        ),
+        FakeServer.json(serverRequest(status: 'approved', decidedByMe: true)),
       )
       ..on(
         'POST',
@@ -93,8 +87,7 @@ void main() {
         FakeServer.json(
           serverRequest(
             status: 'rejected',
-            decidedById: 3,
-            decidedByName: 'مالک ۱',
+            decidedByMe: true,
             rejectionReason: 'زیاد است',
           ),
         ),
@@ -102,7 +95,7 @@ void main() {
 
     final approved = await repository.decide(decision(DecisionAction.approve));
     expect(approved.status, RequestStatus.approved);
-    expect(approved.decidedBy?.nameFa, 'مالک ۱');
+    expect(approved.decidedBy?.kind, DeciderKind.me);
 
     final rejected = await repository.decide(
       decision(DecisionAction.reject, reason: 'زیاد است'),
@@ -119,22 +112,16 @@ void main() {
       ..on(
         'GET',
         '/requests/5',
-        FakeServer.json(
-          serverRequest(
-            status: 'rejected',
-            decidedById: 4,
-            decidedByName: 'مالک ۲',
-          ),
-        ),
+        FakeServer.json(serverRequest(status: 'rejected', decidedByMe: false)),
       );
 
     await expectLater(
       repository.decide(decision(DecisionAction.approve)),
       throwsA(
         isA<AlreadyDecidedException>().having(
-          (e) => e.request.decidedBy?.nameFa,
+          (e) => e.request.decidedBy?.kind,
           'winner',
-          'مالک ۲',
+          DeciderKind.anotherOwner,
         ),
       ),
     );
@@ -146,7 +133,7 @@ void main() {
       ..on(
         'GET',
         '/requests/5',
-        FakeServer.json(serverRequest(status: 'approved', decidedById: 3)),
+        FakeServer.json(serverRequest(status: 'approved', decidedByMe: true)),
       );
 
     final request = await repository.decide(decision(DecisionAction.approve));

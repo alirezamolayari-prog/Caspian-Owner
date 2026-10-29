@@ -640,7 +640,7 @@ components:
     RequestStatus:
       type: string
       description: returned = a rejected request an owner sent back to the requester for changes (v0.2.0).
-      enum: [pending, approved, rejected, cancelled, returned]
+      enum: [pending, approved, rejected, cancelled, returned, issued, unknown]
 
     EscalationReason:
       type: string
@@ -648,7 +648,8 @@ components:
 
     DeciderKind:
       type: string
-      enum: [owner, manager]
+      description: me / another_owner = Caspian Server, which never names the owner who decided.
+      enum: [owner, manager, me, another_owner]
 
     DecidedBy:
       type: object
@@ -696,6 +697,8 @@ components:
             - type: 'null'
         decided_at: { type: [string, 'null'], format: date-time }
         decision_reason: { type: [string, 'null'] }
+        issue_number: { type: [string, 'null'], description: The warehouse's issue document (حواله), once issued. }
+        issued_at: { type: [string, 'null'], format: date-time }
         location_history:
           type: array
           items: { $ref: '#/components/schemas/LocationUsage' }

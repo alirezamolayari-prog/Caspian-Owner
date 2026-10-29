@@ -12,6 +12,7 @@ import 'package:caspian_owner/core/utils/jalali.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/utils/relative_time.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
 import 'package:caspian_owner/features/chat/presentation/request_chat_tile.dart';
 import 'package:caspian_owner/features/requests/application/decision_controller.dart';
@@ -19,6 +20,7 @@ import 'package:caspian_owner/features/requests/application/requests_providers.d
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/requests/presentation/reject_sheet.dart';
 import 'package:caspian_owner/features/requests/presentation/return_for_edit_sheet.dart';
+import 'package:caspian_owner/features/requests/presentation/widgets/decider_name.dart';
 import 'package:caspian_owner/features/requests/presentation/widgets/request_status_chip.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
@@ -107,8 +109,10 @@ class RequestDetailScreen extends ConsumerWidget {
     GoodsRequest winner,
   ) async {
     final l10n = AppLocalizations.of(context);
-    final name =
-        winner.returnedForEdit?.by.nameFa ?? winner.decidedBy?.nameFa ?? '';
+    final by = winner.returnedForEdit?.by ?? winner.decidedBy;
+    final name = by == null
+        ? l10n.decidedByAnotherOwner
+        : deciderName(by, l10n);
     await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
@@ -164,7 +168,7 @@ class _DetailBody extends ConsumerWidget {
         Space.sm,
         Space.page,
         Space.lg,
-      ),
+      ).withSafeBottom(context),
       children: [
         if (cachedAt != null) ...[
           StaleNotice(cachedAt: cachedAt),
@@ -345,20 +349,40 @@ class _DecisionBanner extends StatelessWidget {
           scheme.onSurface,
           AppIcons.returned,
         ),
+      (null, false, GoodsRequest(status: RequestStatus.issued)) => (
+        switch (request.issueNumber) {
+          final number? => l10n.issuedBanner(toPersianDigits(number)),
+          null => l10n.issuedBannerNoNumber,
+        },
+        switch (request.decidedBy) {
+          final by? => _decidedText(l10n, request, by),
+          null => null,
+        },
+        colors.successContainer,
+        colors.success,
+        AppIcons.issued,
+      ),
+      (null, false, GoodsRequest(status: RequestStatus.unknown)) => (
+        l10n.statusUnknown,
+        l10n.unknownStatusBanner,
+        scheme.surfaceContainer,
+        scheme.onSurfaceVariant,
+        AppIcons.unknown,
+      ),
       (null, false, GoodsRequest(isDecided: true, :final decidedBy?)) => (
         _decidedText(l10n, request, decidedBy),
         request.decisionReason == null
             ? null
             : l10n.decisionReason(request.decisionReason!),
-        request.status == RequestStatus.approved
-            ? colors.successContainer
-            : scheme.errorContainer,
-        request.status == RequestStatus.approved
-            ? colors.success
-            : scheme.onErrorContainer,
-        request.status == RequestStatus.approved
-            ? AppIcons.approved
-            : AppIcons.rejected,
+        request.status == RequestStatus.rejected
+            ? scheme.errorContainer
+            : colors.successContainer,
+        request.status == RequestStatus.rejected
+            ? scheme.onErrorContainer
+            : colors.success,
+        request.status == RequestStatus.rejected
+            ? AppIcons.rejected
+            : AppIcons.approved,
       ),
       _ => ('', null, scheme.surface, scheme.onSurface, AppIcons.pending),
     };
@@ -407,15 +431,13 @@ class _DecisionBanner extends StatelessWidget {
     GoodsRequest request,
     DecidedBy by,
   ) {
-    final name = by.kind == DeciderKind.manager
-        ? '${by.nameFa} (${l10n.managerLabel})'
-        : by.nameFa;
+    final name = deciderName(by, l10n);
     final when = request.decidedAt == null
         ? ''
         : formatRelativeTime(request.decidedAt!, now: clock.now(), l10n: l10n);
-    return request.status == RequestStatus.approved
-        ? l10n.decidedApprovedBy(name, when)
-        : l10n.decidedRejectedBy(name, when);
+    return request.status == RequestStatus.rejected
+        ? l10n.decidedRejectedBy(name, when)
+        : l10n.decidedApprovedBy(name, when);
   }
 }
 

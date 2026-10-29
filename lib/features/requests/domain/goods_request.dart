@@ -17,15 +17,23 @@ enum RequestStatus {
   /// quantities («برگشت برای اصلاح»). The requester fixes and resubmits it in
   /// the Warehouse app (that is the server's and Warehouse app's part).
   returned,
+
+  /// Approved, and the warehouse has issued the goods («حواله صادر شد»).
+  issued,
+
+  /// A status this app version doesn't know. Shown as «نامشخص», never
+  /// decidable, never counted as waiting.
+  unknown,
 }
 
 @JsonEnum(fieldRename: FieldRename.snake)
 enum EscalationReason { amount, quantity, importantItem, manual }
 
 /// Who made a decision: an owner (in this app) or the warehouse manager
-/// (in the Warehouse app, for routine requests).
+/// (in the Warehouse app, for routine requests). Caspian Server never says
+/// which owner: only [me] or [anotherOwner], with no name.
 @JsonEnum(fieldRename: FieldRename.snake)
-enum DeciderKind { owner, manager }
+enum DeciderKind { owner, manager, me, anotherOwner }
 
 @freezed
 abstract class DecidedBy with _$DecidedBy {
@@ -132,6 +140,10 @@ abstract class GoodsRequest with _$GoodsRequest {
     DecidedBy? decidedBy,
     DateTime? decidedAt,
     String? decisionReason,
+
+    /// The warehouse's issue document («حواله»), once [RequestStatus.issued].
+    String? issueNumber,
+    DateTime? issuedAt,
     List<LocationUsage>? locationHistory,
     ChatSummary? chatSummary,
     ReturnedForEdit? returnedForEdit,
@@ -144,8 +156,11 @@ abstract class GoodsRequest with _$GoodsRequest {
   /// Owners may act only on escalated requests that are still pending.
   bool get canDecide => escalated && status == RequestStatus.pending;
 
+  /// Approved (and maybe already issued) or rejected.
   bool get isDecided =>
-      status == RequestStatus.approved || status == RequestStatus.rejected;
+      status == RequestStatus.approved ||
+      status == RequestStatus.issued ||
+      status == RequestStatus.rejected;
 
   /// Any rejected request can be sent back for changes (first one wins).
   bool get canReturnForEdit => status == RequestStatus.rejected;

@@ -34,6 +34,29 @@
     "placeholders": { "count": { "type": "int", "format": "decimalPattern" } }
   },
 
+  "statusIssued": "حواله صادر شد",
+  "statusUnknown": "نامشخص",
+  "decidedByYou": "شما",
+  "decidedByAnotherOwner": "یکی از مالکان",
+  "issuedBanner": "حواله صادر شد – شماره {number}",
+  "@issuedBanner": { "placeholders": {"number": {"type": "String"}} },
+  "issuedBannerNoNumber": "حواله صادر شد",
+  "unknownStatusBanner": "وضعیت این درخواست برای این نسخه از برنامه شناخته‌شده نیست. برنامه را به‌روز کنید.",
+  "rejectReasonHelper": "دست‌کم ۳ حرف بنویسید. انبار این دلیل را می‌بیند.",
+  "decisionFailed": "تصمیم درخواست {number} ثبت نشد: {reason}",
+  "@decisionFailed": { "placeholders": {"number": {"type": "String"}, "reason": {"type": "String"}} },
+  "errorWidgetTitle": "این بخش درست نمایش داده نشد",
+  "errorWidgetBody": "مشکل ثبت شد. برگردید و دوباره امتحان کنید.",
+  "errorWidgetBack": "بازگشت",
+  "roleAdmin": "مدیر سیستم (ادمین)",
+  "roleWarehouse": "انبار",
+  "roleUnassigned": "نقش تعیین نشده",
+  "usersActive": "فعال",
+  "usersInactive": "غیرفعال",
+  "usersApprovalPending": "منتظر تأیید",
+  "usersApprovalRejected": "رد شده",
+  "usersPendingSection": "منتظر تأیید مدیر",
+  "usersAllSection": "همه کاربران",
   "statusPending": "منتظر",
   "@statusPending": { "description": "Status chip: waiting for a decision." },
 
@@ -77,6 +100,7 @@
   "@errorNotOwner": { "description": "Login with a warehouse account." },
   "errorNotConnected": "این بخش هنوز به سرور وصل نشده است.",
   "notConnectedBody": "این بخش هنوز به سرور کاسپین وصل نشده است و به‌زودی اضافه می‌شود.",
+  "notConnectedTitle": "به‌زودی",
   "@notConnectedBody": { "description": "Stock, assistant, reports, notifications list while the server has no API for them." },
 
   "tabHome": "خانه",
@@ -88,10 +112,6 @@
   "stockTitle": "موجودی انبار",
   "assistantTitle": "دستیار کاسپین",
   "moreTitle": "بیشتر",
-  "moreRoleAdmin": "{owner} – {admin}",
-  "@moreRoleAdmin": {
-    "placeholders": { "owner": { "type": "String" }, "admin": { "type": "String" } }
-  },
   "logout": "خروج",
 
   "loginTitle": "ورود به مالک کاسپین",
@@ -347,7 +367,7 @@
 
   "rejectSheetTitle": "رد کردن درخواست {number}",
   "@rejectSheetTitle": { "placeholders": { "number": { "type": "String" } } },
-  "rejectReasonLabel": "دلیل (اختیاری)",
+  "rejectReasonLabel": "دلیل رد",
   "rejectReasonHint": "مثلاً: مقدار زیاد است",
 
   "locationHistoryTitle": "مصرف قبلی همین محل",
@@ -485,10 +505,9 @@
 
   "purchaseBody": "لیست خرید در نسخه‌های بعدی اضافه می‌شود.",
 
-  "usersAdmin": "مدیر سیستم",
   "usersOwner": "مالک",
   "usersYou": "شما",
-  "usersNote": "افزودن، حذف و تعیین دسترسی کاربران بعد از راه‌اندازی سرور فعال می‌شود.",
+  "usersNote": "مدیریت کاربران (تأیید، نقش، غیرفعال کردن) از پنل سرور انجام می‌شود.",
 
   "settingsTheme": "ظاهر",
   "themeSystem": "مطابق گوشی",

@@ -28,12 +28,13 @@ void main() {
             // Decided by another owner.
             serverRequest(
               status: 'approved',
-              decidedById: 4,
-              decidedByName: 'مالک ۲',
+              decidedByMe: false,
               updatedAt: '2026-10-21T09:02:00Z',
             ),
             // Decided by me: no notification.
-            serverRequest(id: 8, status: 'rejected', decidedById: 3),
+            serverRequest(id: 8, status: 'rejected', decidedByMe: true),
+            // Issued by the warehouse: not an owner's decision.
+            serverRequest(id: 9, status: 'issued', decidedByMe: false),
           ],
           'messages': [
             serverMessage(text: 'سؤال دارم', createdAt: '2026-10-21T09:03:00Z'),
@@ -52,7 +53,7 @@ void main() {
     expect(batch.events.map((e) => e.titleFa), [
       'درخواست ۷ منتظر تأیید شماست',
       'درخواست ۶ اصلاح شد و دوباره منتظر تأیید شماست',
-      'درخواست ۵ تأیید شد توسط مالک ۲',
+      'درخواست ۵ تأیید شد توسط یکی از مالکان',
       'پیام از انبار پاساژ',
     ]);
     expect(batch.events.last.kind, NotificationEventKind.chatMessage);

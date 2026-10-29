@@ -36,7 +36,7 @@ class ApiNotificationSource implements NotificationSource {
     required DateTime since,
     required String? me,
   }) => <NotificationEvent>[
-    for (final json in changes.requests) ?_requestEvent(json, since, me),
+    for (final json in changes.requests) ?_requestEvent(json, since),
     for (final json in changes.messages)
       if ('${json['sender_id']}' != me) _messageEvent(json),
   ]..sort((a, b) => a.at.compareTo(b.at));
@@ -50,7 +50,6 @@ class ApiNotificationSource implements NotificationSource {
   static NotificationEvent? _requestEvent(
     Map<String, Object?> json,
     DateTime since,
-    String? me,
   ) {
     final request = ServerMappers.request(json);
     final number = request.number;
@@ -75,10 +74,14 @@ class ApiNotificationSource implements NotificationSource {
         target: target,
       );
     }
-    final decidedBySomeoneElse =
-        request.isDecided && '${json['decided_by_id']}' != me;
-    if (!decidedBySomeoneElse) return null;
-    final name = request.decidedBy?.nameFa ?? '';
+    // Only another owner's approve / reject; never my own decision, and not
+    // the warehouse issuing the goods. The server never names that owner.
+    final decidedByAnotherOwner =
+        (request.status == RequestStatus.approved ||
+            request.status == RequestStatus.rejected) &&
+        json['decided_by_me'] == false;
+    if (!decidedByAnotherOwner) return null;
+    const name = 'یکی از مالکان';
     return NotificationEvent(
       id: id,
       kind: NotificationEventKind.requestDecided,

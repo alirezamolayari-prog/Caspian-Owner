@@ -20,6 +20,8 @@ Map<String, dynamic> _$DecidedByToJson(_DecidedBy instance) =>
 const _$DeciderKindEnumMap = {
   DeciderKind.owner: 'owner',
   DeciderKind.manager: 'manager',
+  DeciderKind.me: 'me',
+  DeciderKind.anotherOwner: 'another_owner',
 };
 
 _RequestLine _$RequestLineFromJson(Map<String, dynamic> json) => _RequestLine(
@@ -132,6 +134,10 @@ _GoodsRequest _$GoodsRequestFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['decided_at'] as String),
       decisionReason: json['decision_reason'] as String?,
+      issueNumber: json['issue_number'] as String?,
+      issuedAt: json['issued_at'] == null
+          ? null
+          : DateTime.parse(json['issued_at'] as String),
       locationHistory: (json['location_history'] as List<dynamic>?)
           ?.map((e) => LocationUsage.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -161,6 +167,8 @@ Map<String, dynamic> _$GoodsRequestToJson(
   'decided_by': ?instance.decidedBy?.toJson(),
   'decided_at': ?instance.decidedAt?.toIso8601String(),
   'decision_reason': ?instance.decisionReason,
+  'issue_number': ?instance.issueNumber,
+  'issued_at': ?instance.issuedAt?.toIso8601String(),
   'location_history': ?instance.locationHistory
       ?.map((e) => e.toJson())
       .toList(),
@@ -174,6 +182,8 @@ const _$RequestStatusEnumMap = {
   RequestStatus.rejected: 'rejected',
   RequestStatus.cancelled: 'cancelled',
   RequestStatus.returned: 'returned',
+  RequestStatus.issued: 'issued',
+  RequestStatus.unknown: 'unknown',
 };
 
 const _$EscalationReasonEnumMap = {

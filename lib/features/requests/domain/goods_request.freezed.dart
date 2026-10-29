@@ -1742,7 +1742,8 @@ mixin _$GoodsRequest {
 
  String get id; int get number; DateTime get createdAt; Person get requester; ConsumptionPlace get place; List<RequestLine> get lines; RequestStatus get status;/// True when owners must decide. Routine requests are decided by the
 /// warehouse manager and are shown read-only.
- bool get escalated; String? get note; EscalationReason? get escalationReason; DecidedBy? get decidedBy; DateTime? get decidedAt; String? get decisionReason; List<LocationUsage>? get locationHistory; ChatSummary? get chatSummary; ReturnedForEdit? get returnedForEdit;
+ bool get escalated; String? get note; EscalationReason? get escalationReason; DecidedBy? get decidedBy; DateTime? get decidedAt; String? get decisionReason;/// The warehouse's issue document («حواله»), once [RequestStatus.issued].
+ String? get issueNumber; DateTime? get issuedAt; List<LocationUsage>? get locationHistory; ChatSummary? get chatSummary; ReturnedForEdit? get returnedForEdit;
 /// Create a copy of GoodsRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1756,20 +1757,20 @@ $GoodsRequestCopyWith<GoodsRequest> get copyWith => _$GoodsRequestCopyWithImpl<G
 @override
 bool operator ==(Object other) {
   final _this = this as GoodsRequest;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoodsRequest&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.number, _this.number) || other.number == _this.number)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt)&&(identical(other.requester, _this.requester) || other.requester == _this.requester)&&(identical(other.place, _this.place) || other.place == _this.place)&&const DeepCollectionEquality().equals(other.lines, _this.lines)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.escalated, _this.escalated) || other.escalated == _this.escalated)&&(identical(other.note, _this.note) || other.note == _this.note)&&(identical(other.escalationReason, _this.escalationReason) || other.escalationReason == _this.escalationReason)&&(identical(other.decidedBy, _this.decidedBy) || other.decidedBy == _this.decidedBy)&&(identical(other.decidedAt, _this.decidedAt) || other.decidedAt == _this.decidedAt)&&(identical(other.decisionReason, _this.decisionReason) || other.decisionReason == _this.decisionReason)&&const DeepCollectionEquality().equals(other.locationHistory, _this.locationHistory)&&(identical(other.chatSummary, _this.chatSummary) || other.chatSummary == _this.chatSummary)&&(identical(other.returnedForEdit, _this.returnedForEdit) || other.returnedForEdit == _this.returnedForEdit));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GoodsRequest&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.number, _this.number) || other.number == _this.number)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt)&&(identical(other.requester, _this.requester) || other.requester == _this.requester)&&(identical(other.place, _this.place) || other.place == _this.place)&&const DeepCollectionEquality().equals(other.lines, _this.lines)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.escalated, _this.escalated) || other.escalated == _this.escalated)&&(identical(other.note, _this.note) || other.note == _this.note)&&(identical(other.escalationReason, _this.escalationReason) || other.escalationReason == _this.escalationReason)&&(identical(other.decidedBy, _this.decidedBy) || other.decidedBy == _this.decidedBy)&&(identical(other.decidedAt, _this.decidedAt) || other.decidedAt == _this.decidedAt)&&(identical(other.decisionReason, _this.decisionReason) || other.decisionReason == _this.decisionReason)&&(identical(other.issueNumber, _this.issueNumber) || other.issueNumber == _this.issueNumber)&&(identical(other.issuedAt, _this.issuedAt) || other.issuedAt == _this.issuedAt)&&const DeepCollectionEquality().equals(other.locationHistory, _this.locationHistory)&&(identical(other.chatSummary, _this.chatSummary) || other.chatSummary == _this.chatSummary)&&(identical(other.returnedForEdit, _this.returnedForEdit) || other.returnedForEdit == _this.returnedForEdit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as GoodsRequest;
-  return Object.hash(runtimeType,_this.id,_this.number,_this.createdAt,_this.requester,_this.place,const DeepCollectionEquality().hash(_this.lines),_this.status,_this.escalated,_this.note,_this.escalationReason,_this.decidedBy,_this.decidedAt,_this.decisionReason,const DeepCollectionEquality().hash(_this.locationHistory),_this.chatSummary,_this.returnedForEdit);
+  return Object.hash(runtimeType,_this.id,_this.number,_this.createdAt,_this.requester,_this.place,const DeepCollectionEquality().hash(_this.lines),_this.status,_this.escalated,_this.note,_this.escalationReason,_this.decidedBy,_this.decidedAt,_this.decisionReason,_this.issueNumber,_this.issuedAt,const DeepCollectionEquality().hash(_this.locationHistory),_this.chatSummary,_this.returnedForEdit);
 }
 
 @override
 String toString() {
   final _this = this as GoodsRequest;
-  return 'GoodsRequest(id: ${_this.id}, number: ${_this.number}, createdAt: ${_this.createdAt}, requester: ${_this.requester}, place: ${_this.place}, lines: ${_this.lines}, status: ${_this.status}, escalated: ${_this.escalated}, note: ${_this.note}, escalationReason: ${_this.escalationReason}, decidedBy: ${_this.decidedBy}, decidedAt: ${_this.decidedAt}, decisionReason: ${_this.decisionReason}, locationHistory: ${_this.locationHistory}, chatSummary: ${_this.chatSummary}, returnedForEdit: ${_this.returnedForEdit})';
+  return 'GoodsRequest(id: ${_this.id}, number: ${_this.number}, createdAt: ${_this.createdAt}, requester: ${_this.requester}, place: ${_this.place}, lines: ${_this.lines}, status: ${_this.status}, escalated: ${_this.escalated}, note: ${_this.note}, escalationReason: ${_this.escalationReason}, decidedBy: ${_this.decidedBy}, decidedAt: ${_this.decidedAt}, decisionReason: ${_this.decisionReason}, issueNumber: ${_this.issueNumber}, issuedAt: ${_this.issuedAt}, locationHistory: ${_this.locationHistory}, chatSummary: ${_this.chatSummary}, returnedForEdit: ${_this.returnedForEdit})';
 }
 
 
@@ -1780,7 +1781,7 @@ abstract mixin class $GoodsRequestCopyWith<$Res>  {
   factory $GoodsRequestCopyWith(GoodsRequest value, $Res Function(GoodsRequest) _then) = _$GoodsRequestCopyWithImpl;
 @useResult
 $Res call({
- String id, int number, DateTime createdAt, Person requester, ConsumptionPlace place, List<RequestLine> lines, RequestStatus status, bool escalated, String? note, EscalationReason? escalationReason, DecidedBy? decidedBy, DateTime? decidedAt, String? decisionReason, List<LocationUsage>? locationHistory, ChatSummary? chatSummary, ReturnedForEdit? returnedForEdit
+ String id, int number, DateTime createdAt, Person requester, ConsumptionPlace place, List<RequestLine> lines, RequestStatus status, bool escalated, String? note, EscalationReason? escalationReason, DecidedBy? decidedBy, DateTime? decidedAt, String? decisionReason, String? issueNumber, DateTime? issuedAt, List<LocationUsage>? locationHistory, ChatSummary? chatSummary, ReturnedForEdit? returnedForEdit
 });
 
 
@@ -1797,7 +1798,7 @@ class _$GoodsRequestCopyWithImpl<$Res>
 
 /// Create a copy of GoodsRequest
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? number = null,Object? createdAt = null,Object? requester = null,Object? place = null,Object? lines = null,Object? status = null,Object? escalated = null,Object? note = freezed,Object? escalationReason = freezed,Object? decidedBy = freezed,Object? decidedAt = freezed,Object? decisionReason = freezed,Object? locationHistory = freezed,Object? chatSummary = freezed,Object? returnedForEdit = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? number = null,Object? createdAt = null,Object? requester = null,Object? place = null,Object? lines = null,Object? status = null,Object? escalated = null,Object? note = freezed,Object? escalationReason = freezed,Object? decidedBy = freezed,Object? decidedAt = freezed,Object? decisionReason = freezed,Object? issueNumber = freezed,Object? issuedAt = freezed,Object? locationHistory = freezed,Object? chatSummary = freezed,Object? returnedForEdit = freezed,}) {
   return _then(GoodsRequest(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,number: null == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
@@ -1812,7 +1813,9 @@ as String?,escalationReason: freezed == escalationReason ? _self.escalationReaso
 as EscalationReason?,decidedBy: freezed == decidedBy ? _self.decidedBy : decidedBy // ignore: cast_nullable_to_non_nullable
 as DecidedBy?,decidedAt: freezed == decidedAt ? _self.decidedAt : decidedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,decisionReason: freezed == decisionReason ? _self.decisionReason : decisionReason // ignore: cast_nullable_to_non_nullable
-as String?,locationHistory: freezed == locationHistory ? _self.locationHistory : locationHistory // ignore: cast_nullable_to_non_nullable
+as String?,issueNumber: freezed == issueNumber ? _self.issueNumber : issueNumber // ignore: cast_nullable_to_non_nullable
+as String?,issuedAt: freezed == issuedAt ? _self.issuedAt : issuedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,locationHistory: freezed == locationHistory ? _self.locationHistory : locationHistory // ignore: cast_nullable_to_non_nullable
 as List<LocationUsage>?,chatSummary: freezed == chatSummary ? _self.chatSummary : chatSummary // ignore: cast_nullable_to_non_nullable
 as ChatSummary?,returnedForEdit: freezed == returnedForEdit ? _self.returnedForEdit : returnedForEdit // ignore: cast_nullable_to_non_nullable
 as ReturnedForEdit?,
@@ -1954,10 +1957,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  int number,  DateTime createdAt,  Person requester,  ConsumptionPlace place,  List<RequestLine> lines,  RequestStatus status,  bool escalated,  String? note,  EscalationReason? escalationReason,  DecidedBy? decidedBy,  DateTime? decidedAt,  String? decisionReason,  List<LocationUsage>? locationHistory,  ChatSummary? chatSummary,  ReturnedForEdit? returnedForEdit)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  int number,  DateTime createdAt,  Person requester,  ConsumptionPlace place,  List<RequestLine> lines,  RequestStatus status,  bool escalated,  String? note,  EscalationReason? escalationReason,  DecidedBy? decidedBy,  DateTime? decidedAt,  String? decisionReason,  String? issueNumber,  DateTime? issuedAt,  List<LocationUsage>? locationHistory,  ChatSummary? chatSummary,  ReturnedForEdit? returnedForEdit)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GoodsRequest() when $default != null:
-return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.place,_that.lines,_that.status,_that.escalated,_that.note,_that.escalationReason,_that.decidedBy,_that.decidedAt,_that.decisionReason,_that.locationHistory,_that.chatSummary,_that.returnedForEdit);case _:
+return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.place,_that.lines,_that.status,_that.escalated,_that.note,_that.escalationReason,_that.decidedBy,_that.decidedAt,_that.decisionReason,_that.issueNumber,_that.issuedAt,_that.locationHistory,_that.chatSummary,_that.returnedForEdit);case _:
   return orElse();
 
 }
@@ -1975,10 +1978,10 @@ return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.plac
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  int number,  DateTime createdAt,  Person requester,  ConsumptionPlace place,  List<RequestLine> lines,  RequestStatus status,  bool escalated,  String? note,  EscalationReason? escalationReason,  DecidedBy? decidedBy,  DateTime? decidedAt,  String? decisionReason,  List<LocationUsage>? locationHistory,  ChatSummary? chatSummary,  ReturnedForEdit? returnedForEdit)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  int number,  DateTime createdAt,  Person requester,  ConsumptionPlace place,  List<RequestLine> lines,  RequestStatus status,  bool escalated,  String? note,  EscalationReason? escalationReason,  DecidedBy? decidedBy,  DateTime? decidedAt,  String? decisionReason,  String? issueNumber,  DateTime? issuedAt,  List<LocationUsage>? locationHistory,  ChatSummary? chatSummary,  ReturnedForEdit? returnedForEdit)  $default,) {final _that = this;
 switch (_that) {
 case _GoodsRequest():
-return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.place,_that.lines,_that.status,_that.escalated,_that.note,_that.escalationReason,_that.decidedBy,_that.decidedAt,_that.decisionReason,_that.locationHistory,_that.chatSummary,_that.returnedForEdit);case _:
+return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.place,_that.lines,_that.status,_that.escalated,_that.note,_that.escalationReason,_that.decidedBy,_that.decidedAt,_that.decisionReason,_that.issueNumber,_that.issuedAt,_that.locationHistory,_that.chatSummary,_that.returnedForEdit);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1995,10 +1998,10 @@ return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.plac
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  int number,  DateTime createdAt,  Person requester,  ConsumptionPlace place,  List<RequestLine> lines,  RequestStatus status,  bool escalated,  String? note,  EscalationReason? escalationReason,  DecidedBy? decidedBy,  DateTime? decidedAt,  String? decisionReason,  List<LocationUsage>? locationHistory,  ChatSummary? chatSummary,  ReturnedForEdit? returnedForEdit)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  int number,  DateTime createdAt,  Person requester,  ConsumptionPlace place,  List<RequestLine> lines,  RequestStatus status,  bool escalated,  String? note,  EscalationReason? escalationReason,  DecidedBy? decidedBy,  DateTime? decidedAt,  String? decisionReason,  String? issueNumber,  DateTime? issuedAt,  List<LocationUsage>? locationHistory,  ChatSummary? chatSummary,  ReturnedForEdit? returnedForEdit)?  $default,) {final _that = this;
 switch (_that) {
 case _GoodsRequest() when $default != null:
-return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.place,_that.lines,_that.status,_that.escalated,_that.note,_that.escalationReason,_that.decidedBy,_that.decidedAt,_that.decisionReason,_that.locationHistory,_that.chatSummary,_that.returnedForEdit);case _:
+return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.place,_that.lines,_that.status,_that.escalated,_that.note,_that.escalationReason,_that.decidedBy,_that.decidedAt,_that.decisionReason,_that.issueNumber,_that.issuedAt,_that.locationHistory,_that.chatSummary,_that.returnedForEdit);case _:
   return null;
 
 }
@@ -2010,7 +2013,7 @@ return $default(_that.id,_that.number,_that.createdAt,_that.requester,_that.plac
 @JsonSerializable()
 
 class _GoodsRequest extends GoodsRequest {
-  const _GoodsRequest({required this.id, required this.number, required this.createdAt, required this.requester, required this.place, required  List<RequestLine> lines, required this.status, required this.escalated, this.note, this.escalationReason, this.decidedBy, this.decidedAt, this.decisionReason,  List<LocationUsage>? locationHistory, this.chatSummary, this.returnedForEdit}): _lines = lines,_locationHistory = locationHistory,super._();
+  const _GoodsRequest({required this.id, required this.number, required this.createdAt, required this.requester, required this.place, required  List<RequestLine> lines, required this.status, required this.escalated, this.note, this.escalationReason, this.decidedBy, this.decidedAt, this.decisionReason, this.issueNumber, this.issuedAt,  List<LocationUsage>? locationHistory, this.chatSummary, this.returnedForEdit}): _lines = lines,_locationHistory = locationHistory,super._();
   factory _GoodsRequest.fromJson(Map<String, dynamic> json) => _$GoodsRequestFromJson(json);
 
 @override final  String id;
@@ -2034,6 +2037,9 @@ class _GoodsRequest extends GoodsRequest {
 @override final  DecidedBy? decidedBy;
 @override final  DateTime? decidedAt;
 @override final  String? decisionReason;
+/// The warehouse's issue document («حواله»), once [RequestStatus.issued].
+@override final  String? issueNumber;
+@override final  DateTime? issuedAt;
  final  List<LocationUsage>? _locationHistory;
 @override List<LocationUsage>? get locationHistory {
   final value = _locationHistory;
@@ -2059,18 +2065,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoodsRequest&&(identical(other.id, id) || other.id == id)&&(identical(other.number, number) || other.number == number)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.requester, requester) || other.requester == requester)&&(identical(other.place, place) || other.place == place)&&const DeepCollectionEquality().equals(other.lines, _lines)&&(identical(other.status, status) || other.status == status)&&(identical(other.escalated, escalated) || other.escalated == escalated)&&(identical(other.note, note) || other.note == note)&&(identical(other.escalationReason, escalationReason) || other.escalationReason == escalationReason)&&(identical(other.decidedBy, decidedBy) || other.decidedBy == decidedBy)&&(identical(other.decidedAt, decidedAt) || other.decidedAt == decidedAt)&&(identical(other.decisionReason, decisionReason) || other.decisionReason == decisionReason)&&const DeepCollectionEquality().equals(other.locationHistory, _locationHistory)&&(identical(other.chatSummary, chatSummary) || other.chatSummary == chatSummary)&&(identical(other.returnedForEdit, returnedForEdit) || other.returnedForEdit == returnedForEdit));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GoodsRequest&&(identical(other.id, id) || other.id == id)&&(identical(other.number, number) || other.number == number)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.requester, requester) || other.requester == requester)&&(identical(other.place, place) || other.place == place)&&const DeepCollectionEquality().equals(other.lines, _lines)&&(identical(other.status, status) || other.status == status)&&(identical(other.escalated, escalated) || other.escalated == escalated)&&(identical(other.note, note) || other.note == note)&&(identical(other.escalationReason, escalationReason) || other.escalationReason == escalationReason)&&(identical(other.decidedBy, decidedBy) || other.decidedBy == decidedBy)&&(identical(other.decidedAt, decidedAt) || other.decidedAt == decidedAt)&&(identical(other.decisionReason, decisionReason) || other.decisionReason == decisionReason)&&(identical(other.issueNumber, issueNumber) || other.issueNumber == issueNumber)&&(identical(other.issuedAt, issuedAt) || other.issuedAt == issuedAt)&&const DeepCollectionEquality().equals(other.locationHistory, _locationHistory)&&(identical(other.chatSummary, chatSummary) || other.chatSummary == chatSummary)&&(identical(other.returnedForEdit, returnedForEdit) || other.returnedForEdit == returnedForEdit));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,number,createdAt,requester,place,const DeepCollectionEquality().hash(_lines),status,escalated,note,escalationReason,decidedBy,decidedAt,decisionReason,const DeepCollectionEquality().hash(_locationHistory),chatSummary,returnedForEdit);
+    return Object.hash(runtimeType,id,number,createdAt,requester,place,const DeepCollectionEquality().hash(_lines),status,escalated,note,escalationReason,decidedBy,decidedAt,decisionReason,issueNumber,issuedAt,const DeepCollectionEquality().hash(_locationHistory),chatSummary,returnedForEdit);
 }
 
 @override
 String toString() {
-    return 'GoodsRequest(id: $id, number: $number, createdAt: $createdAt, requester: $requester, place: $place, lines: $lines, status: $status, escalated: $escalated, note: $note, escalationReason: $escalationReason, decidedBy: $decidedBy, decidedAt: $decidedAt, decisionReason: $decisionReason, locationHistory: $locationHistory, chatSummary: $chatSummary, returnedForEdit: $returnedForEdit)';
+    return 'GoodsRequest(id: $id, number: $number, createdAt: $createdAt, requester: $requester, place: $place, lines: $lines, status: $status, escalated: $escalated, note: $note, escalationReason: $escalationReason, decidedBy: $decidedBy, decidedAt: $decidedAt, decisionReason: $decisionReason, issueNumber: $issueNumber, issuedAt: $issuedAt, locationHistory: $locationHistory, chatSummary: $chatSummary, returnedForEdit: $returnedForEdit)';
 }
 
 
@@ -2081,7 +2087,7 @@ abstract mixin class _$GoodsRequestCopyWith<$Res> implements $GoodsRequestCopyWi
   factory _$GoodsRequestCopyWith(_GoodsRequest value, $Res Function(_GoodsRequest) _then) = __$GoodsRequestCopyWithImpl;
 @override @useResult
 $Res call({
- String id, int number, DateTime createdAt, Person requester, ConsumptionPlace place, List<RequestLine> lines, RequestStatus status, bool escalated, String? note, EscalationReason? escalationReason, DecidedBy? decidedBy, DateTime? decidedAt, String? decisionReason, List<LocationUsage>? locationHistory, ChatSummary? chatSummary, ReturnedForEdit? returnedForEdit
+ String id, int number, DateTime createdAt, Person requester, ConsumptionPlace place, List<RequestLine> lines, RequestStatus status, bool escalated, String? note, EscalationReason? escalationReason, DecidedBy? decidedBy, DateTime? decidedAt, String? decisionReason, String? issueNumber, DateTime? issuedAt, List<LocationUsage>? locationHistory, ChatSummary? chatSummary, ReturnedForEdit? returnedForEdit
 });
 
 
@@ -2098,7 +2104,7 @@ class __$GoodsRequestCopyWithImpl<$Res>
 
 /// Create a copy of GoodsRequest
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? number = null,Object? createdAt = null,Object? requester = null,Object? place = null,Object? lines = null,Object? status = null,Object? escalated = null,Object? note = freezed,Object? escalationReason = freezed,Object? decidedBy = freezed,Object? decidedAt = freezed,Object? decisionReason = freezed,Object? locationHistory = freezed,Object? chatSummary = freezed,Object? returnedForEdit = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? number = null,Object? createdAt = null,Object? requester = null,Object? place = null,Object? lines = null,Object? status = null,Object? escalated = null,Object? note = freezed,Object? escalationReason = freezed,Object? decidedBy = freezed,Object? decidedAt = freezed,Object? decisionReason = freezed,Object? issueNumber = freezed,Object? issuedAt = freezed,Object? locationHistory = freezed,Object? chatSummary = freezed,Object? returnedForEdit = freezed,}) {
   return _then(_GoodsRequest(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,number: null == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
@@ -2113,7 +2119,9 @@ as String?,escalationReason: freezed == escalationReason ? _self.escalationReaso
 as EscalationReason?,decidedBy: freezed == decidedBy ? _self.decidedBy : decidedBy // ignore: cast_nullable_to_non_nullable
 as DecidedBy?,decidedAt: freezed == decidedAt ? _self.decidedAt : decidedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,decisionReason: freezed == decisionReason ? _self.decisionReason : decisionReason // ignore: cast_nullable_to_non_nullable
-as String?,locationHistory: freezed == locationHistory ? _self._locationHistory : locationHistory // ignore: cast_nullable_to_non_nullable
+as String?,issueNumber: freezed == issueNumber ? _self.issueNumber : issueNumber // ignore: cast_nullable_to_non_nullable
+as String?,issuedAt: freezed == issuedAt ? _self.issuedAt : issuedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,locationHistory: freezed == locationHistory ? _self._locationHistory : locationHistory // ignore: cast_nullable_to_non_nullable
 as List<LocationUsage>?,chatSummary: freezed == chatSummary ? _self.chatSummary : chatSummary // ignore: cast_nullable_to_non_nullable
 as ChatSummary?,returnedForEdit: freezed == returnedForEdit ? _self.returnedForEdit : returnedForEdit // ignore: cast_nullable_to_non_nullable
 as ReturnedForEdit?,
