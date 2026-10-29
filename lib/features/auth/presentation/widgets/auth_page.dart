@@ -3,6 +3,7 @@ import 'package:caspian_owner/core/theme/app_colors.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:flutter/material.dart';
 
 /// Account pages are for owners aged 55–65: larger text and buttons than
@@ -75,7 +76,7 @@ class AuthPage extends StatelessWidget {
                   Space.md,
                   Space.lg,
                   Space.xl,
-                ),
+                ).withSafeBottom(context),
                 children: [
                   if (!showBack) const SizedBox(height: Space.xl),
                   if (icon != null) ...[

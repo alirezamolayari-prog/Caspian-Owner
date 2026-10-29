@@ -30,7 +30,8 @@ abstract final class ApiConfig {
   /// How often the open app asks the server «what changed?» (`/changes`).
   static const Duration liveSyncInterval = Duration(seconds: 5);
 
-  /// Update manifest on the server; empty: the GitHub release is used.
+  /// Server hosting the update manifest (`update.json`), checked before
+  /// GitHub; empty: only the GitHub release is used. See `manifestUrls`.
   static const String baseUrl = '';
 
   static const Duration connectTimeout = Duration(seconds: 10);

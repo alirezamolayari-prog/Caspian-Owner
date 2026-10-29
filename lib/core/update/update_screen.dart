@@ -2,6 +2,7 @@ import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,7 +33,7 @@ class UpdateScreen extends ConsumerWidget {
           ),
         ),
         body: ListView(
-          padding: const EdgeInsets.all(Space.lg),
+          padding: const EdgeInsets.all(Space.lg).withSafeBottom(context),
           children: [
             if (blocking) ...[
               Text(l10n.updateRequiredBody, style: theme.textTheme.bodyLarge),

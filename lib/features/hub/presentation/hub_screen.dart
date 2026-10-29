@@ -7,6 +7,7 @@ import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/core/widgets/status_chip.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,8 @@ class HubScreen extends ConsumerWidget {
         body: config == null
             ? const Center(child: CircularProgressIndicator())
             : ListView(
-                padding: const EdgeInsets.all(Space.page),
+                padding: const EdgeInsets.all(Space.page)
+                    .withSafeBottom(context),
                 children: [
                   // Two per row; rows grow with large text instead of
                   // clipping it (no fixed-aspect grid).

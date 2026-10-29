@@ -35,31 +35,56 @@ class ServerFeatureGate extends ConsumerWidget {
   }
 }
 
-/// «این بخش هنوز به سرور کاسپین وصل نشده است…»
+/// «به‌زودی – این بخش هنوز به سرور کاسپین وصل نشده است…»: a calm empty
+/// state (icon in a tinted circle, a title and one line), no sample data.
 class NotConnectedBody extends StatelessWidget {
   const new({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
     return Center(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(Space.lg),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              AppIcons.offline,
-              size: 48,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-            const SizedBox(height: Space.md),
-            Text(
-              AppLocalizations.of(context).notConnectedBody,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge,
-            ),
-          ],
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 360),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ExcludeSemantics(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: scheme.secondaryContainer,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(Space.lg),
+                    child: Icon(
+                      AppIcons.offline,
+                      size: 40,
+                      color: scheme.onSecondaryContainer,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: Space.lg),
+              Text(
+                l10n.notConnectedTitle,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: Space.sm),
+              Text(
+                l10n.notConnectedBody,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

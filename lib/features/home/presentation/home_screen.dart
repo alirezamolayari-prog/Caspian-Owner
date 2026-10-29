@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
 import 'package:caspian_owner/core/widgets/module_app_bar.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/core/widgets/stale_notice.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
@@ -74,7 +75,7 @@ class _HomeContent extends StatelessWidget {
         Space.sm,
         Space.page,
         Space.lg,
-      ),
+      ).withSafeBottom(context),
       children: [
         if (cachedAt != null) ...[
           StaleNotice(cachedAt: cachedAt),

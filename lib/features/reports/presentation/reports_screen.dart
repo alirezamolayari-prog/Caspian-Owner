@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/utils/jalali.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/widgets/card_segment.dart';
 import 'package:caspian_owner/core/widgets/error_state.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/features/reports/application/report_providers.dart';
 import 'package:caspian_owner/features/reports/domain/consumption_report.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
           Space.sm,
           Space.page,
           Space.lg,
-        ),
+        ).withSafeBottom(context),
         children: [
           SegmentedButton<ReportGrouping>(
             segments: [

@@ -5,8 +5,11 @@ import 'package:caspian_owner/core/config/api_config.dart';
 import 'package:caspian_owner/core/update/update_manifest.dart';
 import 'package:dio/dio.dart';
 
-/// Where to look for `update.json`, in order: the middle server (once it
-/// exists), then the latest GitHub Release.
+/// Where to look for `update.json`, in order: the server (when
+/// [ApiConfig.baseUrl] is set), then the latest GitHub Release.
+// TODO(alireza): once Caspian Server hosts the manifest (faster from Iran
+// than GitHub), set ApiConfig.baseUrl and check the path below. Nothing on
+// the server serves it yet, so GitHub is used.
 List<String> manifestUrls() => [
   if (ApiConfig.baseUrl.isNotEmpty) '${ApiConfig.baseUrl}/v1/app/update',
   'https://github.com/${Brand.releaseRepo}/releases/latest/download/update.json',
