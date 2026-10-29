@@ -3,6 +3,7 @@ import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +56,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.all(Space.lg),
+          padding: const EdgeInsets.all(Space.lg).withSafeBottom(context),
           children: [
             const SizedBox(height: Space.xl),
             Icon(AppIcons.lock, size: 48, color: theme.colorScheme.primary),

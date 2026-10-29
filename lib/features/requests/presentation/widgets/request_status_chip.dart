@@ -4,8 +4,8 @@ import 'package:caspian_owner/core/widgets/status_chip.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:flutter/widgets.dart';
 
-/// منتظر / تأیید شد / رد شد / برگشت برای اصلاح / لغو شد, always with an
-/// icon.
+/// منتظر / تأیید شد / حواله صادر شد / رد شد / برگشت برای اصلاح / لغو شد /
+/// نامشخص, always with an icon.
 class RequestStatusChip extends StatelessWidget {
   const new(this.status, {super.key});
 
@@ -37,6 +37,15 @@ class RequestStatusChip extends StatelessWidget {
       RequestStatus.cancelled => StatusChip(
         label: l10n.statusCancelled,
         icon: AppIcons.cancelled,
+      ),
+      RequestStatus.issued => StatusChip(
+        label: l10n.statusIssued,
+        icon: AppIcons.issued,
+        tone: StatusTone.success,
+      ),
+      RequestStatus.unknown => StatusChip(
+        label: l10n.statusUnknown,
+        icon: AppIcons.unknown,
       ),
     };
   }

@@ -73,7 +73,7 @@ void main() {
     testWidgets('starts with who is signed in: name and role', (tester) async {
       await pumpAt(tester, '/more');
       expect(find.text('علیرضا'), findsOneWidget);
-      expect(find.text('مالک – مدیر سیستم'), findsOneWidget);
+      expect(find.text('مدیر سیستم (ادمین)'), findsOneWidget);
     });
 
     testWidgets('other owners do not see users and permissions', (
@@ -260,8 +260,14 @@ void main() {
   testWidgets('users list marks the admin and «شما»', (tester) async {
     await pumpAt(tester, '/users');
     expect(find.text('علیرضا (شما)'), findsOneWidget);
-    expect(find.text('مدیر سیستم'), findsOneWidget);
+    expect(find.text('مدیر سیستم (ادمین)'), findsOneWidget);
     expect(find.text('مالک'), findsNWidgets(4));
+    expect(
+      find.text(
+        'مدیریت کاربران (تأیید، نقش، غیرفعال کردن) از پنل سرور انجام می‌شود.',
+      ),
+      findsOneWidget,
+    );
   });
 }
 

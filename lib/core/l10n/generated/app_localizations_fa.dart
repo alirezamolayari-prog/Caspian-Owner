@@ -54,6 +54,75 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get statusIssued => 'حواله صادر شد';
+
+  @override
+  String get statusUnknown => 'نامشخص';
+
+  @override
+  String get decidedByYou => 'شما';
+
+  @override
+  String get decidedByAnotherOwner => 'یکی از مالکان';
+
+  @override
+  String issuedBanner(String number) {
+    return 'حواله صادر شد – شماره $number';
+  }
+
+  @override
+  String get issuedBannerNoNumber => 'حواله صادر شد';
+
+  @override
+  String get unknownStatusBanner =>
+      'وضعیت این درخواست برای این نسخه از برنامه شناخته‌شده نیست. برنامه را به‌روز کنید.';
+
+  @override
+  String get rejectReasonHelper =>
+      'دست‌کم ۳ حرف بنویسید. انبار این دلیل را می‌بیند.';
+
+  @override
+  String decisionFailed(String number, String reason) {
+    return 'تصمیم درخواست $number ثبت نشد: $reason';
+  }
+
+  @override
+  String get errorWidgetTitle => 'این بخش درست نمایش داده نشد';
+
+  @override
+  String get errorWidgetBody => 'مشکل ثبت شد. برگردید و دوباره امتحان کنید.';
+
+  @override
+  String get errorWidgetBack => 'بازگشت';
+
+  @override
+  String get roleAdmin => 'مدیر سیستم (ادمین)';
+
+  @override
+  String get roleWarehouse => 'انبار';
+
+  @override
+  String get roleUnassigned => 'نقش تعیین نشده';
+
+  @override
+  String get usersActive => 'فعال';
+
+  @override
+  String get usersInactive => 'غیرفعال';
+
+  @override
+  String get usersApprovalPending => 'منتظر تأیید';
+
+  @override
+  String get usersApprovalRejected => 'رد شده';
+
+  @override
+  String get usersPendingSection => 'منتظر تأیید مدیر';
+
+  @override
+  String get usersAllSection => 'همه کاربران';
+
+  @override
   String get statusPending => 'منتظر';
 
   @override
@@ -131,6 +200,9 @@ class AppLocalizationsFa extends AppLocalizations {
       'این بخش هنوز به سرور کاسپین وصل نشده است و به‌زودی اضافه می‌شود.';
 
   @override
+  String get notConnectedTitle => 'به‌زودی';
+
+  @override
   String get tabHome => 'خانه';
 
   @override
@@ -153,11 +225,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get moreTitle => 'بیشتر';
-
-  @override
-  String moreRoleAdmin(String owner, String admin) {
-    return '$owner – $admin';
-  }
 
   @override
   String get logout => 'خروج';
@@ -764,7 +831,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get rejectReasonLabel => 'دلیل (اختیاری)';
+  String get rejectReasonLabel => 'دلیل رد';
 
   @override
   String get rejectReasonHint => 'مثلاً: مقدار زیاد است';
@@ -1050,9 +1117,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get purchaseBody => 'لیست خرید در نسخه‌های بعدی اضافه می‌شود.';
 
   @override
-  String get usersAdmin => 'مدیر سیستم';
-
-  @override
   String get usersOwner => 'مالک';
 
   @override
@@ -1060,7 +1124,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get usersNote =>
-      'افزودن، حذف و تعیین دسترسی کاربران بعد از راه‌اندازی سرور فعال می‌شود.';
+      'مدیریت کاربران (تأیید، نقش، غیرفعال کردن) از پنل سرور انجام می‌شود.';
 
   @override
   String get settingsTheme => 'ظاهر';

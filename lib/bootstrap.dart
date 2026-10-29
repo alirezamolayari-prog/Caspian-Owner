@@ -7,6 +7,7 @@ import 'package:caspian_owner/core/di/providers.dart';
 import 'package:caspian_owner/core/logging/app_log.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/mock/mock_fixtures.dart';
+import 'package:caspian_owner/core/network/server_mappers.dart';
 import 'package:caspian_owner/core/notifications/background_poll.dart';
 import 'package:caspian_owner/core/notifications/background_reliability.dart';
 import 'package:caspian_owner/core/notifications/local_notifications.dart';
@@ -15,6 +16,7 @@ import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/security/secure_store.dart';
 import 'package:caspian_owner/core/storage/app_database.dart';
+import 'package:caspian_owner/core/widgets/friendly_error_widget.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -49,6 +51,12 @@ Future<List<Override>> bootstrap() async {
     log.error('Uncaught error', error, stack);
     return true;
   };
+  // Release: a friendly Persian card instead of Flutter's grey box.
+  if (kReleaseMode) {
+    ErrorWidget.builder = (_) => const FriendlyErrorWidget();
+  }
+  // Server data this version doesn't know (e.g. a new request status).
+  ServerMappers.warn = log.warning;
 
   final authenticator = LocalDeviceAuthenticator();
   final info = await AppInfo.load(deviceId: deviceId);

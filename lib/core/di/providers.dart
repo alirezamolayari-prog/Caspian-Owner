@@ -27,6 +27,8 @@ import 'package:caspian_owner/features/auth/domain/auth_repository.dart';
 import 'package:caspian_owner/features/chat/data/api_chat_repository.dart';
 import 'package:caspian_owner/features/chat/data/mock_chat_repository.dart';
 import 'package:caspian_owner/features/chat/domain/chat_repository.dart';
+import 'package:caspian_owner/features/more/data/users_repositories.dart';
+import 'package:caspian_owner/features/more/domain/app_user.dart';
 import 'package:caspian_owner/features/reports/data/mock_reports_repository.dart';
 import 'package:caspian_owner/features/reports/domain/reports_repository.dart';
 import 'package:caspian_owner/features/requests/data/api_requests_repository.dart';
@@ -176,6 +178,17 @@ final requestsRepositoryProvider = Provider<RequestsRepository>(
     api: (client) => ApiRequestsRepository(client, myId: () => _myId(ref)),
   ),
 );
+
+final usersRepositoryProvider = Provider<UsersRepository>(
+  (ref) =>
+      _source(ref, mock: MockUsersRepository.new, api: ApiUsersRepository.new),
+);
+
+/// Every account, for «کاربران و دسترسی‌ها» (admins only).
+final FutureProvider<List<AppUser>> usersListProvider =
+    FutureProvider.autoDispose<List<AppUser>>(
+      (ref) => ref.watch(usersRepositoryProvider).list(),
+    );
 
 final chatRepositoryProvider = Provider<ChatRepository>(
   (ref) => _source(

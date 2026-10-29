@@ -142,6 +142,132 @@ abstract class AppLocalizations {
   /// **'{count} روز پیش'**
   String daysAgo(int count);
 
+  /// No description provided for @statusIssued.
+  ///
+  /// In fa, this message translates to:
+  /// **'حواله صادر شد'**
+  String get statusIssued;
+
+  /// No description provided for @statusUnknown.
+  ///
+  /// In fa, this message translates to:
+  /// **'نامشخص'**
+  String get statusUnknown;
+
+  /// No description provided for @decidedByYou.
+  ///
+  /// In fa, this message translates to:
+  /// **'شما'**
+  String get decidedByYou;
+
+  /// No description provided for @decidedByAnotherOwner.
+  ///
+  /// In fa, this message translates to:
+  /// **'یکی از مالکان'**
+  String get decidedByAnotherOwner;
+
+  /// No description provided for @issuedBanner.
+  ///
+  /// In fa, this message translates to:
+  /// **'حواله صادر شد – شماره {number}'**
+  String issuedBanner(String number);
+
+  /// No description provided for @issuedBannerNoNumber.
+  ///
+  /// In fa, this message translates to:
+  /// **'حواله صادر شد'**
+  String get issuedBannerNoNumber;
+
+  /// No description provided for @unknownStatusBanner.
+  ///
+  /// In fa, this message translates to:
+  /// **'وضعیت این درخواست برای این نسخه از برنامه شناخته‌شده نیست. برنامه را به‌روز کنید.'**
+  String get unknownStatusBanner;
+
+  /// No description provided for @rejectReasonHelper.
+  ///
+  /// In fa, this message translates to:
+  /// **'دست‌کم ۳ حرف بنویسید. انبار این دلیل را می‌بیند.'**
+  String get rejectReasonHelper;
+
+  /// No description provided for @decisionFailed.
+  ///
+  /// In fa, this message translates to:
+  /// **'تصمیم درخواست {number} ثبت نشد: {reason}'**
+  String decisionFailed(String number, String reason);
+
+  /// No description provided for @errorWidgetTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'این بخش درست نمایش داده نشد'**
+  String get errorWidgetTitle;
+
+  /// No description provided for @errorWidgetBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'مشکل ثبت شد. برگردید و دوباره امتحان کنید.'**
+  String get errorWidgetBody;
+
+  /// No description provided for @errorWidgetBack.
+  ///
+  /// In fa, this message translates to:
+  /// **'بازگشت'**
+  String get errorWidgetBack;
+
+  /// No description provided for @roleAdmin.
+  ///
+  /// In fa, this message translates to:
+  /// **'مدیر سیستم (ادمین)'**
+  String get roleAdmin;
+
+  /// No description provided for @roleWarehouse.
+  ///
+  /// In fa, this message translates to:
+  /// **'انبار'**
+  String get roleWarehouse;
+
+  /// No description provided for @roleUnassigned.
+  ///
+  /// In fa, this message translates to:
+  /// **'نقش تعیین نشده'**
+  String get roleUnassigned;
+
+  /// No description provided for @usersActive.
+  ///
+  /// In fa, this message translates to:
+  /// **'فعال'**
+  String get usersActive;
+
+  /// No description provided for @usersInactive.
+  ///
+  /// In fa, this message translates to:
+  /// **'غیرفعال'**
+  String get usersInactive;
+
+  /// No description provided for @usersApprovalPending.
+  ///
+  /// In fa, this message translates to:
+  /// **'منتظر تأیید'**
+  String get usersApprovalPending;
+
+  /// No description provided for @usersApprovalRejected.
+  ///
+  /// In fa, this message translates to:
+  /// **'رد شده'**
+  String get usersApprovalRejected;
+
+  /// No description provided for @usersPendingSection.
+  ///
+  /// In fa, this message translates to:
+  /// **'منتظر تأیید مدیر'**
+  String get usersPendingSection;
+
+  /// No description provided for @usersAllSection.
+  ///
+  /// In fa, this message translates to:
+  /// **'همه کاربران'**
+  String get usersAllSection;
+
   /// Status chip: waiting for a decision.
   ///
   /// In fa, this message translates to:
@@ -280,6 +406,12 @@ abstract class AppLocalizations {
   /// **'این بخش هنوز به سرور کاسپین وصل نشده است و به‌زودی اضافه می‌شود.'**
   String get notConnectedBody;
 
+  /// No description provided for @notConnectedTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'به‌زودی'**
+  String get notConnectedTitle;
+
   /// No description provided for @tabHome.
   ///
   /// In fa, this message translates to:
@@ -327,12 +459,6 @@ abstract class AppLocalizations {
   /// In fa, this message translates to:
   /// **'بیشتر'**
   String get moreTitle;
-
-  /// No description provided for @moreRoleAdmin.
-  ///
-  /// In fa, this message translates to:
-  /// **'{owner} – {admin}'**
-  String moreRoleAdmin(String owner, String admin);
 
   /// No description provided for @logout.
   ///
@@ -1357,7 +1483,7 @@ abstract class AppLocalizations {
   /// No description provided for @rejectReasonLabel.
   ///
   /// In fa, this message translates to:
-  /// **'دلیل (اختیاری)'**
+  /// **'دلیل رد'**
   String get rejectReasonLabel;
 
   /// No description provided for @rejectReasonHint.
@@ -1833,12 +1959,6 @@ abstract class AppLocalizations {
   /// **'لیست خرید در نسخه‌های بعدی اضافه می‌شود.'**
   String get purchaseBody;
 
-  /// No description provided for @usersAdmin.
-  ///
-  /// In fa, this message translates to:
-  /// **'مدیر سیستم'**
-  String get usersAdmin;
-
   /// No description provided for @usersOwner.
   ///
   /// In fa, this message translates to:
@@ -1854,7 +1974,7 @@ abstract class AppLocalizations {
   /// No description provided for @usersNote.
   ///
   /// In fa, this message translates to:
-  /// **'افزودن، حذف و تعیین دسترسی کاربران بعد از راه‌اندازی سرور فعال می‌شود.'**
+  /// **'مدیریت کاربران (تأیید، نقش، غیرفعال کردن) از پنل سرور انجام می‌شود.'**
   String get usersNote;
 
   /// No description provided for @settingsTheme.

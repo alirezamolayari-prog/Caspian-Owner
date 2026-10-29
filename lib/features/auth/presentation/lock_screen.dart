@@ -6,6 +6,7 @@ import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,7 +73,7 @@ class _LockScreenState extends ConsumerState<LockScreen> {
     return Scaffold(
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.all(Space.lg),
+          padding: const EdgeInsets.all(Space.lg).withSafeBottom(context),
           children: [
             const SizedBox(height: Space.xl * 2),
             Icon(AppIcons.lock, size: 56, color: theme.colorScheme.primary),

@@ -8,6 +8,7 @@ import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
 import 'package:caspian_owner/features/settings/presentation/server_url_dialog.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,8 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.moreSettings)),
       body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: Space.sm),
+        padding: const EdgeInsets.symmetric(vertical: Space.sm)
+            .withSafeBottom(context),
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(

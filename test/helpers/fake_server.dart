@@ -112,31 +112,49 @@ class FakeServer implements HttpClientAdapter {
       );
 }
 
-/// A `GoodsRequestOut` as Caspian Server sends it.
+/// A `GoodsRequestOut` as Caspian Server sends it. Who decided is never
+/// sent, only whether it was the viewer ([decidedByMe]); null = not decided.
 Map<String, Object?> serverRequest({
   int id = 5,
   String status = 'pending',
-  int? decidedById,
-  String? decidedByName,
+  bool? decidedByMe,
   String? rejectionReason,
+  String? issueNumber,
   String createdAt = '2026-10-21T08:00:00Z',
   String? updatedAt,
 }) => {
   'id': id,
+  'client_request_id': null,
   'requester_name': 'علی رضایی',
+  'requester_phone': null,
   'consumption_location': 'سرویس بهداشتی طبقه ۲',
   'note': 'فوری',
   'status': status,
   'rejection_reason': rejectionReason,
   'created_by_id': 2,
-  'decided_by_id': decidedById,
-  'decided_by_name': decidedByName,
-  'decided_at': decidedById == null ? null : '2026-10-21T09:00:00Z',
+  'created_by_name': 'انبار پاساژ',
+  'created_by_me': false,
+  'decided_at': decidedByMe == null ? null : '2026-10-21T09:00:00Z',
+  'decided_by_me': decidedByMe ?? false,
+  'issue_number': issueNumber,
+  'issued_at': issueNumber == null ? null : '2026-10-21T10:00:00Z',
   'created_at': createdAt,
   'updated_at': updatedAt ?? createdAt,
   'items': [
-    {'id': 11, 'name': 'کیسه زباله', 'quantity': 20.0, 'unit': 'بسته'},
-    {'id': 12, 'name': 'مایع دستشویی', 'quantity': 2.5, 'unit': 'لیتر'},
+    {
+      'id': 11,
+      'item_code': 'I-1001',
+      'name': 'کیسه زباله',
+      'quantity': 20.0,
+      'unit': 'بسته',
+    },
+    {
+      'id': 12,
+      'item_code': null,
+      'name': 'مایع دستشویی',
+      'quantity': 2.5,
+      'unit': 'لیتر',
+    },
   ],
 };
 

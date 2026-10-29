@@ -9,6 +9,8 @@ import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/sync/live_sync.dart';
 import 'package:caspian_owner/core/theme/app_theme.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
+import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/error_message.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/requests/application/decision_controller.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
@@ -54,6 +56,36 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
       },
     );
 
+    // Once signed in: clean up stuck decisions, then send the queue.
+    ref.listenManual(
+      authControllerProvider.select((auth) => auth is SignedIn),
+      (_, signedIn) {
+        if (signedIn) {
+          unawaited(ref.read(decisionControllerProvider.notifier).start());
+        }
+      },
+      fireImmediately: true,
+    );
+
+    // A decision the server refused for good: say so (it is decidable again).
+    ref.listenManual(decisionFailureProvider, (_, failure) {
+      if (failure == null) return;
+      final l10n = lookupAppLocalizations(CaspianOwnerApp.locale);
+      _messenger.currentState
+        ?..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              l10n.decisionFailed(
+                toPersianDigits(failure.requestId),
+                errorMessage(failure.error, l10n),
+              ),
+            ),
+            duration: const Duration(seconds: 8),
+          ),
+        );
+    });
+
     // Live updates from the server while visible and signed in.
     ref.listenManual(
       _liveSyncWanted,
@@ -90,6 +122,8 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
   }
 
   late final StreamSubscription<String> _taps;
+
+  final _messenger = GlobalKey<ScaffoldMessengerState>();
 
   static final _notificationsWanted = Provider<bool>(
     (ref) =>
@@ -139,6 +173,7 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: _messenger,
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,

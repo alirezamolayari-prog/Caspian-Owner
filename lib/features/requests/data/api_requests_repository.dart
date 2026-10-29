@@ -20,8 +20,8 @@ class ApiRequestsRepository implements RequestsRepository {
     RequestStatus? status,
     bool escalatedOnly = false,
   }) async {
-    // The server knows only pending / approved / rejected; every request
-    // counts as escalated, so [escalatedOnly] changes nothing.
+    // The server knows pending / approved / rejected / issued; every
+    // request counts as escalated, so [escalatedOnly] changes nothing.
     if (status != null && !_serverStatuses.contains(status)) return const [];
     final json = ApiClient.asList(
       await _client.get('/requests', query: {'status': ?status?.name}),
@@ -73,10 +73,11 @@ class ApiRequestsRepository implements RequestsRepository {
       final current = ApiClient.asMap(await _client.get(path));
       final mapped = ServerMappers.request(current);
       final wanted = decision.action == DecisionAction.approve
-          ? RequestStatus.approved
-          : RequestStatus.rejected;
-      final mine = '${current['decided_by_id']}' == myId();
-      if (mine && mapped.status == wanted) return mapped;
+          ? const {RequestStatus.approved, RequestStatus.issued}
+          : const {RequestStatus.rejected};
+      // The server never says who decided, only whether it was us.
+      final mine = current['decided_by_me'] == true;
+      if (mine && wanted.contains(mapped.status)) return mapped;
       throw AlreadyDecidedException(mapped);
     }
   }
@@ -85,6 +86,7 @@ class ApiRequestsRepository implements RequestsRepository {
     RequestStatus.pending,
     RequestStatus.approved,
     RequestStatus.rejected,
+    RequestStatus.issued,
   };
 
   /// Request ids are numbers on the server; anything else can't exist.

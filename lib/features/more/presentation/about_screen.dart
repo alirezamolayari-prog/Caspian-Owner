@@ -8,6 +8,7 @@ import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/core/update/update_manifest.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -72,7 +73,7 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.moreAbout)),
       body: ListView(
-        padding: const EdgeInsets.all(Space.lg),
+        padding: const EdgeInsets.all(Space.lg).withSafeBottom(context),
         children: [
           Text(Brand.appNameFa, style: theme.textTheme.headlineSmall),
           Text(

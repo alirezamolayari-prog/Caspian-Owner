@@ -11,6 +11,8 @@ abstract final class AppIcons {
   static const IconData cancelled = Symbols.block_rounded;
   static const IconData queued = Symbols.schedule_send_rounded;
   static const IconData returned = Symbols.undo_rounded;
+  static const IconData issued = Symbols.receipt_long_rounded;
+  static const IconData unknown = Symbols.help_rounded;
   static const IconData edit = Symbols.edit_rounded;
   static const IconData add = Symbols.add_rounded;
   static const IconData remove = Symbols.remove_rounded;
