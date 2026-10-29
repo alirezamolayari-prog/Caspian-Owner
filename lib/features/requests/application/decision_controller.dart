@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:caspian_owner/core/di/providers.dart';
+import 'package:caspian_owner/core/network/api_exception.dart';
 import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
@@ -59,6 +60,29 @@ class LocalDecision {
         lines: lines,
         note: note,
       );
+}
+
+/// A decision the server refused for good (e.g. a reject without a
+/// reason): the request is decidable again and the owner is told why.
+class DecisionFailure {
+  const new({required this.requestId, required this.error});
+
+  final String requestId;
+  final ApiException error;
+}
+
+/// The latest [DecisionFailure], for a SnackBar (see `app.dart`).
+final decisionFailureProvider =
+    NotifierProvider<DecisionFailureController, DecisionFailure?>(
+      DecisionFailureController.new,
+    );
+
+class DecisionFailureController extends Notifier<DecisionFailure?> {
+  @override
+  DecisionFailure? build() => null;
+
+  DecisionFailure? get latest => state;
+  set latest(DecisionFailure? value) => state = value;
 }
 
 final decisionControllerProvider =
@@ -150,11 +174,35 @@ class DecisionController extends Notifier<Map<String, LocalDecision>> {
     await flush();
   }
 
+  /// At start (signed in): drops queued decisions whose request was
+  /// decided or issued meanwhile, then sends the rest.
+  Future<void> start() async {
+    final dropped = await ref
+        .read(pendingDecisionQueueProvider)
+        .reconcile(ref.read(requestsRepositoryProvider));
+    for (final id in dropped) {
+      _remove(id);
+      _refresh(id);
+    }
+    await flush();
+  }
+
   /// Sends everything in the queue (also on refresh and app resume).
   Future<void> flush() async {
     final result = await ref
         .read(pendingDecisionQueueProvider)
         .flush(ref.read(requestsRepositoryProvider));
+
+    // Refused for good: back to a normal, decidable request, and say why.
+    for (final failed in result.failed) {
+      final id = failed.decision.requestId;
+      _remove(id);
+      _refresh(id);
+      ref.read(decisionFailureProvider.notifier).latest = DecisionFailure(
+        requestId: id,
+        error: failed.error,
+      );
+    }
 
     for (final applied in result.applied) {
       _remove(applied.id);

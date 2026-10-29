@@ -173,12 +173,24 @@ void main() {
       expect(find.text('بازگرداندن'), findsNothing);
     });
 
-    testWidgets('reject asks for an optional reason', (tester) async {
+    testWidgets('reject needs a reason of 3 letters or more', (tester) async {
       final h = await pumpAt(tester, '/requests/r-124');
       await tester.tap(find.text('رد کردن'));
       await tester.pumpAndSettle();
       expect(find.text('رد کردن درخواست ۱۲۴'), findsOneWidget);
+      expect(find.text('دلیل رد'), findsOneWidget);
+      FilledButton rejectButton() =>
+          tester.widget(find.widgetWithText(FilledButton, 'رد کردن'));
+
+      // Empty or too short (spaces don't count): «رد کردن» is off.
+      expect(rejectButton().onPressed, isNull);
+      await tester.enterText(find.byType(TextField).last, ' ز  ی ');
+      await tester.pump();
+      expect(rejectButton().onPressed, isNull);
+
       await tester.enterText(find.byType(TextField).last, 'زیاد است');
+      await tester.pump();
+      expect(rejectButton().onPressed, isNotNull);
       await tester.tap(find.widgetWithText(FilledButton, 'رد کردن'));
       await tester.pump();
       await tester.pump(DecisionController.undoWindow);

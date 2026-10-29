@@ -2,6 +2,7 @@ import 'package:caspian_owner/core/network/api_exception.dart';
 import 'package:caspian_owner/core/storage/app_database.dart';
 import 'package:caspian_owner/core/storage/cache_store.dart';
 import 'package:caspian_owner/core/storage/pending_decision_queue.dart';
+import 'package:caspian_owner/features/requests/data/api_requests_repository.dart';
 import 'package:caspian_owner/features/requests/data/mock_requests_repository.dart';
 import 'package:caspian_owner/features/requests/domain/goods_request.dart';
 import 'package:caspian_owner/features/requests/domain/requests_repository.dart';
@@ -9,6 +10,7 @@ import 'package:drift/drift.dart' show driftRuntimeOptions;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../helpers/fake_server.dart';
 import '../../helpers/mock_setup.dart';
 
 /// A repository that is offline until [online] is set.
@@ -145,5 +147,99 @@ void main() {
     await db.wipe();
     expect(await cache.get('requests', (j) => j), isNull);
     expect(await queue.pending(), isEmpty);
+  });
+
+  group('against Caspian Server', () {
+    late FakeServer server;
+    late ApiRequestsRepository repo;
+    setUp(() {
+      server = FakeServer();
+      repo = ApiRequestsRepository(server.client(token: 't'), myId: () => '3');
+    });
+
+    test('422 (a reject without a reason) is dropped and reported', () async {
+      server.on('POST', '/requests/5/reject', FakeServer.error(422));
+      await queue.enqueue(
+        requestId: '5',
+        action: DecisionAction.reject,
+        reason: '',
+      );
+
+      final result = await queue.flush(repo);
+
+      expect(result.failed.single.decision.requestId, '5');
+      expect(result.failed.single.error, isA<ValidationException>());
+      expect(result.remaining, 0);
+      expect(await queue.pending(), isEmpty);
+    });
+
+    test('400, 403 and 404 are dropped too', () async {
+      for (final (id, status) in [('6', 400), ('7', 403), ('8', 404)]) {
+        server.on('POST', '/requests/$id/approve', FakeServer.error(status));
+        await queue.enqueue(requestId: id, action: DecisionAction.approve);
+      }
+      final result = await queue.flush(repo);
+      expect(result.failed.map((f) => f.decision.requestId), ['6', '7', '8']);
+      expect(await queue.pending(), isEmpty);
+    });
+
+    test('no internet, 5xx and 429 stay queued', () async {
+      server
+        ..on('POST', '/requests/5/approve', FakeServer.error(503))
+        ..on('POST', '/requests/6/approve', FakeServer.error(429))
+        ..on('POST', '/requests/7/approve', FakeServer.noInternet());
+      for (final id in ['5', '6', '7']) {
+        await queue.enqueue(requestId: id, action: DecisionAction.approve);
+      }
+
+      final result = await queue.flush(repo);
+
+      expect(result.failed, isEmpty);
+      expect(result.remaining, 3);
+    });
+
+    test('409: decided by another owner first → conflict', () async {
+      server
+        ..on('POST', '/requests/5/approve', FakeServer.error(409))
+        ..on(
+          'GET',
+          '/requests/5',
+          FakeServer.json(
+            serverRequest(status: 'rejected', decidedByMe: false),
+          ),
+        );
+      await queue.enqueue(requestId: '5', action: DecisionAction.approve);
+
+      final result = await queue.flush(repo);
+
+      expect(result.conflicts.single.decidedBy?.kind, DeciderKind.anotherOwner);
+      expect(await queue.pending(), isEmpty);
+    });
+
+    test('reconcile drops decisions for requests no longer pending', () async {
+      server
+        ..on(
+          'GET',
+          '/requests/1',
+          FakeServer.json(serverRequest(id: 1, status: 'issued')),
+        )
+        ..on('GET', '/requests/1/messages', FakeServer.json(<Object>[]))
+        ..on('GET', '/requests/2', FakeServer.json(serverRequest(id: 2)))
+        ..on('GET', '/requests/2/messages', FakeServer.json(<Object>[]))
+        ..on('GET', '/requests/3', FakeServer.error(404));
+      for (final id in ['1', '2', '3']) {
+        await queue.enqueue(requestId: id, action: DecisionAction.approve);
+      }
+
+      expect(await queue.reconcile(repo), ['1', '3']);
+      expect((await queue.pending()).single.requestId, '2');
+    });
+
+    test('reconcile keeps everything when offline', () async {
+      server.on('GET', '/requests/1', FakeServer.noInternet());
+      await queue.enqueue(requestId: '1', action: DecisionAction.approve);
+      expect(await queue.reconcile(repo), isEmpty);
+      expect(await queue.pending(), hasLength(1));
+    });
   });
 }
