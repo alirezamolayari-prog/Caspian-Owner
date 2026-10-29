@@ -105,9 +105,7 @@ class _ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final role = owner.isAdmin
-        ? l10n.moreRoleAdmin(l10n.usersOwner, l10n.usersAdmin)
-        : l10n.usersOwner;
+    final role = owner.isAdmin ? l10n.roleAdmin : l10n.usersOwner;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         Space.page,

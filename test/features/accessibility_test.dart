@@ -50,6 +50,7 @@ void main() {
     '/notifications',
     '/settings',
     '/about',
+    '/users',
   ]) {
     testWidgets('$location meets the accessibility guidelines', (tester) async {
       final semantics = tester.ensureSemantics();

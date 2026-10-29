@@ -4,6 +4,7 @@ import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/mock/mock_backend.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
+import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/requests/application/requests_providers.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
@@ -58,7 +59,7 @@ class _DeveloperScreenState extends ConsumerState<DeveloperScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.devTitle)),
       body: ListView(
-        padding: const EdgeInsets.all(Space.page),
+        padding: const EdgeInsets.all(Space.page).withSafeBottom(context),
         children: [
           Text(l10n.devDataSource, style: theme.textTheme.titleSmall),
           Text(
