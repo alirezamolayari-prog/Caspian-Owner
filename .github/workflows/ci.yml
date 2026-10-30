@@ -49,7 +49,18 @@ jobs:
           flutter analyze --fatal-infos 2>&1 | tee build-analyze.txt || { grep -E '(error|warning|info) •' build-analyze.txt | head -40 | while read -r l; do echo "::error::$l"; done; exit 1; }
 
       - name: Test
-        run: flutter test --reporter expanded --file-reporter json:build/test-results.json
+        run: |
+          flutter test --reporter expanded --file-reporter json:build/test-results.json || { python3 - <<'PY'
+          import json
+          names={}
+          for line in open('build/test-results.json'):
+              e=json.loads(line)
+              if e.get('type')=='testStart': names[e['test']['id']]=e['test']['name']
+              if e.get('type')=='error':
+                  msg=(names.get(e['testID'],'?')+' :: '+e['error'][:900]).replace('\n',' | ')
+                  print('::error::'+msg)
+          PY
+          exit 1; }
 
       - name: Upload test results
         if: always()
