@@ -46,7 +46,7 @@ jobs:
       - name: Analyze
         run: |
           set -o pipefail
-          flutter analyze --fatal-infos 2>&1 | tee build-analyze.txt || { grep -E ' - ' build-analyze.txt | head -40 | while read -r l; do echo "::error::$l"; done; exit 1; }
+          flutter analyze --fatal-infos 2>&1 | tee build-analyze.txt || { grep -E '(error|warning|info) •' build-analyze.txt | head -40 | while read -r l; do echo "::error::$l"; done; exit 1; }
 
       - name: Test
         run: flutter test --reporter expanded --file-reporter json:build/test-results.json
