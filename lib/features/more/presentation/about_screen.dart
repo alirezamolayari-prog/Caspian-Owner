@@ -7,13 +7,16 @@ import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/core/update/update_manifest.dart';
+import 'package:caspian_owner/core/update/update_panel.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// «درباره و نسخه». Tapping the version 7 times opens the developer screen.
+/// «درباره و نسخه»: the installed version and, when there is one, the new
+/// version with «دانلود و نصب». Tapping the version 7 times opens the
+/// developer screen.
 class AboutScreen extends ConsumerStatefulWidget {
   const new({super.key});
 
@@ -43,15 +46,13 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     setState(() => _checking = true);
     final UpdateManifest? manifest;
     try {
-      manifest = await ref
-          .read(updateControllerProvider.notifier)
-          .check(force: true);
+      manifest = await ref.read(updateControllerProvider.notifier).check();
     } finally {
       if (mounted) setState(() => _checking = false);
     }
     if (!mounted) return;
-    final update = ref.read(updateControllerProvider);
-    if (update.decision is NoUpdate) {
+    // A newer version shows up on this page (the panel below).
+    if (ref.read(updateControllerProvider).decision is NoUpdate) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -59,8 +60,6 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
           ),
         ),
       );
-    } else if (!update.required) {
-      unawaited(context.push(Routes.update));
     }
   }
 
@@ -69,53 +68,91 @@ class _AboutScreenState extends ConsumerState<AboutScreen> {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final info = ref.watch(appInfoProvider);
+    final hasUpdate = ref.watch(availableUpdateProvider) != null;
+    // Opened from a phone notification there is nothing to go back to:
+    // back leads to the hub instead of closing the app.
+    final canPop = context.canPop();
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.moreAbout)),
-      body: ListView(
-        padding: const EdgeInsets.all(Space.lg).withSafeBottom(context),
-        children: [
-          Text(Brand.appNameFa, style: theme.textTheme.headlineSmall),
-          Text(
-            l10n.aboutMall(Brand.mallNameFa),
-            style: theme.textTheme.bodyMedium,
-          ),
-          const SizedBox(height: Space.lg),
-          // Tap target for the hidden developer screen.
-          InkWell(
-            onTap: _onVersionTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: Space.md),
-              child: Text(
-                l10n.aboutVersion(
-                  toPersianDigits(info.version),
-                  toPersianDigits('${info.buildNumber}'),
+    return PopScope(
+      canPop: canPop,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) context.go(Routes.home);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: canPop
+              ? null
+              : BackButton(onPressed: () => context.go(Routes.home)),
+          title: Text(l10n.moreAbout),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(Space.lg).withSafeBottom(context),
+          children: [
+            Text(Brand.appNameFa, style: theme.textTheme.headlineSmall),
+            Text(
+              l10n.aboutMall(Brand.mallNameFa),
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: Space.lg),
+            // Tap target for the hidden developer screen.
+            InkWell(
+              onTap: _onVersionTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: Space.md),
+                child: Text(
+                  l10n.aboutVersion(
+                    toPersianDigits(info.version),
+                    toPersianDigits('${info.buildNumber}'),
+                  ),
+                  style: theme.textTheme.titleMedium,
                 ),
-                style: theme.textTheme.titleMedium,
               ),
             ),
-          ),
-          OutlinedButton.icon(
-            onPressed: _checking ? null : _checkForUpdate,
-            icon: _checking
-                ? const SizedBox.square(
-                    dimension: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : null,
-            label: Text(
-              _checking ? l10n.aboutCheckingUpdate : l10n.aboutCheckUpdate,
+            if (hasUpdate)
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(Space.md),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        l10n.updateAvailableTitle,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(height: Space.sm),
+                      const UpdatePanel(),
+                    ],
+                  ),
+                ),
+              )
+            else
+              OutlinedButton.icon(
+                onPressed: _checking ? null : _checkForUpdate,
+                icon: _checking
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : null,
+                label: Text(
+                  _checking ? l10n.aboutCheckingUpdate : l10n.aboutCheckUpdate,
+                ),
+              ),
+            const SizedBox(height: Space.md),
+            Text(Brand.supportContactFa, style: theme.textTheme.bodyMedium),
+            const SizedBox(height: Space.lg),
+            // The copyright line stays in English, as in LICENSE.
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text(
+                Brand.copyrightLine,
+                style: theme.textTheme.bodySmall,
+              ),
             ),
-          ),
-          const SizedBox(height: Space.md),
-          Text(Brand.supportContactFa, style: theme.textTheme.bodyMedium),
-          const SizedBox(height: Space.lg),
-          // The copyright line stays in English, as in LICENSE.
-          Directionality(
-            textDirection: TextDirection.ltr,
-            child: Text(Brand.copyrightLine, style: theme.textTheme.bodySmall),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

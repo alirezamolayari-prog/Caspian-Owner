@@ -32,6 +32,12 @@ final foregroundNotifierProvider = Provider<LocalNotifier?>(
   (ref) => ref.watch(localNotificationsProvider),
 );
 
+/// Phone notifications about app updates (null in tests that don't record
+/// them).
+final updateNotifierProvider = Provider<UpdateNotifier?>(
+  (ref) => ref.watch(localNotificationsProvider),
+);
+
 /// Links from tapped notifications while the app runs.
 final notificationTapsProvider = Provider<StreamController<String>>((ref) {
   final controller = StreamController<String>.broadcast();

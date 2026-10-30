@@ -45,6 +45,9 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
         // No live polling in the background (battery); workmanager's
         // 15-minute check still brings notifications.
         ref.read(liveSyncProvider.notifier).stop();
+        ref
+            .read(updateControllerProvider.notifier)
+            .setForeground(visible: false);
       },
       onShow: () {
         _visible = true;
@@ -53,6 +56,11 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
           unawaited(ref.read(decisionControllerProvider.notifier).flush());
         }
         _syncLive(wanted: ref.read(_liveSyncWanted));
+        // A downloaded update opens Android's installer now; after the
+        // «install unknown apps» permission the download continues.
+        ref
+            .read(updateControllerProvider.notifier)
+            .setForeground(visible: true);
       },
     );
 
@@ -105,13 +113,13 @@ class _CaspianOwnerAppState extends ConsumerState<CaspianOwnerApp> {
       );
     }
 
-    // Update check on launch (at most once a day), and the optional-update
-    // dialog once per new version.
+    // Update check on every launch; the dialog (once per run while the
+    // update is pending) comes from UpdateOfferHost.
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => unawaited(ref.read(updateControllerProvider.notifier).check()),
     );
-    // The optional-update offer is shown by AppShell (the four tabs), so it
-    // never appears over the lock or login screen.
+    // The offer is hosted by the hub and the module shells, so it never
+    // appears over the lock or login screen.
 
     // Background check runs only while signed in with notifications on.
     ref.listenManual(

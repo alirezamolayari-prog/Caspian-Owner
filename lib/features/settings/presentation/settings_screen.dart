@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:caspian_owner/core/config/api_config.dart';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/notifications/background_reliability.dart';
+import 'package:caspian_owner/core/router/routes.dart';
 import 'package:caspian_owner/core/security/app_lock.dart';
 import 'package:caspian_owner/core/security/device_authenticator.dart';
 import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/theme/tokens.dart';
+import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/features/settings/application/settings_controller.dart';
@@ -14,6 +16,7 @@ import 'package:caspian_owner/features/settings/presentation/server_url_dialog.d
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// «تنظیمات»: theme, notifications (and what stops them while the app is
 /// closed), fingerprint, screenshots, server address, app PIN.
@@ -130,6 +133,16 @@ class SettingsScreen extends ConsumerWidget {
               onPressed: () => _setPin(context, ref),
               child: Text(l10n.settingsPinSet),
             ),
+          ),
+          const Divider(),
+          // Also in «بیشتر»; here too, where owners look for the version.
+          ListTile(
+            leading: const Icon(AppIcons.about),
+            title: Text(l10n.moreAbout),
+            trailing: ref.watch(availableUpdateProvider) == null
+                ? null
+                : Badge(label: Text(l10n.settingsUpdateBadge)),
+            onTap: () => context.push(Routes.about),
           ),
         ],
       ),

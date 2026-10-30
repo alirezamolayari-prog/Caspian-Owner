@@ -10,6 +10,7 @@ import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:caspian_owner/core/widgets/safe_bottom.dart';
 import 'package:caspian_owner/core/widgets/status_chip.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
+import 'package:caspian_owner/features/notifications/presentation/notifications_bell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -43,11 +44,7 @@ class HubScreen extends ConsumerWidget {
             ],
           ),
           actions: [
-            IconButton(
-              tooltip: l10n.notificationsTooltip,
-              icon: const Icon(AppIcons.notifications),
-              onPressed: () => context.push(Routes.notifications),
-            ),
+            const NotificationsBell(),
             IconButton(
               tooltip: l10n.accountTooltip,
               icon: const Icon(AppIcons.account),

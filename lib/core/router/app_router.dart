@@ -61,13 +61,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: Routes.updateRequired,
-        builder: (context, state) => const UpdateScreen(blocking: true),
-      ),
-      GoRoute(
-        path: Routes.update,
-        parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const UpdateScreen(),
       ),
+      // Optional updates are installed from «درباره و نسخه».
+      GoRoute(path: Routes.update, redirect: (context, state) => Routes.about),
       GoRoute(
         path: Routes.login,
         builder: (context, state) => const LoginScreen(),
@@ -157,14 +154,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const MoreScreen(),
       ),
       for (final (path, screen) in <(String, Widget)>[
-        // No server API for these yet: «به‌زودی» on Caspian Server v1.
-        (
-          Routes.notifications,
-          ServerFeatureGate(
-            title: (l10n) => l10n.notificationsTitle,
-            child: const NotificationsScreen(),
-          ),
-        ),
+        // Shows the update row even while the list itself is «به‌زودی».
+        (Routes.notifications, const NotificationsScreen()),
+        // No server API for this yet: «به‌زودی» on Caspian Server v1.
         (
           Routes.reports,
           ServerFeatureGate(
