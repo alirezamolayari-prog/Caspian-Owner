@@ -10,6 +10,16 @@ abstract interface class LocalNotifier {
   Future<void> show(NotificationEvent event);
 }
 
+/// Phone notifications about a new app version. `ready`: downloaded and
+/// waiting to be installed. Tapping opens `target` («درباره و نسخه»).
+abstract interface class UpdateNotifier {
+  Future<void> showUpdate({
+    required String version,
+    required bool ready,
+    required String target,
+  });
+}
+
 /// One background check: asks the [source] for events since the last
 /// check, shows each new one once, and remembers what it showed.
 class NotificationPoller {

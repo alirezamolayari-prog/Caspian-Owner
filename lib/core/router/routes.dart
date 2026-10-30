@@ -29,6 +29,7 @@ abstract final class Routes {
   /// After a password login: «اثر انگشت فعال شود؟».
   static const unlockOffer = '/unlock-offer';
 
+  /// Redirects to [about] (kept for old links).
   static const update = '/update';
   static const updateRequired = '/update-required';
   static const lock = '/lock';

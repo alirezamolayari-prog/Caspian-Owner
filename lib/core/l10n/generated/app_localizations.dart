@@ -2349,6 +2349,102 @@ abstract class AppLocalizations {
   /// **'اطلاعات به‌روزرسانی دریافت نشد.'**
   String get aboutUpdateCheckFailed;
 
+  /// No description provided for @channelUpdates.
+  ///
+  /// In fa, this message translates to:
+  /// **'به‌روزرسانی برنامه'**
+  String get channelUpdates;
+
+  /// No description provided for @updateDismiss.
+  ///
+  /// In fa, this message translates to:
+  /// **'رد کردن'**
+  String get updateDismiss;
+
+  /// No description provided for @updateDismissedHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'هر وقت خواستید، از زنگوله اعلان‌ها به‌روز کنید.'**
+  String get updateDismissedHint;
+
+  /// No description provided for @updateInstall.
+  ///
+  /// In fa, this message translates to:
+  /// **'نصب'**
+  String get updateInstall;
+
+  /// No description provided for @updateInstallFailed.
+  ///
+  /// In fa, this message translates to:
+  /// **'پیام نصب باز نشد. دوباره «نصب» را بزنید.'**
+  String get updateInstallFailed;
+
+  /// No description provided for @updateReadyHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'فایل دانلود شد. اگر پیام نصب را بستید، «نصب» را بزنید.'**
+  String get updateReadyHint;
+
+  /// No description provided for @updateDownloadingStarted.
+  ///
+  /// In fa, this message translates to:
+  /// **'در حال دانلود…'**
+  String get updateDownloadingStarted;
+
+  /// No description provided for @updateLeaveHint.
+  ///
+  /// In fa, this message translates to:
+  /// **'می‌توانید از این صفحه خارج شوید و کارتان را ادامه دهید؛ وقتی دانلود تمام شد، پیام نصب خودش باز می‌شود.'**
+  String get updateLeaveHint;
+
+  /// No description provided for @updateNotifyTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه تازه آماده است'**
+  String get updateNotifyTitle;
+
+  /// No description provided for @updateNotifyBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه {version} – برای دیدن تغییرات و نصب بزنید.'**
+  String updateNotifyBody(String version);
+
+  /// No description provided for @updateReadyNotifyTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'به‌روزرسانی آماده نصب است'**
+  String get updateReadyNotifyTitle;
+
+  /// No description provided for @updateReadyNotifyBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه {version} دانلود شد. برای نصب بزنید.'**
+  String updateReadyNotifyBody(String version);
+
+  /// No description provided for @notificationsUpdateTitle.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه {version} آماده است'**
+  String notificationsUpdateTitle(String version);
+
+  /// No description provided for @notificationsUpdateBody.
+  ///
+  /// In fa, this message translates to:
+  /// **'برای دیدن تغییرات و نصب بزنید'**
+  String get notificationsUpdateBody;
+
+  /// No description provided for @notificationsTooltipUpdate.
+  ///
+  /// In fa, this message translates to:
+  /// **'اعلان‌ها – نسخه تازه آماده است'**
+  String get notificationsTooltipUpdate;
+
+  /// No description provided for @settingsUpdateBadge.
+  ///
+  /// In fa, this message translates to:
+  /// **'نسخه تازه'**
+  String get settingsUpdateBadge;
+
   /// No description provided for @errorTitle.
   ///
   /// In fa, this message translates to:

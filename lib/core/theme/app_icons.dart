@@ -58,6 +58,7 @@ abstract final class AppIcons {
 
   // Top bar and account
   static const IconData notifications = Symbols.notifications_rounded;
+  static const IconData update = Symbols.system_update_rounded;
   static const IconData account = Symbols.account_circle_rounded;
   static const IconData logout = Symbols.logout_rounded;
 

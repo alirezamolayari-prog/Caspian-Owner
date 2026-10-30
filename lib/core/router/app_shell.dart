@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/modules/app_module.dart';
 import 'package:caspian_owner/core/router/routes.dart';
+import 'package:caspian_owner/core/theme/app_icons.dart';
 import 'package:caspian_owner/core/update/update_controller.dart';
 import 'package:caspian_owner/core/update/update_manifest.dart';
 import 'package:caspian_owner/core/utils/persian_digits.dart';
@@ -83,9 +84,7 @@ class ModuleShell extends StatelessWidget {
 /// An optional update the owner hasn't answered yet.
 final _pendingUpdate = Provider<UpdateManifest?>((ref) {
   final update = ref.watch(updateControllerProvider);
-  return update.decision is OptionalUpdate && !update.dismissed
-      ? update.manifest
-      : null;
+  return update.dismissed ? null : ref.watch(availableUpdateProvider);
 });
 
 /// Offers optional updates. It wraps the hub and the module shells, which
@@ -101,37 +100,47 @@ class UpdateOfferHost extends ConsumerStatefulWidget {
 }
 
 class _UpdateOfferHostState extends ConsumerState<UpdateOfferHost> {
-  /// Each version is offered at most once per run.
-  static int? _offeredBuild;
-
   @override
   void initState() {
     super.initState();
     ref.listenManual(_pendingUpdate, (_, manifest) {
-      if (manifest == null || manifest.build == _offeredBuild) return;
-      _offeredBuild = manifest.build;
+      // Each version is offered at most once per run (the hub and each
+      // module shell all host the offer).
+      if (manifest == null ||
+          !ref.read(updateControllerProvider.notifier).markOffered(manifest)) {
+        return;
+      }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) unawaited(_offer(manifest));
       });
     }, fireImmediately: true);
   }
 
+  /// «نسخه تازه آماده است»: the version, its size and what's new.
+  /// «به‌روزرسانی» opens «درباره و نسخه», where the owner downloads and
+  /// installs it. «رد کردن» (or tapping outside) lets them keep working;
+  /// the update stays on the bell.
   Future<void> _offer(UpdateManifest manifest) async {
     final l10n = AppLocalizations.of(context);
+    final size = formatNumber(
+      (manifest.sizeBytes / (1024 * 1024) * 10).round() / 10,
+    );
     final accept = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        icon: const Icon(AppIcons.update),
         title: Text(l10n.updateAvailableTitle),
         content: SingleChildScrollView(
           child: Text(
-            '${l10n.updateVersion(toPersianDigits(manifest.version))}\n\n'
+            '${l10n.updateVersion(toPersianDigits(manifest.version))}'
+            ' – ${l10n.updateSize(size)}\n\n'
             '${manifest.changelogFa}',
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.updateLater),
+            child: Text(l10n.updateDismiss),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
@@ -141,10 +150,14 @@ class _UpdateOfferHostState extends ConsumerState<UpdateOfferHost> {
       ),
     );
     if (!mounted) return;
+    final controller = ref.read(updateControllerProvider.notifier);
     if (accept ?? false) {
-      unawaited(context.push(Routes.update));
+      unawaited(context.push(Routes.about));
     } else {
-      ref.read(updateControllerProvider.notifier).later();
+      ScaffoldMessenger.maybeOf(context)
+        ?..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(l10n.updateDismissedHint)));
+      unawaited(controller.dismiss());
     }
   }
 

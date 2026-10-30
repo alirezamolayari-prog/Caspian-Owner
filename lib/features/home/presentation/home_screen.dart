@@ -9,6 +9,7 @@ import 'package:caspian_owner/core/widgets/stale_notice.dart';
 import 'package:caspian_owner/features/auth/application/auth_controller.dart';
 import 'package:caspian_owner/features/home/application/home_controller.dart';
 import 'package:caspian_owner/features/home/presentation/home_placeholder.dart';
+import 'package:caspian_owner/features/notifications/presentation/notifications_bell.dart';
 import 'package:caspian_owner/features/requests/presentation/widgets/request_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,11 +33,7 @@ class HomeScreen extends ConsumerWidget {
       appBar: ModuleAppBar(
         title: Text(l10n.homeGreeting(name)),
         actions: [
-          IconButton(
-            tooltip: l10n.notificationsTooltip,
-            icon: const Icon(AppIcons.notifications),
-            onPressed: () => context.push(Routes.notifications),
-          ),
+          const NotificationsBell(),
           IconButton(
             tooltip: l10n.accountTooltip,
             icon: const Icon(AppIcons.account),

@@ -1337,6 +1337,63 @@ class AppLocalizationsFa extends AppLocalizations {
   String get aboutUpdateCheckFailed => 'اطلاعات به‌روزرسانی دریافت نشد.';
 
   @override
+  String get channelUpdates => 'به‌روزرسانی برنامه';
+
+  @override
+  String get updateDismiss => 'رد کردن';
+
+  @override
+  String get updateDismissedHint =>
+      'هر وقت خواستید، از زنگوله اعلان‌ها به‌روز کنید.';
+
+  @override
+  String get updateInstall => 'نصب';
+
+  @override
+  String get updateInstallFailed => 'پیام نصب باز نشد. دوباره «نصب» را بزنید.';
+
+  @override
+  String get updateReadyHint =>
+      'فایل دانلود شد. اگر پیام نصب را بستید، «نصب» را بزنید.';
+
+  @override
+  String get updateDownloadingStarted => 'در حال دانلود…';
+
+  @override
+  String get updateLeaveHint =>
+      'می‌توانید از این صفحه خارج شوید و کارتان را ادامه دهید؛ وقتی دانلود تمام شد، پیام نصب خودش باز می‌شود.';
+
+  @override
+  String get updateNotifyTitle => 'نسخه تازه آماده است';
+
+  @override
+  String updateNotifyBody(String version) {
+    return 'نسخه $version – برای دیدن تغییرات و نصب بزنید.';
+  }
+
+  @override
+  String get updateReadyNotifyTitle => 'به‌روزرسانی آماده نصب است';
+
+  @override
+  String updateReadyNotifyBody(String version) {
+    return 'نسخه $version دانلود شد. برای نصب بزنید.';
+  }
+
+  @override
+  String notificationsUpdateTitle(String version) {
+    return 'نسخه $version آماده است';
+  }
+
+  @override
+  String get notificationsUpdateBody => 'برای دیدن تغییرات و نصب بزنید';
+
+  @override
+  String get notificationsTooltipUpdate => 'اعلان‌ها – نسخه تازه آماده است';
+
+  @override
+  String get settingsUpdateBadge => 'نسخه تازه';
+
+  @override
   String get errorTitle => 'اطلاعات دریافت نشد';
 
   @override

@@ -1,12 +1,13 @@
 import 'package:caspian_owner/core/l10n/generated/app_localizations.dart';
 import 'package:caspian_owner/core/notifications/notification_event.dart';
 import 'package:caspian_owner/core/notifications/notification_poller.dart';
+import 'package:caspian_owner/core/utils/persian_digits.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Phone notifications (no Firebase). The payload is the in-app link, e.g.
 /// `/requests/r-124`, opened when the owner taps the notification.
-class LocalNotifications implements LocalNotifier {
+class LocalNotifications implements LocalNotifier, UpdateNotifier {
   new([FlutterLocalNotificationsPlugin? plugin])
     : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
 
@@ -61,6 +62,35 @@ class LocalNotifications implements LocalNotifier {
         android: AndroidNotificationDetails(
           channel,
           name,
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+      ),
+    );
+  }
+
+  /// One notification for updates: «ready to install» replaces «available».
+  static const _updateId = 0x55504454;
+
+  @override
+  Future<void> showUpdate({
+    required String version,
+    required bool ready,
+    required String target,
+  }) {
+    final l10n = lookupAppLocalizations(const Locale('fa'));
+    final shown = toPersianDigits(version);
+    return _plugin.show(
+      id: _updateId,
+      title: ready ? l10n.updateReadyNotifyTitle : l10n.updateNotifyTitle,
+      body: ready
+          ? l10n.updateReadyNotifyBody(shown)
+          : l10n.updateNotifyBody(shown),
+      payload: target,
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails(
+          'updates',
+          l10n.channelUpdates,
           importance: Importance.high,
           priority: Priority.high,
         ),
