@@ -10,8 +10,8 @@ abstract interface class LocalNotifier {
   Future<void> show(NotificationEvent event);
 }
 
-/// Phone notifications about a new app version. [ready]: downloaded and
-/// waiting to be installed. Tapping opens [target] («درباره و نسخه»).
+/// Phone notifications about a new app version. `ready`: downloaded and
+/// waiting to be installed. Tapping opens `target` («درباره و نسخه»).
 abstract interface class UpdateNotifier {
   Future<void> showUpdate({
     required String version,

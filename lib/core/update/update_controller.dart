@@ -90,7 +90,7 @@ class UpdateController extends Notifier<UpdateState> {
   static const notifiedBuildKey = 'update_notified_build';
 
   /// Link opened by the update notifications: «درباره و نسخه».
-  static const target = Routes.about;
+  static const String target = Routes.about;
 
   bool _foreground = true;
   int? _offeredBuild;
@@ -161,7 +161,10 @@ class UpdateController extends Notifier<UpdateState> {
   Future<void> downloadAndInstall() async {
     final manifest = state.manifest;
     if (manifest == null || state.downloading) return;
-    if (state.readyApk case final apk?) return _install(apk);
+    if (state.readyApk case final apk?) {
+      await _install(apk);
+      return;
+    }
 
     final installer = ref.read(apkInstallerProvider);
     if (!await installer.canInstall()) {

@@ -40,12 +40,12 @@ class FakeInstaller implements ApkInstaller {
 class FakeDownloader extends ApkDownloader {
   new() : super(directory: Directory('unused'));
 
-  Completer<File>? _pending;
+  late Completer<File> _pending;
   int downloads = 0;
 
-  void finish() => _pending!.complete(File('/updates/caspian-owner-12.apk'));
+  void finish() => _pending.complete(File('/updates/caspian-owner-12.apk'));
 
-  void fail() => _pending!.completeError(Exception('network'));
+  void fail() => _pending.completeError(Exception('network'));
 
   @override
   Future<File> download(
