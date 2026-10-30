@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../helpers/fake_http.dart';
+import '../../helpers/mock_setup.dart';
 import '../../helpers/test_app.dart';
 import 'update_test.dart' show manifestJson;
 
@@ -79,23 +80,24 @@ void main() {
   late ProviderContainer container;
 
   setUp(() async {
-    harness = await TestHarness.load(signedIn: true);
+    harness = TestHarness.create(
+      await loadTestFixtures(),
+      signedIn: true,
+      updateChecker: UpdateChecker(
+        dio: fakeDio(
+          FakeHttpAdapter({
+            'https://u.example/update.json': (o) =>
+                FakeHttpAdapter.json(manifestJson(minBuild: 1)),
+          }),
+        ),
+        urls: const ['https://u.example/update.json'],
+      ),
+    );
     installer = FakeInstaller();
     downloader = FakeDownloader();
     notifier = FakeUpdateNotifier();
     container = harness.container(
       extra: [
-        updateCheckerProvider.overrideWithValue(
-          UpdateChecker(
-            dio: fakeDio(
-              FakeHttpAdapter({
-                'https://u.example/update.json': (o) =>
-                    FakeHttpAdapter.json(manifestJson(minBuild: 1)),
-              }),
-            ),
-            urls: const ['https://u.example/update.json'],
-          ),
-        ),
         apkInstallerProvider.overrideWithValue(installer),
         apkDownloaderProvider.overrideWith((ref) async => downloader),
         updateNotifierProvider.overrideWithValue(notifier),
