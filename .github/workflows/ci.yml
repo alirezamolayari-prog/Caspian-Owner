@@ -44,7 +44,9 @@ jobs:
         run: dart format --set-exit-if-changed .
 
       - name: Analyze
-        run: flutter analyze --fatal-infos
+        run: |
+          set -o pipefail
+          flutter analyze --fatal-infos 2>&1 | tee build-analyze.txt || { grep -E ' - ' build-analyze.txt | head -40 | while read -r l; do echo "::error::$l"; done; exit 1; }
 
       - name: Test
         run: flutter test --reporter expanded --file-reporter json:build/test-results.json
