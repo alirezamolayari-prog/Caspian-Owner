@@ -1,6 +1,6 @@
 # Progress
 
-**Next step:** M20 (v0.5.0, update notice) is merged. Release it (tag `v0.5.0`), then Alireza updates from v0.4.2 and, once a later version exists, checks the new flow: dialog → «به‌روزرسانی» → About → «دانلود و نصب» → leave the page → Android's install prompt; and «رد کردن» → bell dot → «اعلان‌ها» row → About.
+**Next step:** M21 (v0.5.1, smaller APK: native libs compressed, size + SHA-256 in release notes) is merged and tagged. Alireza installs v0.5.1 from the GitHub Release on a phone that never had the app and checks the downloaded size matches the release page.
 
 ## Environment (M0)
 | Item | Value |
@@ -41,6 +41,7 @@ Windows PowerShell 5.1 mangles UTF-8 when it rewrites files: edit text files wit
 | M19 | Done (branch `fix/owner-e2e-bugs`) | v0.4.2+8. From Alireza's Redmi e2e test. Reject reason required (≥3 letters); the queue drops refusals for good (400/403/404/422 → `FlushResult.failed`, SnackBar, decidable again), keeps network/401/408/429/5xx, and `reconcile()` at sign-in drops decisions for requests no longer pending. `RequestStatus.issued` («حواله صادر شد» + `issue_number`) and `unknown` («نامشخص», logged via `ServerMappers.warn`, never decidable). `decided_by_me` instead of the never-sent `decided_by_id/name` (DeciderKind.me / anotherOwner: «شما» / «یکی از مالکان»), notifications only for another owner's approve/reject. `item_code` for item codes. Chat: «شما» / «مالک» for owners, warehouse keeps its name. Users screen reads `GET /admin/users` (read-only). Profile «مدیر سیستم (ادمین)». `withSafeBottom` on list screens, nicer «به‌زودی», release `ErrorWidget.builder` → `FriendlyErrorWidget`. The grey detail page could not be reproduced in tests with the server JSON (also not at 2× text); the data paths that differed for #1 are fixed and the error is logged on the device |
 
 | M20 | Done (branch `m20-update-notice`) | v0.5.0+9. Plan: `docs/plans/M20-update-notice.md`. Update dialog on every launch while an update is pending (no more once-a-day throttle; once per run): version, size, changes, «رد کردن» / «به‌روزرسانی» → About. `UpdatePanel` (About + blocking `UpdateScreen`); `Routes.update` redirects to About. The download lives in `UpdateController`: the owner can leave the page; in front → installer right away, in the background → «آماده نصب» phone notification and the installer on return (`setForeground` from `app.dart`); continues after the install permission; «نصب» reopens a cancelled installer (the button used to stay disabled). «رد کردن» → one phone notification per version (`UpdateNotifier`, channel `updates`, payload `/about`), bell dot (`NotificationsBell`), first row in «اعلان‌ها» (also while the list is «به‌زودی» on the real server). About in Settings too; About opened from a notification goes back to the hub |
+| M21 | Done | Smaller APK (~67 MB → compressed native libs) so first installs from GitHub stop failing with "package appears to be invalid" (half downloads); CI size check (45 MB); size + SHA-256 + install tips in release notes (v0.5.1) |
 
 ## Human checklist status (§2.4)
 - [x] H1 UAC prompts (JDK 17, KeePassXC)

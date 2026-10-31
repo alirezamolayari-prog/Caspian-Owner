@@ -120,6 +120,25 @@ jobs:
             exit 1
           fi
 
+      # A big APK often stops halfway when downloaded from GitHub in Iran,
+      # and Android then says "package appears to be invalid". Native libs
+      # are compressed (android/app/build.gradle.kts › packaging) to keep
+      # it small; fail if it grows past 45 MB again.
+      - name: Check the release APK size
+        if: >-
+          github.actor != 'dependabot[bot]' &&
+          (github.event_name == 'push' ||
+          github.event.pull_request.head.repo.full_name == github.repository)
+        run: |
+          apk=build/app/outputs/flutter-apk/app-release.apk
+          bytes=$(stat -c %s "$apk")
+          echo "APK size: $bytes bytes ($((bytes / 1048576)) MB)"
+          unzip -v "$apk" 'lib/*' | tail -n +4 | head -n -2
+          if [ "$bytes" -gt $((45 * 1048576)) ]; then
+            echo "::error::The release APK is larger than 45 MB."
+            exit 1
+          fi
+
       - name: Remove the keystore
         if: always()
         run: rm -f android/app/release.jks android/key.properties

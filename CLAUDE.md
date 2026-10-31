@@ -71,7 +71,7 @@ flutter build apk --release   # signed with android/key.properties, else the DEB
 - Use the `ui-ux-pro-max` skill for UI decisions (`--stack flutter`, `--domain ux`).
 
 ## Updates and release
-- Release builds are **universal**: `flutter build apk --release` (arm64-v8a, armeabi-v7a, x86_64; as CI does), so the APK installs on any phone and on emulators. Published as `caspian-vX.Y.Z.apk`. `android/gradle.properties` sets in-process Kotlin with `kotlin.incremental=false` for this PC.
+- Release builds are **universal**: `flutter build apk --release` (arm64-v8a, armeabi-v7a, x86_64; as CI does), so the APK installs on any phone and on emulators. Published as `caspian-vX.Y.Z.apk`. Native libraries are stored **compressed** (`packaging.jniLibs.useLegacyPackaging = true`): uncompressed they made a ~67 MB APK whose downloads from GitHub often stopped halfway in Iran ("package appears to be invalid" on first install). CI fails above 45 MB. `android/gradle.properties` sets in-process Kotlin with `kotlin.incremental=false` for this PC.
 - Release builds need the `INTERNET` permission in `src/main/AndroidManifest.xml` (Flutter's template only grants it to debug/profile).
 - `pubspec.yaml` `version: X.Y.Z+BUILD`; BUILD must always increase. Use `tool/bump_version.ps1`.
 - In-app updater (`lib/core/update/`) reads `update.json` (server URL first, then the GitHub Release asset), verifies SHA-256, then starts the installer.

@@ -51,6 +51,18 @@ android {
         }
     }
 
+    // Store native libraries (Flutter engine, app code) COMPRESSED in the APK.
+    // Stored uncompressed they made the APK ~67 MB, and on Iranian internet a
+    // download that big from GitHub often stops halfway; Android then says
+    // "App not installed / package appears to be invalid" on first install.
+    // Compressed, the APK is less than half the size. Android unpacks the
+    // libraries once at install time.
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
     buildTypes {
         release {
             if (hasReleaseKeystore) {

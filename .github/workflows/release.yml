@@ -92,6 +92,24 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           awk -v v="## $VERSION" 'index($0, v) == 1 {p=1; next} /^## / {p=0} p' docs/CHANGELOG.md > notes.md
+          # Size and SHA-256, so a half-finished download (common on Iranian
+          # internet; Android then says "package appears to be invalid") can
+          # be recognised before trying to install it.
+          apk="caspian-v$VERSION.apk"
+          bytes=$(stat -c %s "$apk")
+          mb=$(awk -v b="$bytes" 'BEGIN { printf "%.1f", b / 1048576 }')
+          sha=$(sha256sum "$apk" | cut -d' ' -f1)
+          {
+            echo
+            echo "### نصب"
+            echo "- فایل \`$apk\` را از پایین همین صفحه (Assets) دانلود کنید."
+            echo "- حجم فایل باید دقیقاً **$bytes بایت** (حدود $mb مگابایت) باشد. اگر کمتر است، دانلود نیمه‌کاره مانده و اندروید می‌گوید «بسته نامعتبر است»؛ دوباره دانلود کنید."
+            echo "- اگر نسخه‌ای با امضای دیگر روی گوشی هست (مثلاً نسخه آزمایشی)، اول آن را حذف کنید."
+            echo "- حداقل اندروید ۷."
+            echo
+            echo "SHA-256: \`$sha\`"
+          } >> notes.md
+          cat notes.md
           gh release create "$GITHUB_REF_NAME" \
             "caspian-v$VERSION.apk" update.json \
             --title "Caspian Owner $VERSION" \
